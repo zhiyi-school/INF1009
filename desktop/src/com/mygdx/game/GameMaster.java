@@ -11,6 +11,6 @@ public class GameMaster extends ApplicationAdapter{
 	
 	@Override
 	public void render() {
-		System.out.println("before");
+		System.out.println("test");
 	}
 }
