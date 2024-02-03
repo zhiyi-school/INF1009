@@ -12,6 +12,7 @@ public class NonPlayableCharacter extends Character{
 	
 	// Default Constructor
 	public NonPlayableCharacter(){
+		super(Color.BLACK, texture, 0, 0, 1, 100, 2);
 		
 	}
 	

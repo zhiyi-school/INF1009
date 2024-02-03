@@ -14,6 +14,13 @@ public class Character extends Entity{
 	
 	// Default Constructor
 	public Character() {
+		super(Color.YELLOW, 0, 0);
+		setTexture(texture);
+		setImage("");
+		setSpeed(1);
+		setAttack(0);
+		setDie(false);
+		setHealth(100);
 		
 	}
 	

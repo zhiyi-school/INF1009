@@ -12,6 +12,9 @@ public class Entity implements iMoveable{
 	
 	// Default Constructor
 	public Entity() {
+		setColor(Color.RED);
+		setPosX(0);
+		setPosY(0);
 		
 	}
 	

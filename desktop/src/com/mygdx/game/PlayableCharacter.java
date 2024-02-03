@@ -12,6 +12,7 @@ public class PlayableCharacter extends Character{
 	
 	// Default Constructor
 		public PlayableCharacter(){
+			super(Color.WHITE, texture, 0, 0, 0, 100, 1, false);
 			
 		}
 		
