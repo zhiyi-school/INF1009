@@ -12,13 +12,13 @@ public class NonPlayableCharacter extends Character{
 	
 	// Default Constructor
 	public NonPlayableCharacter(){
-		super(Color.BLACK, texture, 0, 0, 1, 100, 2);
+		super(Color.BLACK, "", 0, 0, 1, 100, 2, false);
 		
 	}
 	
 	// Parameterized Constructor
-	public NonPlayableCharacter(Color color, Texture texture, float x, float y, float speed, float health, float attack) {
-		super(color, texture, x, y, speed, health, attack);
+	public NonPlayableCharacter(Color color, String texture, float x, float y, float speed, float health, float attack, Boolean aiCheck) {
+		super(color, texture, x, y, speed, health, attack, aiCheck);
 	}
 	
 	public void moveAIControlled() {

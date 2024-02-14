@@ -12,13 +12,13 @@ public class PlayableCharacter extends Character{
 	
 	// Default Constructor
 		public PlayableCharacter(){
-			super(Color.WHITE, texture, 0, 0, 0, 100, 1, false);
+			super(Color.WHITE, "", 0, 0, 0, 100, 1, false, true);
 			
 		}
 		
 		// Parameterized Constructor
-		public PlayableCharacter(Color color, Texture texture, float x, float y, float speed, float health, float attack, boolean die) {
-			super(color, texture, x, y, speed, health, attack, die);
+		public PlayableCharacter(Color color, String texture, float x, float y, float speed, float health, float attack, boolean die, Boolean aiCheck) {
+			super(color, texture, x, y, speed, health, attack, die, aiCheck);
 		}
 		
 		private void setDefaultX() {
