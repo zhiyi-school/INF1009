@@ -16,6 +16,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 
 public class EntityManager {
 	
@@ -23,6 +25,8 @@ public class EntityManager {
 	private List<Entity> npcList;
 	Random rand = new Random();
 	private SpriteBatch batch;
+	// Create a Box2D world
+	World world = new World(new Vector2(0, -10), true);
 	
 	public EntityManager() {
 		entityList = new ArrayList<Entity>();
@@ -43,10 +47,10 @@ public class EntityManager {
 			batch.end();
 			batch.dispose();
 		}
-		for(Entity entity: npcList) {
+		for(Entity npc: npcList) {
 			batch = new SpriteBatch();
 			batch.begin();
-			entity.draw(batch);
+			npc.draw(batch);
 			batch.end();
 			batch.dispose();
 		}
@@ -79,21 +83,31 @@ public class EntityManager {
 	public void checkCollide() {
 		for(Entity entity: entityList) {
 			for(Entity npc: npcList) {
+				
+				float entityX = entity.getPosX();
+				float entityY = entity.getPosY();
+				float npcX = npc.getPosX();
+				float npcY = npc.getPosY();
+				
+				float entityWidth = entity.getSprite().getWidth();
+				float entityHeight = entity.getSprite().getHeight();
+				float npcWidth = npc.getSprite().getWidth();
+				float npcHeight = npc.getSprite().getHeight();
 	            // Create a Polygon and set its vertices to match the shape of your texture
 	            // This example assumes a rectangular texture, you'll need to adjust for irregular shapes
 	            float[] verticesEntity = new float[] {
-	                (entity.getPosX() - (entity.getSprite().getWidth()/2)), (entity.getPosY() - (entity.getSprite().getHeight()/2)), // Bottom left corner
-	                entity.getSprite().getWidth(), (entity.getPosY() - (entity.getSprite().getHeight()/2)), // Bottom right corner
-	                entity.getSprite().getWidth(), entity.getSprite().getHeight(), // Top right corner
-	                (entity.getPosX() - (entity.getSprite().getWidth()/2)), entity.getSprite().getHeight() // Top left corner
+	                (entityX - (entityHeight/2)), (entityY - (entityHeight/2)), // Bottom left corner
+	                entityWidth, (entityY - (entityHeight/2)), // Bottom right corner
+	                entityWidth, entityHeight, // Top right corner
+	                (entityX - (entityHeight/2)), entityHeight // Top left corner
 	            };
 	            
 	            float[] verticesNPC = new float[] {
-	            		(npc.getPosX() - (npc.getSprite().getWidth()/2)), (npc.getPosY() - (npc.getSprite().getHeight()/2)), // Bottom left corner
-		                npc.getSprite().getWidth(), (npc.getPosY() - (npc.getSprite().getHeight()/2)), // Bottom right corner
-		                npc.getSprite().getWidth(), npc.getSprite().getHeight(), // Top right corner
-		                (npc.getPosX() - (npc.getSprite().getWidth()/2)), npc.getSprite().getHeight() // Top left corner
-		            };
+            		(npcX - (npcHeight/2)), (npcY - (npcHeight/2)), // Bottom left corner
+            		npcWidth, (npcY - (npcHeight/2)), // Bottom right corner
+            		npcWidth, npcHeight, // Top right corner
+	                (npcX - (npcHeight/2)), npcHeight // Top left corner
+	            };
 
 	            Polygon polygon1 = new Polygon(verticesEntity);
 	            Polygon polygon2 = new Polygon(verticesNPC);

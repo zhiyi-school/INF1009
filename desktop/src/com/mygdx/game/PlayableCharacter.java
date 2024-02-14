@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 
 public class PlayableCharacter extends Character{
 	
@@ -29,20 +30,23 @@ public class PlayableCharacter extends Character{
 		}
 		
 		public void moveUserControlled() {
-			if(Gdx.input.isKeyPressed (Keys.A)) {
-				setPosX(getPosX() - speed * Gdx.graphics.getDeltaTime());
-			}
-			if(Gdx.input.isKeyPressed (Keys.D)) {
-				setPosX(getPosX() + speed * Gdx.graphics.getDeltaTime());
-			}
-			if(Gdx.input.isKeyPressed (Keys.SPACE)) {
-				setPosY(getPosY() + speed * Gdx.graphics.getDeltaTime());
-			}
-			
-			if(getPosX() <= 0) {
-				setPosX(getPosX());
-			}else if(getPosX() >= Gdx.graphics.getWidth()) {
-				setPosX(getPosX());
+			if(!getDie()) {
+				if(Gdx.input.isKeyPressed (Keys.A)) {
+					setPosX(getPosX() - speed * Gdx.graphics.getDeltaTime());
+				}
+				if(Gdx.input.isKeyPressed (Keys.D)) {
+					setPosX(getPosX() + speed * Gdx.graphics.getDeltaTime());
+				}
+				if(Gdx.input.isKeyPressed (Keys.SPACE)) {
+//					setPosY(getPosY() + speed * Gdx.graphics.getDeltaTime());
+					getBody().applyLinearImpulse(new Vector2(0, 10), getBody().getWorldCenter(), true);
+				}
+				
+				if(getPosX() <= 0) {
+					setPosX(getPosX());
+				}else if(getPosX() >= Gdx.graphics.getWidth()) {
+					setPosX(getPosX());
+				}
 			}
 		}
 		
