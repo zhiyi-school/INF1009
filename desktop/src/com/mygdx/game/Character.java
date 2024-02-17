@@ -7,32 +7,39 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 
-public class Character extends Entity{
+public abstract class Character extends Entity{
 	
 	private String image;
 	protected float speed;
 	protected float attack;
 	protected boolean die;
 	protected float health;
+	protected static World worldDefault = new World(new Vector2(0, -9.8f), true);
 	
 	private SpriteBatch batch = new SpriteBatch();
 	
+	protected abstract void moveUp();
+	protected abstract void moveDown();
+	protected abstract void moveLeft();
+	protected abstract void moveRight();
+	
 	// Default Constructor
 	public Character() {
-		super(Color.YELLOW, 0, 0, "", false);
+		super(worldDefault, "", 0, 0, false);
 		setTexture(image);
 		setImage("");
 		setSpeed(1);
 		setAttack(0);
 		setDie(false);
 		setHealth(100);
-		
 	}
 	
 	// Parameterized Constructor
-	public Character(Color colorInput, float posXInput, float posYInput, String texture, String image, float speed, float attack, boolean die, float health, Boolean aiCheck) {
-		super(colorInput, posXInput, posYInput, texture, aiCheck);
+	public Character(World world, String textureImage, float posXInput, float posYInput, String image, float speed, float attack, boolean die, float health, Boolean aiCheck) {
+		super(world, textureImage, posXInput, posYInput, aiCheck);
 		setImage(image);
 		setSpeed(speed);
 		setAttack(attack);
@@ -41,22 +48,22 @@ public class Character extends Entity{
 	}
 	
 	// NonPlayableCharacter
-	public Character(Color colorInput, String texture, float x, float y, float speed, float health, float attack, Boolean aiCheck) {
-		super(colorInput, x, y, texture, aiCheck);
+	public Character(World world, String textureImage, float x, float y, float speed, float health, float attack, Boolean aiCheck) {
+		super(world, textureImage, x, y, aiCheck);
 		setSpeed(speed);
 		setHealth(health);
 		setAttack(attack);
 	}
 	
 	// PlayableCharacter
-		public Character(Color colorInput, String texture, float x, float y, float speed, float health, float attack, boolean die, Boolean aiCheck) {
-			super(colorInput, x, y, texture, aiCheck);
-			setSpeed(speed);
-			setHealth(health);
-			setAttack(attack);
-			setDie(die);
-		}
-	
+	public Character(World world, String textureImage, float x, float y, float speed, float health, float attack, boolean die, Boolean aiCheck) {
+		super(world, textureImage, x, y, aiCheck);
+		setSpeed(speed);
+		setHealth(health);
+		setAttack(attack);
+		setDie(die);
+	}
+
 	public String getImage() {
 		return image;
 	}
@@ -92,16 +99,9 @@ public class Character extends Entity{
 		health = healthInput;
 	}
 	
-	public void moveLeft() {
-		
-	}
-	public void moveRight() {
-		
-	}
+	public abstract void draw(SpriteBatch batch);
 	
-	public void draw(SpriteBatch batch) {
-		batch.draw(getTexture(), getPosX(), getPosY(), getTexture().getWidth(), getTexture().getHeight());
-	}
+	
 	
 
 }

@@ -6,92 +6,89 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-public class Entity implements iMoveable, iCollide{
-	protected Color color;
-	protected Texture texture;
-	protected Sprite sprite;
+public abstract class Entity implements iMoveable, iCollide{
+	
+	// Box2d Variables
+	protected BodyDef bodyDef;
 	protected Body body;
+	protected PolygonShape shape;
+	protected FixtureDef fixtureDef;
+	protected Fixture fixture;
+	private Texture texture;
+	protected Sprite sprite;
+	
+	// Variables to draw entity
 	protected float height;
 	protected float width;
 	protected float posX;
 	protected float posY;
 	protected Boolean aiCheck;
-	World world = new World(new Vector2(0, -10), true);
+
+	protected abstract void destroy();
 	
 	// Default Constructor
 	public Entity() {
-		setColor(Color.RED);
 		setPosX(0);
 		setPosY(0);
-		
 	}
 	
 	// Parameterized Constructor
-	public Entity(Color colorInput, float posXInput, float posYInput, String texture, Boolean aiCheck) {
-		setColor(colorInput);
+	public Entity(World world, String textureImage, float posXInput, float posYInput, Boolean aiCheck) {
+		setTexture(textureImage);
 		setPosX(posXInput);
 		setPosY(posYInput);
-		setTexture(texture);
 		setAICheck(aiCheck);
 		setBody(world);
 		setSprite(getTexture());
-		
 	}
 	
-	public Color getColor() {
-		return color;
-	}
-	public void setColor(Color colorInput) {
-		color = colorInput;
-	}
 	public Texture getTexture() {
 		return texture;
 	}
-	public void setTexture(String textureInput) {
-		texture = new Texture(Gdx.files.internal(textureInput));
+	public void setTexture(String textureImage) {
+		texture = new Texture(Gdx.files.internal(textureImage));
 	}
 	
-	
+	// Creating Box2D for Entity
 	public Body getBody() {
 		return body;
 	}
+	public Fixture getFix() {
+		return fixture;
+	}
 	public void setBody(World world) {
-		BodyDef bodyDef = new BodyDef();
+		bodyDef = new BodyDef();
 		bodyDef.type = BodyDef.BodyType.DynamicBody;
 		bodyDef.position.set(getPosX(), getPosY());
 		body = world.createBody(bodyDef);
 		
+		shape = new PolygonShape();
+        shape.setAsBox(getTexture().getWidth(), getTexture().getHeight());
+
+        fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = 1f; 		// Set density to affect how body responds to forces
+        fixtureDef.friction = 0.4f; 	// Set friction to affect sliding
+        fixtureDef.restitution = 0.1f; 	// Set restitution to affect how bouncy the object is
+
+        fixture = body.createFixture(fixtureDef);
+        // Set the user data for the fixture to the character instance
+        fixture.setUserData(this);
+        shape.dispose();
 	}
 	
-	public void setFix() {
-		// Create a FixtureDef
-		FixtureDef fixtureDef = new FixtureDef();
-		fixtureDef.density = 1;
-		fixtureDef.friction = 0.5f;
-		fixtureDef.restitution = 0.5f; // Make the object bounce a little bit
-		
-		// Create a PolygonShape
-		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(10, 10); // Set the shape as a box with a width and height of 10
-
-		// Attach the shape to the FixtureDef
-		fixtureDef.shape = shape;
-
-		// Attach the FixtureDef to the Body
-		body.createFixture(fixtureDef);
-
-		// Dispose of the shape when you're done with it
-		shape.dispose();
-	}
-	
+	// Drawing Sprite of Entity
 	public Sprite getSprite() {
 		return sprite;
 	}
@@ -100,21 +97,7 @@ public class Entity implements iMoveable, iCollide{
 		sprite.setPosition(getBody().getPosition().x - sprite.getWidth() / 2, getBody().getPosition().y - sprite.getHeight() / 2);
 	}
 	
-	// There might be inbuild getHeight and getWidth functions
-//	protected float getHeight() {
-//		return height;
-//	}
-//	void setHeight(float heightInput) {
-//		height = heightInput;
-//	}
-//	
-//	protected float getWidth() {
-//		return width;
-//	}
-//	void setWidth(float widthInput) {
-//		width = widthInput;
-//	}
-	
+	// Get x Co-ordinate of Entity
 	public float getPosX() {
 		return posX;
 	}
@@ -122,12 +105,15 @@ public class Entity implements iMoveable, iCollide{
 		posX = x;
 	}
 	
+	// Get y Co-ordinate of Entity
 	public float getPosY() {
 		return posY;
 	}
 	public void setPosY(float y) {
 		posY = y;
 	}
+	
+	// Check if Entity is user controlled
 	protected boolean getAICheck() {
 		return aiCheck;
 	}
@@ -137,18 +123,18 @@ public class Entity implements iMoveable, iCollide{
 	
 	public void draw(SpriteBatch batch) {
 		
-	}
-	
-	public void moveAIControlled() {
+	}	
+	public void moveAIControlled(){
 		
 	}
 	public void moveUserControlled() {
 		
 	}
-	
 	public void checkCollide() {
 		
 	}
-	
+	public void movementUpdate() {
+		
+	}
 
 }
