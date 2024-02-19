@@ -13,7 +13,7 @@ public class PlayableCharacter extends Character{
     private boolean isJumping = false;
     private float verticalVelocity = 0;
     
-    private boolean attackCheck = false;
+    private boolean attackCheck;
     
 	private float defaultX;
 	private float defaultY;
@@ -28,6 +28,7 @@ public class PlayableCharacter extends Character{
 		// Parameterized Constructor
 		public PlayableCharacter(World world, String textureImage, float x, float y, float speed, float health, float attack, boolean die, Boolean aiCheck) {
 			super(world, textureImage, x, y, speed, health, attack, die, aiCheck);
+			setAttackCheck(false);
 		}
 		
 		private void setDefaultX() {

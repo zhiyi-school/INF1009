@@ -118,7 +118,7 @@ public class EntityManager {
 	public CollisionManager getCollision() {
 		return contactListener;
 	}
-	public void collisionDelete(World world) {
+	public void collisionEquip(World world) {
 		if(itemList.size() != 0) {
 			for(NonPlayableCharacter item: itemList) {
 				if(getCollision().equip(item, world)) {
@@ -128,22 +128,16 @@ public class EntityManager {
 			}
 			itemList.remove(removeItem);
 		}
-		
 	}
 	public void collisionFight(World world) {
 		if(npcList.size() != 0) {
 			for(PlayableCharacter entity: entityList) {
 				for(NonPlayableCharacter npc: npcList) {
-					if(entity.getAttackCheck() && "fight".equals(entity.getFix().getUserData())&& "fight".equals(npc.getFix().getUserData())) {
-						getCollision().kill(npc, world);
-						entity.getFix().setUserData("PlayableCharacter");
-						entity.setAttackCheck(false);
-						removeNPC = npc;
+					if(entity.getAttackCheck()) {
+						removeNPC = getCollision().kill(entity, npc, world);
 						count--;
-					}else if(!entity.getAttackCheck() && "fight".equals(entity.getFix().getUserData())&& "fight".equals(npc.getFix().getUserData())){
-						npc.getFix().setUserData("Enemy");
-						getCollision().die(entity, world);
-						removePC = entity;
+					}else{
+						removePC = getCollision().die(entity, npc, world);
 						count--;
 					}
 				}
@@ -153,11 +147,6 @@ public class EntityManager {
 		}
 	}
 	public int getNum() {
-		for(PlayableCharacter entity: entityList) {
-			if("flag".equals(entity.getFix().getUserData())) {
-				count++;
-			}
-		}
 		for(NonPlayableCharacter npc: npcList) {
 			if("fight".equals(npc.getFix().getUserData())) {
 				count++;

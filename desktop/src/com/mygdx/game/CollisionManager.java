@@ -23,7 +23,8 @@ public class CollisionManager implements ContactListener{
 		       	fixtureB.setUserData("equip");
 		        
 		   }else if("Weapon".equals(fixtureA.getUserData()) && "PlayableCharacter".equals(fixtureB.getUserData())) {
-			   	fixtureA.setUserData("equip");
+			   System.out.println("Collision detected between PlayableCharacter and Weapon");	
+			   fixtureA.setUserData("equip");
 		}
 	    
 	    // Check for PC and Enemy collision
@@ -34,9 +35,10 @@ public class CollisionManager implements ContactListener{
 	       	fixtureB.setUserData("fight");
 	        
 	   }else if("Enemy".equals(fixtureA.getUserData()) && "PlayableCharacter".equals(fixtureB.getUserData())) {
-		   	fixtureA.setUserData("fight");
-		   	fixtureB.setUserData("fight");
-	}
+		   System.out.println("Collision detected between PlayableCharacter and Enemy");	
+		   fixtureA.setUserData("fight");
+		   fixtureB.setUserData("fight");
+	   }
 	}
 
 	@Override
@@ -55,58 +57,35 @@ public class CollisionManager implements ContactListener{
 	    // Optional: Called after collision is resolved, allows you to query the impulse of the collision
 	}
 	
-	public boolean handleCollision(PlayableCharacter entity, World world) {
-	    // Remove Playable Character
-		if("".equals(entity.getFix().getUserData())) {
+	public PlayableCharacter die(PlayableCharacter entity, NonPlayableCharacter npc, World world) {
+		// NPC kills PlayableCharacter
+		if("fight".equals(entity.getFix().getUserData())&& "fight".equals(npc.getFix().getUserData())) {
 			entity.despawn(world);
 		    entity.destroy();
+		    npc.getFix().setUserData("Enemy");
+			return entity;
+		}
+	    return null;
+	}
+	public NonPlayableCharacter kill(PlayableCharacter entity, NonPlayableCharacter npc, World world) {
+		// PlayableCharacter kills NPC
+		if("fight".equals(entity.getFix().getUserData())&& "fight".equals(npc.getFix().getUserData())) {
+			npc.despawn(world);
+		    npc.destroy();
+		    entity.getFix().setUserData("PlayableCharacter");
+		    entity.setAttackCheck(false);
+			return npc;
+		}
+		return null;
+	}
+	public boolean equip(NonPlayableCharacter item, World world) {
+	    // Item equipped, remove from screen
+		if("equip".equals(item.getFix().getUserData())) {
+			item.despawn(world);
+		    item.destroy();
 			return true;
 		}
 		return false;
-	}
-	
-	public boolean die(PlayableCharacter entity, World world) {
-	    entity.despawn(world);
-	    entity.destroy();
-		return true;
-	}
-	public boolean kill(NonPlayableCharacter entity, World world) {
-	    entity.despawn(world);
-	    entity.destroy();
-		return true;
-	}
-	public boolean equip(NonPlayableCharacter entity, World world) {
-	    // Remove the NPC or Item
-		if("equip".equals(entity.getFix().getUserData())) {
-		    entity.despawn(world);
-		    entity.destroy();
-			return true;
-		}
-		return false;
-	}
-	
-	
-	
-	public boolean equip1(PlayableCharacter entity, NonPlayableCharacter item, World world) {
-		Body body = entity.getBody();
-
-        // Remove the original fixtures
-        world.destroyBody(entity.getBody());
-        world.destroyBody(item.getBody());
-
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(entity.getTexture().getWidth() + item.getTexture().getWidth() / 2.5f, entity.getTexture().getHeight() / 2.5f);
-        
-        // Create a new fixture that represents the combination of the two original fixtures
-        // This is a simplified example, you'll need to create a shape that represents the combination
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = shape;
-        fixtureDef.shape.setRadius(1f); // Set the radius of the new fixture
-
-        // Add the new fixture to one of the bodies
-        body.createFixture(fixtureDef);
-
-        fixtureDef.shape.dispose();	
-        return true;
+	    
 	}
 }

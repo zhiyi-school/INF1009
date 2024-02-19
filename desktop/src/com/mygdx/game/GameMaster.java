@@ -21,7 +21,7 @@ public class GameMaster extends ApplicationAdapter{
 	}	
 	
 	public void update() {
-		entityManager.collisionDelete(world);
+		entityManager.collisionEquip(world);
 		entityManager.collisionFight(world);
 	}
 	
@@ -31,6 +31,7 @@ public class GameMaster extends ApplicationAdapter{
 		Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         ScreenUtils.clear(0, 0, 0.2f, 1);
+//        System.out.println(entityManager.getNum());
         
 		if(entityManager.getNum() > 0) {
 			update();

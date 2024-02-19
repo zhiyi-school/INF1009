@@ -54,7 +54,7 @@ public abstract class Entity implements iMoveable, iCollide{
 		setPosX(posXInput);
 		setPosY(posYInput);
 		setAICheck(aiCheck);
-		setBody(world);
+		createBody(world);
 		setSprite(getTexture());
 	}
 	
@@ -79,7 +79,7 @@ public abstract class Entity implements iMoveable, iCollide{
 	public Fixture getFix() {
 		return fixture;
 	}
-	public void setBody(World world) {
+	public void createBody(World world) {
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyDef.BodyType.DynamicBody;
 		bodyDef.position.set(getPosX(), getPosY());
@@ -98,7 +98,6 @@ public abstract class Entity implements iMoveable, iCollide{
         // Set the user data for the fixture to the character instance
         int filename = getImage().lastIndexOf('.');
         String strippedFilename = getImage().substring(0, filename);
-        System.out.println(strippedFilename);
         fixture.setUserData(strippedFilename);
         shape.dispose();
 	}
