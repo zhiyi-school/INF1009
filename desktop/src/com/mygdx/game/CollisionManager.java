@@ -1,8 +1,13 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 
 public class CollisionManager implements ContactListener{
 	
@@ -11,20 +16,33 @@ public class CollisionManager implements ContactListener{
 		Fixture fixtureA = contact.getFixtureA();
 	    Fixture fixtureB = contact.getFixtureB();
 	    
-	    System.out.println(fixtureA.getUserData() instanceof PlayableCharacter);
+	    // Check for PC and Item collision
+	    if ("PlayableCharacter".equals(fixtureA.getUserData()) && "Weapon".equals(fixtureB.getUserData())) {
+		       	// Debug output to confirm collision detection
+		       	System.out.println("Collision detected between PlayableCharacter and Weapon");
+		       	fixtureB.setUserData("equip");
+		        
+		   }else if("Weapon".equals(fixtureA.getUserData()) && "PlayableCharacter".equals(fixtureB.getUserData())) {
+			   	fixtureA.setUserData("equip");
+		}
 	    
-	    // Check if one fixture belongs to PlayableCharacter and the other to NPC
-	    if ((fixtureA.getUserData() instanceof PlayableCharacter && fixtureB.getUserData() instanceof NonPlayableCharacter) ||
-	        (fixtureA.getUserData() instanceof NonPlayableCharacter && fixtureB.getUserData() instanceof PlayableCharacter)) {
-	        // Debug output to confirm collision detection
-	        System.out.println("Collision detected between PlayableCharacter and NPC");
+	    // Check for PC and Enemy collision
+	    if ("PlayableCharacter".equals(fixtureA.getUserData()) && "Enemy".equals(fixtureB.getUserData())) {
+	       	// Debug output to confirm collision detection
+	       	System.out.println("Collision detected between PlayableCharacter and Enemy");
+	       	fixtureA.setUserData("fight");
+	       	fixtureB.setUserData("fight");
 	        
-	    }
+	   }else if("Enemy".equals(fixtureA.getUserData()) && "PlayableCharacter".equals(fixtureB.getUserData())) {
+		   	fixtureA.setUserData("fight");
+		   	fixtureB.setUserData("fight");
+	}
 	}
 
 	@Override
 	public void endContact(Contact contact) {
 	    // Optional: Implement logic when two objects stop colliding
+		
 	}
 	
 	@Override
@@ -37,8 +55,58 @@ public class CollisionManager implements ContactListener{
 	    // Optional: Called after collision is resolved, allows you to query the impulse of the collision
 	}
 	
-	private void handleCollision(PlayableCharacter player, NonPlayableCharacter npc) {
-	    // Remove the NPC
-	    npc.destroy();
+	public boolean handleCollision(PlayableCharacter entity, World world) {
+	    // Remove Playable Character
+		if("".equals(entity.getFix().getUserData())) {
+			entity.despawn(world);
+		    entity.destroy();
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean die(PlayableCharacter entity, World world) {
+	    entity.despawn(world);
+	    entity.destroy();
+		return true;
+	}
+	public boolean kill(NonPlayableCharacter entity, World world) {
+	    entity.despawn(world);
+	    entity.destroy();
+		return true;
+	}
+	public boolean equip(NonPlayableCharacter entity, World world) {
+	    // Remove the NPC or Item
+		if("equip".equals(entity.getFix().getUserData())) {
+		    entity.despawn(world);
+		    entity.destroy();
+			return true;
+		}
+		return false;
+	}
+	
+	
+	
+	public boolean equip1(PlayableCharacter entity, NonPlayableCharacter item, World world) {
+		Body body = entity.getBody();
+
+        // Remove the original fixtures
+        world.destroyBody(entity.getBody());
+        world.destroyBody(item.getBody());
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(entity.getTexture().getWidth() + item.getTexture().getWidth() / 2.5f, entity.getTexture().getHeight() / 2.5f);
+        
+        // Create a new fixture that represents the combination of the two original fixtures
+        // This is a simplified example, you'll need to create a shape that represents the combination
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.shape.setRadius(1f); // Set the radius of the new fixture
+
+        // Add the new fixture to one of the bodies
+        body.createFixture(fixtureDef);
+
+        fixtureDef.shape.dispose();	
+        return true;
 	}
 }

@@ -25,6 +25,7 @@ public abstract class Character extends Entity{
 	protected abstract void moveDown();
 	protected abstract void moveLeft();
 	protected abstract void moveRight();
+	public abstract void draw(SpriteBatch batch);
 	
 	// Default Constructor
 	public Character() {
@@ -99,7 +100,6 @@ public abstract class Character extends Entity{
 		health = healthInput;
 	}
 	
-	public abstract void draw(SpriteBatch batch);
 	
 	
 	

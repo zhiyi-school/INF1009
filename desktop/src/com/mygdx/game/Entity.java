@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -34,6 +36,8 @@ public abstract class Entity implements iMoveable, iCollide{
 	protected float posX;
 	protected float posY;
 	protected Boolean aiCheck;
+	
+	protected String image;
 
 	protected abstract void destroy();
 	
@@ -45,12 +49,20 @@ public abstract class Entity implements iMoveable, iCollide{
 	
 	// Parameterized Constructor
 	public Entity(World world, String textureImage, float posXInput, float posYInput, Boolean aiCheck) {
+		setImage(textureImage);
 		setTexture(textureImage);
 		setPosX(posXInput);
 		setPosY(posYInput);
 		setAICheck(aiCheck);
 		setBody(world);
 		setSprite(getTexture());
+	}
+	
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String imageInput) {
+		image = imageInput;
 	}
 	
 	public Texture getTexture() {
@@ -74,8 +86,8 @@ public abstract class Entity implements iMoveable, iCollide{
 		body = world.createBody(bodyDef);
 		
 		shape = new PolygonShape();
-        shape.setAsBox(getTexture().getWidth(), getTexture().getHeight());
-
+        shape.setAsBox(getTexture().getWidth() / 2.5f, getTexture().getHeight() / 2.5f);
+        
         fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = 1f; 		// Set density to affect how body responds to forces
@@ -84,7 +96,10 @@ public abstract class Entity implements iMoveable, iCollide{
 
         fixture = body.createFixture(fixtureDef);
         // Set the user data for the fixture to the character instance
-        fixture.setUserData(this);
+        int filename = getImage().lastIndexOf('.');
+        String strippedFilename = getImage().substring(0, filename);
+        System.out.println(strippedFilename);
+        fixture.setUserData(strippedFilename);
         shape.dispose();
 	}
 	

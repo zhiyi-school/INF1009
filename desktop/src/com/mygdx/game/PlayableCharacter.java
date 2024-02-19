@@ -10,9 +10,10 @@ public class PlayableCharacter extends Character{
 	
 	private static final float JUMP_VELOCITY = 500f; // Adjust this value to control jump height
     private static final float GRAVITY = -1500f; // Adjust this value to control gravity
-
     private boolean isJumping = false;
     private float verticalVelocity = 0;
+    
+    private boolean attackCheck = false;
     
 	private float defaultX;
 	private float defaultY;
@@ -39,9 +40,20 @@ public class PlayableCharacter extends Character{
 		public void draw(SpriteBatch batch) {
 			batch.draw(getTexture(), getPosX(), getPosY(), getTexture().getWidth() * 3, getTexture().getHeight() * 3);
 		}
-		
+		public void despawn(World world) {
+			getTexture().dispose();
+			getBody().destroyFixture(getFix());
+			world.destroyBody(getBody());
+		}
 		public void destroy(){
 			getTexture().dispose();
+		}
+		
+		public boolean getAttackCheck() {
+			return attackCheck;
+		}
+		public void setAttackCheck(boolean attackInput) {
+			attackCheck = attackInput;
 		}
 		
 		public void moveUserControlled() {

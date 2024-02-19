@@ -11,7 +11,7 @@ import com.badlogic.gdx.physics.box2d.World;
 public class NonPlayableCharacter extends Character{
 	
 	Random rand = new Random();
-	private int randomNum = 0;;
+	private int randomNum = 0;
 	
 	private float moveSpeed = 50; // Adjust the speed of movement
     private int moveDir; // Indicates whether the NPC is
@@ -21,7 +21,6 @@ public class NonPlayableCharacter extends Character{
 	// Default Constructor
 	public NonPlayableCharacter(){
 		super(worldDefault, "", 0, 0, 1, 100, 2, false);
-		
 	}
 	
 	// Parameterized Constructor
@@ -36,6 +35,18 @@ public class NonPlayableCharacter extends Character{
 	
 	public void draw(SpriteBatch batch) {
 		batch.draw(getTexture(), getPosX(), getPosY(), getTexture().getWidth() * 3, getTexture().getHeight() * 3);
+	}
+	public void draw(SpriteBatch batch, boolean Item) {
+		if(Item) {
+			batch.draw(getTexture(), getPosX(), getPosY(), getTexture().getWidth() * 0.5f, getTexture().getHeight() * 0.5f);
+		}
+	}
+	
+	
+	public void despawn(World world) {
+		getTexture().dispose();
+		getBody().destroyFixture(getFix());
+		world.destroyBody(getBody());
 	}
 	
 	public void destroy() {
@@ -56,7 +67,7 @@ public class NonPlayableCharacter extends Character{
 		npcMove(moveDir);
         
         // Check if NPC reaches the boundaries, then change direction
-        if (getPosX() >= Gdx.graphics.getWidth() - getTexture().getWidth() || getPosX() <= 0 || getPosY() >= Gdx.graphics.getHeight() - getTexture().getHeight() || getPosY() <= 0) {
+        if (getPosX() >= Gdx.graphics.getWidth() - (getTexture().getWidth() / 2.5f) || getPosX() <= 0 || getPosY() >= Gdx.graphics.getHeight() - getTexture().getHeight() || getPosY() <= 0) {
         	moveDir = 0;
         	randomNum = rand.nextInt(100);
         }
