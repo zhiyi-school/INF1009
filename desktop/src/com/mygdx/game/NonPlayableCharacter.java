@@ -33,7 +33,7 @@ public class NonPlayableCharacter extends Character{
 	}
 	
 	public void draw(SpriteBatch batch) {
-		batch.draw(getTexture(), getPosX(), getPosY(), getTexture().getWidth() * 3, getTexture().getHeight() * 3);
+		batch.draw(getTexture(), getPosX(), getPosY(), getTexture().getWidth() * 2, getTexture().getHeight() * 2);
 	}
 	public void draw(SpriteBatch batch, boolean Item) {
 		if(Item) {
@@ -53,20 +53,21 @@ public class NonPlayableCharacter extends Character{
 	}
 	
 	public void moveAIControlled() {
-		if (randomNum % 5 == 0) {
+		if (randomNum % 2 == 0) {
 			moveDir = 1;	// Move Right
-        } else if(randomNum % 5 == 1){
+        } else if(randomNum % 2 == 1){
         	moveDir = 2;	// Move Left
-        } else if(randomNum % 5 == 2){
-        	moveDir = 3;	// Move Up
-        } else if(randomNum % 5 == 3){
-        	moveDir = 4;	// Move Down
         }
+//        } else if(randomNum % 5 == 2){
+//        	moveDir = 3;	// Move Up
+//        } else if(randomNum % 5 == 3){
+//        	moveDir = 4;	// Move Down
+//        }
 		
 		npcMove(moveDir);
         
         // Check if NPC reaches the boundaries, then change direction
-        if (getPosX() >= Gdx.graphics.getWidth() - (getTexture().getWidth() / 2.5f) || getPosX() <= 0 || getPosY() >= Gdx.graphics.getHeight() - getTexture().getHeight() || getPosY() <= 0) {
+        if (getPosX() >= Gdx.graphics.getWidth() - (getTexture().getWidth() * 2) || getPosX() <= 0 || getPosY() >= Gdx.graphics.getHeight() - (getTexture().getHeight() * 2) || getPosY() <= 0) {
         	moveDir = 0;
         	randomNum = rand.nextInt(100);
         }

@@ -36,7 +36,7 @@ public class EntityManager {
 //		rand.nextInt(Gdx.graphics.getHeight() + 1)
 		
 		// NPC and PC
-		Enemy = new NonPlayableCharacter(world, "Enemy.png", rand.nextInt(Gdx.graphics.getWidth() + 1), 
+		Enemy = new NonPlayableCharacter(world, "Enemy.png", rand.nextInt(Gdx.graphics.getWidth() - 90 + 1), 
 				10, 200, 100, 10, true);
 		npcList.add(Enemy);
 		

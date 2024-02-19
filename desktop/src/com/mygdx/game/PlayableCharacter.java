@@ -73,8 +73,8 @@ public class PlayableCharacter extends Character{
 				if(getPosX() <= 0) {
 					setPosX(0);
 				}
-				if(getPosX() >= Gdx.graphics.getWidth() - getTexture().getWidth()) {
-					setPosX(Gdx.graphics.getWidth() - getTexture().getWidth());
+				if(getPosX() >= Gdx.graphics.getWidth() - (getTexture().getWidth() * 3)) {
+					setPosX(Gdx.graphics.getWidth() - (getTexture().getWidth() * 3));
 				}
 			}
 		}
