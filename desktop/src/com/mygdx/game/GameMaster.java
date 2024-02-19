@@ -1,39 +1,60 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.ScreenUtils;
 
 public class GameMaster extends ApplicationAdapter {
 	private TextureAtlas textureAtlas;
     	private TextureRegion originalCharacterRegion, originalWeaponRegion, originalEnemyRegion;
     	private TextureRegion croppedCharacterRegion, croppedWeaponRegion, croppedEnemyRegion;
 	
+	private EntityManager entityManager;
+	private World world;
+	
+	
 	@Override
 	public void create() {
-		textureAtlas = new TextureAtlas("Entities.pack");
-        
-        	// Cropping onto a single Character image
-	        originalCharacterRegion = textureAtlas.findRegion("PlayableCharacter");
-	        croppedCharacterRegion = new TextureRegion(originalCharacterRegion, 140, 0, 22, 37);
-	        
-	        // Cropping onto a single Weapon image
-	        originalWeaponRegion = textureAtlas.findRegion("Weapon");
-	        croppedWeaponRegion = new TextureRegion(originalWeaponRegion, 0, 0, 120, 100);
-	        
-	        // Cropping onto a single Enemy image
-	        originalEnemyRegion = textureAtlas.findRegion("Enemy");
-	        croppedEnemyRegion = new TextureRegion(originalEnemyRegion, 0, 0, 50, 64);
+
+		world = new World(new Vector2(0, -9.8f), true);		
+		entityManager = new EntityManager(world);
+	}	
+	
+	public void update() {
+		entityManager.collisionEquip(world);
+		entityManager.collisionFight(world);
 	}
 	
 	@Override
 	public void render() {
-		batch.begin();
-		// Define starting position of Entities and have it enlarged
-	        batch.draw(croppedCharacterRegion, 100, 5, croppedCharacterRegion.getRegionWidth() * 3, croppedCharacterRegion.getRegionHeight() * 3);
-	        batch.draw(croppedWeaponRegion, 250, 100, croppedWeaponRegion.getRegionWidth(), croppedWeaponRegion.getRegionHeight());
-	        batch.draw(croppedEnemyRegion, 400, 20, croppedEnemyRegion.getRegionWidth() * 2, croppedEnemyRegion.getRegionHeight() * 2);
-		batch.end();
+		// Clear the screen
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        ScreenUtils.clear(0, 0, 0.2f, 1);
+//        System.out.println(entityManager.getNum());
+        
+		if(entityManager.getNum() > 0) {
+			update();
+		}else {
+	        world.step(Gdx.graphics.getDeltaTime(), 6, 2);
+//	        System.out.println(world.getContactCount());
+	        
+	        OrthographicCamera camera = new OrthographicCamera();
+	        camera.setToOrtho(false, 1, 1);		
+	        
+			entityManager.entityDraw();
+			entityManager.movement();	
+		}	
 	}
+	
+	@Override
+    public void dispose() {
+        world.dispose();
+        entityManager.diposeEntities();
+    }
 }
