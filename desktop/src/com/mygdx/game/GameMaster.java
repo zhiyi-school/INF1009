@@ -10,10 +10,6 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class GameMaster extends ApplicationAdapter {
-	private TextureAtlas textureAtlas;
-    	private TextureRegion originalCharacterRegion, originalWeaponRegion, originalEnemyRegion;
-    	private TextureRegion croppedCharacterRegion, croppedWeaponRegion, croppedEnemyRegion;
-	
 	private EntityManager entityManager;
 	private World world;
 	
