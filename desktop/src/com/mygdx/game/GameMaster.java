@@ -1,7 +1,6 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -16,7 +15,6 @@ public class GameMaster extends ApplicationAdapter {
 	
 	@Override
 	public void create() {
-
 		world = new World(new Vector2(0, -9.8f), true);		
 		entityManager = new EntityManager(world);
 	}	
@@ -34,6 +32,7 @@ public class GameMaster extends ApplicationAdapter {
         ScreenUtils.clear(0, 0, 0.2f, 1);
 //        System.out.println(entityManager.getNum());
         
+        // Check if update outside of world.set is required
 		if(entityManager.getNum() > 0) {
 			update();
 		}else {

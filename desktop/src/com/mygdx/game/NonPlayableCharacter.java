@@ -9,12 +9,12 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class NonPlayableCharacter extends Character{
 	
-	Random rand = new Random();
+	private Random rand = new Random();
 	private int randomNum = 0;
 	
 	private float moveSpeed = 50; // Adjust the speed of movement
     private int moveDir; // Indicates whether the NPC is
-	protected static World worldDefault = new World(new Vector2(0, -9.8f), true);
+    private static World worldDefault = new World(new Vector2(0, -9.8f), true);
     
 	
 	// Default Constructor
@@ -41,17 +41,17 @@ public class NonPlayableCharacter extends Character{
 		}
 	}
 	
-	
+	// Dispose 
 	public void despawn(World world) {
 		getTexture().dispose();
 		getBody().destroyFixture(getFix());
 		world.destroyBody(getBody());
 	}
-	
 	public void destroy() {
 		getTexture().dispose();
 	}
 	
+	// AI movement
 	public void moveAIControlled() {
 		if (randomNum % 2 == 0) {
 			moveDir = 1;	// Move Right
@@ -72,36 +72,35 @@ public class NonPlayableCharacter extends Character{
         	randomNum = rand.nextInt(100);
         }
         
-        body.setTransform(getPosX(), getPosY(), 0);
+        getBody().setTransform(getPosX(), getPosY(), 0);
     }
-	
 	private void npcMove(int direction) {
 		switch(moveDir) {
 		    case 1:
-		    	setPosX(Math.max(0, getPosX() + moveSpeed * Gdx.graphics.getDeltaTime())); // Ensure x-coordinate cannot go below minX
+		    	moveRight();
 		        break;
 		    case 2:
-		    	setPosX(Math.max(0, getPosX() - moveSpeed * Gdx.graphics.getDeltaTime())); // Ensure x-coordinate cannot go below minX
+		    	moveLeft();
 		        break;
 		    case 3:
-		    	setPosY(Math.max(0, getPosY() + moveSpeed * Gdx.graphics.getDeltaTime())); // Ensure x-coordinate cannot go below minX
+		    	moveUp();
 		    	break;
 		    case 4:
-		    	setPosY(Math.max(0, getPosY() - moveSpeed * Gdx.graphics.getDeltaTime())); // Ensure x-coordinate cannot go below minX
+		    	moveDown();
 		    	break;
 		}
 	}
 	
 	public void moveLeft() {
-		
+		setPosX(Math.max(0, getPosX() - moveSpeed * Gdx.graphics.getDeltaTime())); // Ensure x-coordinate cannot go below minX
 	}
 	public void moveRight() {
-		
+		setPosX(Math.max(0, getPosX() + moveSpeed * Gdx.graphics.getDeltaTime())); // Ensure x-coordinate cannot go below minX
 	}
 	public void moveUp() {
-		
+		setPosY(Math.max(0, getPosY() + moveSpeed * Gdx.graphics.getDeltaTime())); // Ensure x-coordinate cannot go below minX
 	}
 	public void moveDown() {
-		
+		setPosY(Math.max(0, getPosY() - moveSpeed * Gdx.graphics.getDeltaTime())); // Ensure x-coordinate cannot go below minX
 	}
 }

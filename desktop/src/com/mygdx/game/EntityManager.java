@@ -17,13 +17,12 @@ public class EntityManager {
 	private PlayableCharacter Player1;	
 	private NonPlayableCharacter Enemy;	
 	private NonPlayableCharacter Item;	
-	
 
+	private PlayableCharacter removePC;
 	private NonPlayableCharacter removeNPC;
 	private NonPlayableCharacter removeItem;
-	private PlayableCharacter removePC;
 
-	Random rand = new Random();
+	private Random rand = new Random();
 	private SpriteBatch batch;
 	private CollisionManager contactListener;
 	private int count = 0;
@@ -33,22 +32,22 @@ public class EntityManager {
 		npcList = new ArrayList<NonPlayableCharacter>();
 		itemList = new ArrayList<NonPlayableCharacter>();
 		
-//		rand.nextInt(Gdx.graphics.getHeight() + 1)
+		// Creating Entities. Add them to ArrayList
+		Player1 = new PlayableCharacter(world, "PlayableCharacter.png", 0, 0, 200, 100, 5, false, true);
+		entityList.add(Player1);
 		
-		// NPC and PC
+//		rand.nextInt(Gdx.graphics.getHeight() + 1)
 		Enemy = new NonPlayableCharacter(world, "Enemy.png", rand.nextInt(Gdx.graphics.getWidth() - 90 + 1), 
 				10, 200, 100, 10, true);
 		npcList.add(Enemy);
 		
 		Item = new NonPlayableCharacter(world, "Weapon.png", 100, 100, 200, 100, 10, false);
 		itemList.add(Item);
-		
-		Player1 = new PlayableCharacter(world, "PlayableCharacter.png", 0, 0, 200, 100, 5, false, true);
-		entityList.add(Player1);
+
 		setCollision(world);
-		
 	}
 	
+	// Dispose all entities
 	public void diposeEntities() {
 		for(Entity entity: entityList) {
 			entity.destroy();
@@ -56,8 +55,12 @@ public class EntityManager {
 		for(Entity npc: npcList) {
 			npc.destroy();
 		}
+		for(Entity item: itemList) {
+			item.destroy();
+		}
 	}
 	
+	// Drawing all entities
 	public void entityDraw() {
 		batch = new SpriteBatch();
 		batch.begin();
@@ -73,6 +76,8 @@ public class EntityManager {
 		batch.end();
 		batch.dispose();
 	}
+	
+	// Movement for entities
 	private void entityMovement(){
 		for(Entity entity: entityList) {
 			if(entity.getAICheck()) {
@@ -82,7 +87,6 @@ public class EntityManager {
 			}
 		}
 	}
-	
 	private void npcMovement(){
 		for(Entity npc: npcList) {
 			if(npc.getAICheck()) {
@@ -90,12 +94,12 @@ public class EntityManager {
 			}
 		}
 	}
-	
 	public void movement() {
 		entityMovement();
 		npcMovement();
 	}
 	
+	// Box2d Collision
 	public void setCollision(World world) {
 		contactListener = new CollisionManager();
 		world.setContactListener(contactListener);
@@ -145,7 +149,6 @@ public class EntityManager {
 		}
 		return count;
 	}
-	
 }
 	
 	

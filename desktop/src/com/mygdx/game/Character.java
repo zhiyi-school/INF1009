@@ -1,19 +1,15 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
 public abstract class Character extends Entity{
 	
 	private String image;
-	protected float speed;
-	protected float attack;
-	protected boolean die;
-	protected float health;
-	protected static World worldDefault = new World(new Vector2(0, -9.8f), true);
-	
-	private SpriteBatch batch = new SpriteBatch();
+	private float speed;
+	private float attack;
+	private boolean die;
+	private float health;
 	
 	protected abstract void moveUp();
 	protected abstract void moveDown();
@@ -22,10 +18,10 @@ public abstract class Character extends Entity{
 	public abstract void draw(SpriteBatch batch);
 	
 	// Default Constructor
-	public Character() {
-		super(worldDefault, "", 0, 0, false);
-		setTexture(image);
+	public Character(World world) {
+		super(world, "", 0, 0, false);
 		setImage("");
+		setTexture(image);
 		setSpeed(1);
 		setAttack(0);
 		setDie(false);
@@ -83,8 +79,8 @@ public abstract class Character extends Entity{
 	public boolean getDie() {
 		return die;
 	}
-	public void setDie(boolean dieCheck) {
-		die = dieCheck;
+	public void setDie(boolean dieInput) {
+		die = dieInput;
 	}
 	
 	public float getHealth() {

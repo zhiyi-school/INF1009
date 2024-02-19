@@ -3,7 +3,6 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -12,32 +11,35 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-public abstract class Entity implements iMoveable, iCollide{
+public abstract class Entity implements iMoveable{
 	
 	// Box2d Variables
-	protected BodyDef bodyDef;
-	protected Body body;
-	protected PolygonShape shape;
-	protected FixtureDef fixtureDef;
-	protected Fixture fixture;
+	private BodyDef bodyDef;
+	private Body body;
+	private PolygonShape shape;
+	private FixtureDef fixtureDef;
+	private Fixture fixture;
 	private Texture texture;
-	protected Sprite sprite;
 	
 	// Variables to draw entity
-	protected float height;
-	protected float width;
-	protected float posX;
-	protected float posY;
-	protected Boolean aiCheck;
+	private float posX;
+	private float posY;
+	private Boolean aiCheck;
 	
 	protected String image;
 
+	protected abstract void despawn(World world);
 	protected abstract void destroy();
+	public abstract void draw(SpriteBatch batch);
 	
 	// Default Constructor
-	public Entity() {
+	public Entity(World world) {
+		setImage("");
+		setTexture("");
 		setPosX(0);
 		setPosY(0);
+		setAICheck(true);
+		createBody(world);
 	}
 	
 	// Parameterized Constructor
@@ -48,7 +50,6 @@ public abstract class Entity implements iMoveable, iCollide{
 		setPosY(posYInput);
 		setAICheck(aiCheck);
 		createBody(world);
-		setSprite(getTexture());
 	}
 	
 	public String getImage() {
@@ -95,15 +96,6 @@ public abstract class Entity implements iMoveable, iCollide{
         shape.dispose();
 	}
 	
-	// Drawing Sprite of Entity
-	public Sprite getSprite() {
-		return sprite;
-	}
-	public void setSprite(Texture texture) {
-		sprite = new Sprite(texture);
-		sprite.setPosition(getBody().getPosition().x - sprite.getWidth() / 2, getBody().getPosition().y - sprite.getHeight() / 2);
-	}
-	
 	// Get x Co-ordinate of Entity
 	public float getPosX() {
 		return posX;
@@ -128,19 +120,10 @@ public abstract class Entity implements iMoveable, iCollide{
 		aiCheck = aiInput;
 	}
 	
-	public void draw(SpriteBatch batch) {
-		
-	}	
 	public void moveAIControlled(){
 		
 	}
 	public void moveUserControlled() {
-		
-	}
-	public void checkCollide() {
-		
-	}
-	public void movementUpdate() {
 		
 	}
 
