@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -8,7 +9,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-public class GameMaster extends ApplicationAdapter{
+public class GameMaster extends ApplicationAdapter {
+	private TextureAtlas textureAtlas;
+    	private TextureRegion originalCharacterRegion, originalWeaponRegion, originalEnemyRegion;
+    	private TextureRegion croppedCharacterRegion, croppedWeaponRegion, croppedEnemyRegion;
 	
 	private EntityManager entityManager;
 	private World world;
@@ -16,6 +20,7 @@ public class GameMaster extends ApplicationAdapter{
 	
 	@Override
 	public void create() {
+
 		world = new World(new Vector2(0, -9.8f), true);		
 		entityManager = new EntityManager(world);
 	}	
