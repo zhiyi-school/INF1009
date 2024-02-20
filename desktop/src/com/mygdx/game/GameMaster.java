@@ -7,12 +7,24 @@ public class GameMaster extends ApplicationAdapter{
 	private Screen screen1;
    
     private Screen currentScreen;
+    
+    private ScreenManager screenManager;
+    private GameScreen gameScreen;
+    private PauseScreen pauseScreen;
+
 
     @Override
     public void create() {
-        screen1 = new MainMenuScreen();
-        //screen2 = new PauseScreen();
-        currentScreen = screen1;
+    	// Initialize the GameScreen
+        gameScreen = new GameScreen();
+        gameScreen.show(); // Show the GameScreen
+        
+        // Initialize the ScreenManager
+        screenManager = new ScreenManager();
+        
+    	pauseScreen = new PauseScreen(screenManager, gameScreen);
+        // screen1 = new InstructionsScreen();
+        currentScreen = pauseScreen;
         currentScreen.show();
     }
 
@@ -24,10 +36,12 @@ public class GameMaster extends ApplicationAdapter{
 
     @Override
     public void dispose() {
-        screen1.dispose();
+        gameScreen.dispose();
+        pauseScreen.dispose();
 //        screen2.dispose();
     }
-
+    
+/*
     public void changeScreen(int screenNumber) {
 //        if (screenNumber == 1) {
 //            currentScreen.hide();
@@ -40,5 +54,5 @@ public class GameMaster extends ApplicationAdapter{
 //            currentScreen.show();
 //        }
     }
+*/
 }
-
