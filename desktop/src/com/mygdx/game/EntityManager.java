@@ -69,6 +69,11 @@ public class EntityManager {
     			entity.destroy();
     		}
 		}
+		for (Entity entity : entityList) {
+            		if (entity instanceof Map) {
+                		((Map) entity).dispose();
+            		}
+        	}
 	}
 	
 	// Drawing all entities
@@ -165,7 +170,6 @@ public class EntityManager {
 		}
 		return count;
 	}
-
 	public void update(float deltaTime) {
     	for (Entity pc : pcList) {
     		pc.update(deltaTime);
