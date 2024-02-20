@@ -16,7 +16,6 @@ public abstract class Character extends Entity{
 	protected abstract void moveLeft();
 	protected abstract void moveRight();
 	public abstract void draw(SpriteBatch batch);
-	protected abstract void destroy();
 	
 	// Default Constructor
 	public Character(World world) {

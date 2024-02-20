@@ -83,5 +83,13 @@ public class Map extends Entity {
         map.dispose();
         maprenderer.dispose();
     }
+    public void destroy() {
+		getTexture().dispose();
+	}
+    public void despawn(World world) {
+		getTexture().dispose();
+		getBody().destroyFixture(getFix());
+		world.destroyBody(getBody());
+	}
 }
 
