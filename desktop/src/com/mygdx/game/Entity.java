@@ -29,8 +29,7 @@ public abstract class Entity implements iMoveable{
 	
 	protected String image;
 
-	protected abstract void despawn(World world);
-	protected abstract void destroy();
+	protected abstract void dispose(World world);
 	
 	// Default Constructor
 	public Entity(World world) {

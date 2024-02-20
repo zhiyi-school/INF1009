@@ -79,7 +79,7 @@ public class Map extends Entity {
         return map;
     }
 
-    public void dispose() {
+    public void dispose(World world) {
         map.dispose();
         maprenderer.dispose();
     }

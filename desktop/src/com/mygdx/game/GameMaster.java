@@ -1,7 +1,27 @@
 package com.mygdx.game;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+
+   
+    private Screen currentScreen;
+    private ScreenManager screenManager;
+    private GameScreen gameScreen;
+    private PauseScreen pauseScreen;    
+/*
+    public void changeScreen(int screenNumber) {
+//        if (screenNumber == 1) {
+//            currentScreen.hide();
+//            currentScreen = screen1;
+//            currentScreen.show();
+//        } 
+//        else if (screenNumber == 2) {
+//            currentScreen.hide();
+//            currentScreen = screen2;
+//            currentScreen.show();
+//        }
+    }
+*/
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
@@ -51,6 +71,18 @@ public class GameMaster extends ApplicationAdapter {
         
     	// Calculate camera boundaries and set them in OrthographicCameraController
     	orthographicCameraController.setCameraBoundaries(mapFullWidth, mapFullHeight);
+    
+    // Initialize the GameScreen
+        gameScreen = new GameScreen();
+        gameScreen.show(); // Show the GameScreen
+        
+        // Initialize the ScreenManager
+        screenManager = new ScreenManager();
+        
+    	pauseScreen = new PauseScreen(screenManager, gameScreen);
+        // screen1 = new InstructionsScreen();
+        currentScreen = pauseScreen;
+        currentScreen.show();
 	}	
 	
 	public void update() {
@@ -68,6 +100,11 @@ public class GameMaster extends ApplicationAdapter {
 		// System.out.println(entityManager.getNum());
 
         entityManager.entityDraw(batch);
+      	float delta = Gdx.graphics.getDeltaTime();
+        currentScreen.render(delta);
+		// System.out.println(entityManager.getNum());
+
+    entityManager.entityDraw(batch);
 		entityManager.movement(soundEffect);
 		
         // Check if update outside of world.set is required
@@ -88,8 +125,7 @@ public class GameMaster extends ApplicationAdapter {
 		    		entityManager.setProjection(orthographicCameraController, batch);
 				}else {
 					
-				}
-	    		
+				}	
 		}	
 	}
 
@@ -101,8 +137,10 @@ public class GameMaster extends ApplicationAdapter {
 	@Override
     	public void dispose() {
     		batch.dispose();
-        	world.dispose();
-        	entityManager.diposeEntities();
-        	soundEffect.dispose();
+			entityManager.diposeEntities(world);
+			soundEffect.dispose();
+			world.dispose();
+			gameScreen.dispose();
+			pauseScreen.dispose();
     	}
 }
