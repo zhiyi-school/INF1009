@@ -14,6 +14,7 @@ public class EntityManager {
 	private List<PlayableCharacter> entityList;
 	private List<NonPlayableCharacter> npcList;
 	private List<NonPlayableCharacter> itemList;
+	private List<Entity> entityList = new ArrayList<>();
 	
 	private PlayableCharacter Player1;	
 	private NonPlayableCharacter Enemy;	
@@ -59,6 +60,11 @@ public class EntityManager {
 		for(Entity item: itemList) {
 			item.destroy();
 		}
+		for (Entity entity : entityList) {
+            		if (entity instanceof Map) {
+                		((Map) entity).dispose();
+            		}
+        	}
 	}
 	
 	// Drawing all entities
@@ -150,6 +156,23 @@ public class EntityManager {
 		}
 		return count;
 	}
+
+	// Map entities
+    	public void addEntity(Entity entity) {
+        	entityList.add(entity);
+    	}
+
+    	public void update(float deltaTime) {
+        	for (Entity entity : entityList) {
+            		entity.update(deltaTime);
+        	}
+    	}
+
+    	public void render(SpriteBatch batch) {
+        	for (Entity entity : entityList) {
+            		entity.render(batch);
+        	}
+    	}
 }
 	
 	
