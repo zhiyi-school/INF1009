@@ -1,33 +1,19 @@
-<<<<<<<< HEAD:desktop/src/Entity/GameOverScreen.java
-package com.mygdx.game;
-========
 package Screen;
->>>>>>>> 9aa0594380108f968905c4e252fd9fe96cde98ae:desktop/src/Screen/GameOverScreen.java
 
-import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.Align;
 
 
 public class GameOverScreen implements Screen {
 	
 	// private Screen gameOverScreen;
+	private ScreenManager screenManager;
 	
 	private String gameOverText;
 	private Button startButton;
@@ -173,6 +159,10 @@ public class GameOverScreen implements Screen {
         }
 	}
 	
+	public void setScreenManager(ScreenManager screenManagerInput) {
+    	screenManager = screenManagerInput;
+    }
+	
 	@Override
 	public void resize(int width, int height) {
 		
@@ -191,6 +181,11 @@ public class GameOverScreen implements Screen {
 	@Override
 	public void hide() {
 		
+	}
+	
+	public String getScreen() {
+		String screen = "gameOver";
+		return screen;
 	}
 	
 	@Override 

@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:desktop/src/Entity/PauseScreen.java
-package com.mygdx.game;
-========
 package Screen;
->>>>>>>> 9aa0594380108f968905c4e252fd9fe96cde98ae:desktop/src/Screen/PauseScreen.java
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -175,6 +171,10 @@ public class PauseScreen implements Screen {
         	exitButton.setColour(Color.RED);
         }
     }
+    
+    public void setScreenManager(ScreenManager screenManagerInput) {
+    	screenManager = screenManagerInput;
+    }
 
     @Override
     public void resize(int width, int height) {
@@ -195,6 +195,11 @@ public class PauseScreen implements Screen {
     public void hide() {
         // Called when this screen is no longer the current screen.
     }
+    
+    public String getScreen() {
+		String screen = "pause";
+		return screen;
+	}
 
     @Override
     public void dispose() {

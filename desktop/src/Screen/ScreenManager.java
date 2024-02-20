@@ -1,16 +1,7 @@
-<<<<<<<< HEAD:desktop/src/Entity/ScreenManager.java
-package com.mygdx.game;
-========
 package Screen;
->>>>>>>> 9aa0594380108f968905c4e252fd9fe96cde98ae:desktop/src/Screen/ScreenManager.java
 
 import java.util.ArrayList;
-import java.util.List;
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class ScreenManager {
 	
@@ -23,46 +14,108 @@ public class ScreenManager {
 	private Screen currentScreen;
 
 	
-    private ArrayList<Screen> screens;
+    private ArrayList<Screen> screensList;
     
 
     public ScreenManager() {
-        screens = new ArrayList<>();
+        screensList = new ArrayList<Screen>();
         mainMenuScreen = new MainMenuScreen(); // Initialize mainMenuScreen
+        screensList.add(mainMenuScreen);
+        
         instructionsScreen = new InstructionsScreen(); // Initialize instructionsScreen
+        screensList.add(instructionsScreen);
+        
         gameScreen = new GameScreen(); // Initialize gameScreen
+        screensList.add(gameScreen);
+        
         pauseScreen = new PauseScreen(this, gameScreen); // Initialize pauseScreen with appropriate parameters
+        screensList.add(pauseScreen);
+        
         gameOverScreen = new GameOverScreen(); // Initialize gameOverScreen
+        screensList.add(gameOverScreen);
+    }
+    
+    public void setScreenManager(ScreenManager screenManagerInput) {
+    	mainMenuScreen.setScreenManager(screenManagerInput);
+        instructionsScreen.setScreenManager(screenManagerInput);
+        gameScreen.setScreenManager(screenManagerInput);
+        pauseScreen.setScreenManager(screenManagerInput);
+        gameOverScreen.setScreenManager(screenManagerInput);
+    }
+    public void show(float delta) {
+    	pauseScreen.show();
+    	pauseScreen.render(delta);
     }
 
-
     public void addScreen(Screen screen) {
-        screens.add(screen);
+    	screensList.add(screen);
     }
 
     public void removeScreen(Screen screen) {
-        screens.remove(screen);
+    	screensList.remove(screen);
     }
     
-    public void setCurrentScreen(Screen screen) {
-    	currentScreen = screen;
+    public Screen getCurrentScreen() {
+    	return currentScreen;
+    }
+    
+    public void setCurrentScreen(String screen) {
+//    	switch(screen) {
+//	    	case "Main":
+//	    		currentScreen = mainMenuScreen;
+//				switchTo(mainMenuScreen);
+//			
+//	    	case "Pause":
+////	    		currentScreen = mainMenuScreen;
+//	    		switchTo(pauseScreen);
+//	    		
+//	    	case "Game":
+//	    		switchTo(gameScreen);
+//	    	
+//	    	case "GameOver":
+//	    		switchTo(gameOverScreen);
+//	    		
+//	    	case "Instruction":
+//	    		switchTo(instructionsScreen);
+//				
+//			default:
+//				currentScreen = gameScreen;
+//    	}	
+    	if(screen == "Main") {
+    		currentScreen = mainMenuScreen;
+			switchTo(mainMenuScreen);
+    	}else if(screen == "Pause") {
+    		switchTo(pauseScreen);
+    	}else if(screen == "Game") {
+    		switchTo(gameScreen);
+    	}else if(screen == "GameOver") {
+    		switchTo(gameOverScreen);
+    	}else if(screen == "Instructions") {
+    		switchTo(instructionsScreen);
+    	}else {
+    		currentScreen = mainMenuScreen;
+    	}
     }
     
     public void switchTo(Screen screen) {
-    	if (screen instanceof PauseScreen) {
-            currentScreen = pauseScreen;
+    	if (screen instanceof MainMenuScreen) {
+    		currentScreen = mainMenuScreen;
+            
         } else if (screen instanceof GameScreen) {
-        	System.out.println(currentScreen);
-        	currentScreen.hide();
             currentScreen = gameScreen;
-            currentScreen.show();
+
+        } else if (screen instanceof GameOverScreen) {
+            currentScreen = gameOverScreen;
+            
         } else if (screen instanceof InstructionsScreen) {
             currentScreen = instructionsScreen;
-        } else if (screen instanceof MainMenuScreen) {
-            currentScreen = mainMenuScreen;
-        } else {
-            // Handle other types of screens
-        }
+            
+        } else if (screen instanceof PauseScreen) {
+            currentScreen = pauseScreen;
+            
+        } 
+//        currentScreen.show();
+//    	System.out.println(currentScreen);
     }
     
     /*

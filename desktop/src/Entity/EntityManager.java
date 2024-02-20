@@ -173,6 +173,13 @@ public class EntityManager {
     	}
 	}
 	
+	public boolean checkGame() {
+		if(pcList.size() > 0) {
+			return true;
+		}
+		return false;
+	}
+	
 	public PlayableCharacter getEntity(String entityInput) {
 		for(PlayableCharacter pc: pcList) {
 			if(entityInput.equals(pc.getFix().getUserData())){

@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:desktop/src/Entity/MainMenuScreen.java
-package com.mygdx.game;
-========
 package Screen;
->>>>>>>> 9aa0594380108f968905c4e252fd9fe96cde98ae:desktop/src/Screen/MainMenuScreen.java
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -68,7 +64,6 @@ public class MainMenuScreen implements Screen {
         
     }
 
-    @Override
     public void render(float delta) {
         // Clear the screen
         Gdx.gl.glClearColor(0, 1, 0, 1);
@@ -95,7 +90,8 @@ public class MainMenuScreen implements Screen {
         	startButton.setColour(Color.YELLOW);
         	if(Gdx.input.isTouched())
         	{
-        		System.out.println("Start clicked!");
+//        		System.out.println("Start clicked!");
+        		screenManager.setCurrentScreen("Game");
         	}
         }
         else if (instructionsButton.hover(mouseX, mouseY)==true) {
@@ -103,7 +99,7 @@ public class MainMenuScreen implements Screen {
         	if(Gdx.input.isTouched())
         	{
         		System.out.println("Instruction clicked!");
-        		screenManager.setCurrentScreen(instructionsScreen); // edited this
+        		screenManager.setCurrentScreen("Instruction"); // edited this
         	}
         }
         else if (exitButton.hover(mouseX, mouseY)==true) {
@@ -121,6 +117,10 @@ public class MainMenuScreen implements Screen {
         }
 
         
+    }
+    
+    public void setScreenManager(ScreenManager screenManagerInput) {
+    	screenManager = screenManagerInput;
     }
 
     @Override
@@ -155,5 +155,10 @@ public class MainMenuScreen implements Screen {
 	public void hide() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public String getScreen() {
+		String screen = "mainMenu";
+		return screen;
 	}
 }
