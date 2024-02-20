@@ -90,7 +90,13 @@ public class EntityManager {
 		batch.end();
 	}
 	public void addEntity(Entity entity) {
-    	entityList.add(entity);
+    	entityList.add(entityList.size(), entity);
+	}
+	public void addPlayableCharacter(PlayableCharacter pc) {
+		pcList.add(pcList.size(), pc);
+	}
+	public void addNonPlayableCharacter(NonPlayableCharacter npc) {
+		npcList.add(npcList.size(), npc);
 	}
 	
 	// Movement for entities
@@ -149,8 +155,16 @@ public class EntityManager {
 					}
 				}
 			}
-			npcList.remove(removeNPC);
-			pcList.remove(removePC);
+			if(removeNPC != null) {
+				npcList.remove(removeNPC);
+				removeNPC.destroy();
+				removeNPC.dispose(world);
+			}
+			if(removePC != null) {
+				pcList.remove(removePC);
+				removePC.destroy();
+				removePC.dispose(world);
+			}
 		}
 	}
 	public int getNum() {

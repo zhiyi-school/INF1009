@@ -33,7 +33,6 @@ public class GameMaster extends ApplicationAdapter {
 	
 	private Screen currentScreen;
     private ScreenManager screenManager;
-    private GameOverScreen gameScreen;
 
 	// Constant variable for enlarging objects
 	private static final float MAP_SCALE = 3.0f;
@@ -61,13 +60,9 @@ public class GameMaster extends ApplicationAdapter {
         
     	// Calculate camera boundaries and set them in OrthographicCameraController
     	orthographicCameraController.setCameraBoundaries(mapFullWidth, mapFullHeight);
-//    
-    	// Initialize the GameScreen
-        gameScreen = new GameOverScreen();
-//        gameScreen.show(); // Show the GameScreen
         
         // Initialize the ScreenManager
-        screenManager = new ScreenManager();
+        screenManager = new ScreenManager(entityManager, world);
         screenManager.setScreenManager(screenManager);
 	}	
 	
@@ -78,67 +73,68 @@ public class GameMaster extends ApplicationAdapter {
 	
 	@Override
 	public void render() {
-
-      	float delta = Gdx.graphics.getDeltaTime();
-
-      	currentScreen = screenManager.getCurrentScreen();      	
-      	
-      	if(currentScreen == null) {
-      		System.out.println("1 time");
-      		screenManager.setCurrentScreen("Instruction");
-      	}else {
-//      		System.out.println(currentScreen);
-          	currentScreen.show();
-    		currentScreen.render(delta);
-          	
-    		if(screenManager.getCurrentScreen() instanceof MainMenuScreen) {
-//    			System.out.println("MainMenu");
-    			
-    		}else if(screenManager.getCurrentScreen() instanceof InstructionsScreen) {
-//    			System.out.println("MainMenu");
-    			
-    		}else if (screenManager.getCurrentScreen() instanceof PauseScreen) {
-//    			System.out.println("MainMenu");
-    			
-    		}else if (screenManager.getCurrentScreen() instanceof GameOverScreen) {
-//    			System.out.println("MainMenu");
-    			
-    		}else if(screenManager.getCurrentScreen() instanceof GameScreen) {
-
-    			// Clear the screen
-    			Gdx.gl.glClearColor(0, 0, 0, 1);
-    	    	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-    			ScreenUtils.clear(0, 0, 0.2f, 1);
-    			// System.out.println(entityManager.getNum());
-
-    			// Check if update outside of world.set is required
-    			if(entityManager.getNum() > 0) {
-    				update();
-    				System.out.println("here testing");
-    			}else {
-//    				System.out.println(entityManager.checkGame());
-    				if(entityManager.checkGame()) {
-    	    			entityManager.entityDraw(batch);
-    	    			entityManager.movement(soundEffect);
-    	    			
-    					world.step(Gdx.graphics.getDeltaTime(), 6, 2);
-        		        // System.out.println(world.getContactCount());
-        				
-        				entityManager.update(Gdx.graphics.getDeltaTime());
-    	    		
-    					// Update camera position to follow character and ensures it does not go out of map boundaries
-    					orthographicCameraController.updateCameraPosition(entityManager.getEntity("PlayableCharacter").getPosX() + 
-    		    				entityManager.getEntity("PlayableCharacter").getTexture().getWidth() / 2, 240);
-    		    		orthographicCameraController.applyViewport();
-    		    		// Set the batch projection matrix to camera's combined matrix	
-    		    		entityManager.setProjection(orthographicCameraController, batch);
-        			}else {
-        				screenManager.setCurrentScreen("GameOver");
-        			}
-    			}	
-    		}
-      	}
+		try {
+	      	float delta = Gdx.graphics.getDeltaTime();
+	      	currentScreen = screenManager.getCurrentScreen();      	
+	      	
+	      	if(currentScreen == null) {
+	      		screenManager.setCurrentScreen("Instruction");
+	      	}else {
+	          	currentScreen.show();
+	    		currentScreen.render(delta);
+	          	
+	    		if(screenManager.getCurrentScreen() instanceof MainMenuScreen) {
+	//    			System.out.println("MainMenu");
+	    			
+	    		}else if(screenManager.getCurrentScreen() instanceof InstructionsScreen) {
+	//    			System.out.println("MainMenu");
+	    			
+	    		}else if (screenManager.getCurrentScreen() instanceof PauseScreen) {
+	//    			System.out.println("MainMenu");
+	    			
+	    		}else if (screenManager.getCurrentScreen() instanceof GameOverScreen) {
+	//    			System.out.println("MainMenu");
+	    			
+	    		}else if(screenManager.getCurrentScreen() instanceof GameScreen) {
+	
+	    			// Clear the screen
+	    			Gdx.gl.glClearColor(0, 0, 0, 1);
+	    	    	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+	
+	    			ScreenUtils.clear(0, 0, 0.2f, 1);
+	    			// System.out.println(entityManager.getNum());
+	
+	    			// Check if update outside of world.set is required
+	    			if(entityManager.getNum() > 0) {
+	    				update();
+	    			}else {
+	    				entityManager.entityDraw(batch);
+		    			entityManager.movement(soundEffect);
+		    			
+						world.step(Gdx.graphics.getDeltaTime(), 6, 2);
+	    		        // System.out.println(world.getContactCount());
+	    				
+	    				entityManager.update(Gdx.graphics.getDeltaTime());
+	    				
+	    				if(entityManager.getEntity("PlayableCharacter") != null) {
+	    					// Update camera position to follow character and ensures it does not go out of map boundaries
+	    					orthographicCameraController.updateCameraPosition(entityManager.getEntity("PlayableCharacter").getPosX() + 
+	    		    				entityManager.getEntity("PlayableCharacter").getTexture().getWidth() / 2, 240);
+	    		    		orthographicCameraController.applyViewport();
+	    		    		// Set the batch projection matrix to camera's combined matrix	
+	    		    		entityManager.setProjection(orthographicCameraController, batch);
+	        			}else {
+	        				screenManager.setCurrentScreen("GameOver");
+	        				update();
+	        			}
+	    			}	
+	    		}
+	      	}
+		}catch(Exception e){
+			System.out.println(e);
+		}finally{
+			
+		}
 	}
 	
 	/*

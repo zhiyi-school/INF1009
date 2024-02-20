@@ -2,6 +2,9 @@ package Screen;
 
 import java.util.ArrayList;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.physics.box2d.World;
+
+import Entity.EntityManager;
 
 public class ScreenManager {
 	
@@ -12,12 +15,14 @@ public class ScreenManager {
 	private GameOverScreen gameOverScreen;
 	// private GameMaster gameScreen;
 	private Screen currentScreen;
+	private EntityManager entityManager;
+	private World world;
 
 	
     private ArrayList<Screen> screensList;
     
 
-    public ScreenManager() {
+    public ScreenManager(EntityManager entityManager, World world) {
         screensList = new ArrayList<Screen>();
         mainMenuScreen = new MainMenuScreen(); // Initialize mainMenuScreen
         screensList.add(mainMenuScreen);
@@ -33,6 +38,9 @@ public class ScreenManager {
         
         gameOverScreen = new GameOverScreen(); // Initialize gameOverScreen
         screensList.add(gameOverScreen);
+        
+        setEntityManager(entityManager);
+        setWorld(world);
     }
     
     public void setScreenManager(ScreenManager screenManagerInput) {
@@ -57,6 +65,19 @@ public class ScreenManager {
     
     public Screen getCurrentScreen() {
     	return currentScreen;
+    }
+    
+    public void setEntityManager(EntityManager entityManagerInput) {
+    	entityManager = entityManagerInput;
+    }
+    public EntityManager getEntityManager() {
+    	return entityManager;
+    }
+    public void setWorld(World worldInput) {
+    	world = worldInput;
+    }
+    public World getWorld() {
+    	return world;
     }
     
     public void setCurrentScreen(String screen) {
