@@ -1,34 +1,20 @@
 package com.mygdx.game;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-
-   
-    private Screen currentScreen;
-    private ScreenManager screenManager;
-    private GameScreen gameScreen;
-    private PauseScreen pauseScreen;    
-/*
-    public void changeScreen(int screenNumber) {
-//        if (screenNumber == 1) {
-//            currentScreen.hide();
-//            currentScreen = screen1;
-//            currentScreen.show();
-//        } 
-//        else if (screenNumber == 2) {
-//            currentScreen.hide();
-//            currentScreen = screen2;
-//            currentScreen.show();
-//        }
-    }
-*/
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
+
+import Entity.EntityManager;
+import Entity.OrthographicCameraController;
+import Screen.GameScreen;
+import Screen.PauseScreen;
+import Screen.ScreenManager;
 
 public class GameMaster extends ApplicationAdapter {
 	private SpriteBatch batch;
@@ -43,6 +29,11 @@ public class GameMaster extends ApplicationAdapter {
 	private float mapTileWidth;
 	private float mapTileHeight;
 	private float tileSize;
+	
+	private Screen currentScreen;
+    private ScreenManager screenManager;
+    private GameScreen gameScreen;
+    private PauseScreen pauseScreen;
 
 	// Constant variable for enlarging objects
 	private static final float MAP_SCALE = 3.0f;
@@ -128,6 +119,21 @@ public class GameMaster extends ApplicationAdapter {
 				}	
 		}	
 	}
+	
+	/*
+    public void changeScreen(int screenNumber) {
+//        if (screenNumber == 1) {
+//            currentScreen.hide();
+//            currentScreen = screen1;
+//            currentScreen.show();
+//        } 
+//        else if (screenNumber == 2) {
+//            currentScreen.hide();
+//            currentScreen = screen2;
+//            currentScreen.show();
+//        }
+    }
+*/
 
 	@Override
 	public void resize(int width, int height) {

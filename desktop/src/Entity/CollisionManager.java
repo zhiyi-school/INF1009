@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package Entity;
 
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -76,7 +76,7 @@ public class CollisionManager implements ContactListener{
 		return null;
 	}
 	// Item equipped, remove from screen
-	public boolean equip(Entity item, World world) {
+	public boolean equip(NonPlayableCharacter item, World world) {
 		if("equip".equals(item.getFix().getUserData())) {
 			item.getFix().setUserData("Weapon");
 			item.dispose(world);
