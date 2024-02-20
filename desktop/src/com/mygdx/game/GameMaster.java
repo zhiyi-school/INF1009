@@ -78,6 +78,7 @@ public class GameMaster extends ApplicationAdapter {
     		// Set the batch projection matrix to camera's combined matrix
     		batch.setProjectionMatrix(orthographicCameraController.getCamera().combined);
 
+		// TRANFER OVER LATER
 		batch.begin();
 			entityManager.render(batch);
         	batch.end();
