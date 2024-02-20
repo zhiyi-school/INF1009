@@ -144,4 +144,9 @@ public abstract class Entity implements iMoveable{
 		
 	}
 
+	// Map and Orthographic Camera
+	public abstract void update(float deltaTime);
+	
+	public abstract void render(SpriteBatch batch);
+
 }

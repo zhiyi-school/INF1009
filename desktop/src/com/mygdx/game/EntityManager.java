@@ -69,6 +69,11 @@ public class EntityManager {
     			entity.destroy();
     		}
 		}
+		for (Entity entity : entityList) {
+            		if (entity instanceof Map) {
+                		((Map) entity).dispose();
+            		}
+        	}
 	}
 	
 	// Drawing all entities
