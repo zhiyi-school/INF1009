@@ -23,6 +23,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 public class InstructionsScreen implements Screen {
 	
 	// private Screen instructionScreen;
+	private ScreenManager screenManager;
 	
 	private String instructionsText;
 	private Button startButton;
@@ -62,10 +63,12 @@ public class InstructionsScreen implements Screen {
     
     public void returnToMenu() {
         // Resume the game logic here
+		screenManager.setCurrentScreen("Main");
     }
 
     public void startGame() {
         // Restart the game logic here
+		screenManager.setCurrentScreen("Game");
     }
 
     public void exitGame() {
@@ -173,6 +176,9 @@ public class InstructionsScreen implements Screen {
         	exitButton.setColour(Color.RED);
         }
 	}
+	public void setScreenManager(ScreenManager screenManagerInput) {
+    	screenManager = screenManagerInput;
+    }
 	
 	@Override
 	public void resize(int width, int height) {
@@ -192,6 +198,11 @@ public class InstructionsScreen implements Screen {
 	@Override
 	public void hide() {
 		
+	}
+	
+	public String getScreen() {
+		String screen = "instructions";
+		return screen;
 	}
 	
 	@Override 

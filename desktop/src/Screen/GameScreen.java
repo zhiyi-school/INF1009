@@ -24,6 +24,7 @@ import com.badlogic.gdx.utils.Align;
 public class GameScreen implements Screen {
 	
 	// private Screen gameScreen;
+	private ScreenManager screenManager;
 	
 	private String gameText;
 	private Button pauseButton;
@@ -56,7 +57,6 @@ public class GameScreen implements Screen {
     	// Display game over text
     	gameText = "MARIO GAME"; 
 
-    	
     	// Calculate the x position to center the buttons horizontally
         float buttonWidth = 50; // Assuming all buttons have the same width
         float buttonHeight = 60; // Assuming all buttons have the same height
@@ -114,6 +114,10 @@ public class GameScreen implements Screen {
         }
 	}
 	
+	public void setScreenManager(ScreenManager screenManagerInput) {
+    	screenManager = screenManagerInput;
+    }
+	
 	@Override
 	public void resize(int width, int height) {
 		
@@ -132,6 +136,11 @@ public class GameScreen implements Screen {
 	@Override
 	public void hide() {
 		
+	}
+	
+	public String getScreen() {
+		String screen = "game";
+		return screen;
 	}
 	
 	@Override 

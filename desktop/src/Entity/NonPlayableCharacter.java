@@ -14,6 +14,8 @@ public class NonPlayableCharacter extends Character{
 	private float moveSpeed = 50; // Adjust the speed of movement
     private float elapsedTime;
     private boolean isMovingRight;
+    private static final float GRAVITY = -1500f;
+    private float verticalVelocity = 0;
     
 	
 	// Default Constructor
@@ -71,6 +73,22 @@ public class NonPlayableCharacter extends Character{
         // Update the NPC's position based on Box2D body
         getBody().setTransform(getPosX(), getPosY(), 0);
     }
+	// Apply gravity
+	public void update(float delta) {
+		// Apply gravity
+		verticalVelocity += GRAVITY * delta;
+		
+		// Update position based on vertical velocity
+		setPosY(getPosY() + verticalVelocity * delta);
+		
+		// Check if the NonPlayableCharacter is on the ground
+        if (getPosY() <= 0) {
+            setPosY(0);
+            verticalVelocity = 0;
+        }
+        getBody().setTransform(getPosX(), getPosY(), 0);
+        moveAIControlled(delta);
+	}
 	
 	public void moveLeft() {
 		setPosX(Math.max(0, getPosX() - moveSpeed * Gdx.graphics.getDeltaTime())); // Ensure x-coordinate cannot go below minX
