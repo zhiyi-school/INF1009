@@ -121,7 +121,7 @@ public abstract class Entity implements iMoveable{
 		aiCheck = aiInput;
 	}
 	
-	public void moveAIControlled(){
+	public void moveAIControlled(float delta){
 		
 	}
 	public void moveUserControlled(Sound soundEffect) {
