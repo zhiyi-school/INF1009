@@ -181,9 +181,15 @@ public class EntityManager {
 		}
 		return count;
 	}
+	// Call update() method to apply gravity for Entities that can move
 	public void update(float deltaTime) {
     	for (Entity pc : pcList) {
     		pc.update(deltaTime);
+    	}
+    	for (NonPlayableCharacter npc : npcList) {
+    		if(npc.getAICheck()) {
+    			npc.update(deltaTime);
+			}
     	}
 	}
 	
