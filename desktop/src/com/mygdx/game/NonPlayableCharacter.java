@@ -54,7 +54,6 @@ public class NonPlayableCharacter extends Character{
 	public void moveAIControlled(float delta) {
 		elapsedTime += delta;
 
-        System.out.println(elapsedTime);
         // Toggle direction every 2 seconds
         if (elapsedTime >= 4 || getPosX() <= 0) {
             isMovingRight = !isMovingRight; // Toggle direction
