@@ -43,7 +43,7 @@ public class GameMaster extends ApplicationAdapter {
         	entityManager.addEntity(gameMap);
 
 		// Create physics static bodies by iterating over all map objects
-        	gameMap.mapObjects(b2dworld);
+        	gameMap.mapObjects(world);
 
 		// Set up map dimensions
         	mapTileWidth = gameMap.getMapTileWidth();
@@ -70,7 +70,21 @@ public class GameMaster extends ApplicationAdapter {
         	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         	ScreenUtils.clear(0, 0, 0.2f, 1);
 		// System.out.println(entityManager.getNum());
-        
+
+		entityManager.update(Gdx.graphics.getDeltaTime());
+    		// Update camera position to follow character and ensures it does not go out of map boundaries
+    		orthographicCameraController.updateCameraPosition(bucket.getPosX() + bucket.getWidth() / 2, 240);
+    		orthographicCameraController.applyViewport();
+    		// Set the batch projection matrix to camera's combined matrix
+    		batch.setProjectionMatrix(orthographicCameraController.getCamera().combined);
+
+		batch.begin();
+			entityManager.render(batch);
+        	batch.end();
+
+		// REMOVE LATER
+        	b2drenderer.render(world, orthographicCameraController.getCamera().combined.cpy().scl(MAP_SCALE));
+		
         	// Check if update outside of world.set is required
 		if(entityManager.getNum() > 0) {
 			update();
@@ -85,6 +99,11 @@ public class GameMaster extends ApplicationAdapter {
 			entityManager.movement(soundEffect);
 		}	
 	}
+
+    	@Override
+    	public void resize(int width, int height) {
+        	orthographicCameraController.resize(width, height);
+    	}
 	
 	@Override
     	public void dispose() {
