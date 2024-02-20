@@ -45,7 +45,7 @@ public class EntityManager {
 				100, 200, 100, 10, true);
 		npcList.add(Enemy);
 		
-		Item = new NonPlayableCharacter(world, "Weapon.png", 100, 10, 200, 100, 10, false);
+		Item = new NonPlayableCharacter(world, "Weapon.png", 100, 300, 200, 100, 10, false);
 		npcList.add(Item);
 		
 		gameMap = new Map(0, 0, "gamemap.tmx", MAP_SCALE, orthographicCameraController);
@@ -55,7 +55,7 @@ public class EntityManager {
 	}
 	
 	// Dispose all entities
-	public void diposeEntities() {
+	public void diposeEntities(World world) {
 		for(PlayableCharacter pc: pcList) {
 			pc.destroy();
 		}
@@ -64,16 +64,11 @@ public class EntityManager {
 		}
 		for(Entity entity: entityList) {
 			if (entity instanceof Map) {
-        		((Map) entity).dispose();
+        		((Map) entity).dispose(world);
     		}else {
-    			entity.destroy();
+    			entity.dispose(world);
     		}
 		}
-		for (Entity entity : entityList) {
-            		if (entity instanceof Map) {
-                		((Map) entity).dispose();
-            		}
-        	}
 	}
 	
 	// Drawing all entities
@@ -146,9 +141,11 @@ public class EntityManager {
 					if(pc.getAttackCheck()) {
 						removeNPC = getCollision().kill(pc, npc, world);
 						count--;
+						break;
 					}else{
 						removePC = getCollision().die(pc, npc, world);
 						count--;
+						break;
 					}
 				}
 			}

@@ -41,7 +41,7 @@ public class PlayableCharacter extends Character{
 	}
 	
 	// Dispose 
-	public void despawn(World world) {
+	public void dispose(World world) {
 		getTexture().dispose();
 		getBody().destroyFixture(getFix());
 		world.destroyBody(getBody());

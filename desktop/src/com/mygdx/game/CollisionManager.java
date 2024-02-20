@@ -57,7 +57,7 @@ public class CollisionManager implements ContactListener{
 	// NPC kills PlayableCharacter
 	public PlayableCharacter die(PlayableCharacter entity, NonPlayableCharacter npc, World world) {
 		if("fight".equals(entity.getFix().getUserData())&& "fight".equals(npc.getFix().getUserData())) {
-			entity.despawn(world);
+			entity.dispose(world);
 		    entity.destroy();
 		    npc.getFix().setUserData("Enemy");
 			return entity;
@@ -67,7 +67,7 @@ public class CollisionManager implements ContactListener{
 	// PlayableCharacter kills NPC
 	public NonPlayableCharacter kill(PlayableCharacter entity, NonPlayableCharacter npc, World world) {
 		if("fight".equals(entity.getFix().getUserData())&& "fight".equals(npc.getFix().getUserData())) {
-			npc.despawn(world);
+			npc.dispose(world);
 		    npc.destroy();
 		    entity.getFix().setUserData("PlayableCharacter");
 		    entity.setAttackCheck(false);
@@ -76,10 +76,10 @@ public class CollisionManager implements ContactListener{
 		return null;
 	}
 	// Item equipped, remove from screen
-	public boolean equip(Entity item, World world) {
+	public boolean equip(NonPlayableCharacter item, World world) {
 		if("equip".equals(item.getFix().getUserData())) {
 			item.getFix().setUserData("Weapon");
-			item.despawn(world);
+			item.dispose(world);
 		    item.destroy();
 			return true;
 		}

@@ -88,8 +88,7 @@ public class GameMaster extends ApplicationAdapter {
 		    		entityManager.setProjection(orthographicCameraController, batch);
 				}else {
 					
-				}
-	    		
+				}	
 		}	
 	}
 
@@ -101,8 +100,8 @@ public class GameMaster extends ApplicationAdapter {
 	@Override
     	public void dispose() {
     		batch.dispose();
-        	world.dispose();
-        	entityManager.diposeEntities();
+        	entityManager.diposeEntities(world);
         	soundEffect.dispose();
+        	world.dispose();
     	}
 }

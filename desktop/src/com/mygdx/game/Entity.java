@@ -29,8 +29,7 @@ public abstract class Entity implements iMoveable{
 	
 	protected String image;
 
-	protected abstract void despawn(World world);
-	protected abstract void destroy();
+	protected abstract void dispose(World world);
 	
 	// Default Constructor
 	public Entity(World world) {
@@ -143,10 +142,5 @@ public abstract class Entity implements iMoveable{
 	public void render(SpriteBatch batch) {
 		
 	}
-
-	// Map and Orthographic Camera
-	public abstract void update(float deltaTime);
-	
-	public abstract void render(SpriteBatch batch);
 
 }
