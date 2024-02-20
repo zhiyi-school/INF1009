@@ -76,8 +76,9 @@ public class CollisionManager implements ContactListener{
 		return null;
 	}
 	// Item equipped, remove from screen
-	public boolean equip(NonPlayableCharacter item, World world) {
+	public boolean equip(Entity item, World world) {
 		if("equip".equals(item.getFix().getUserData())) {
+			item.getFix().setUserData("Weapon");
 			item.despawn(world);
 		    item.destroy();
 			return true;

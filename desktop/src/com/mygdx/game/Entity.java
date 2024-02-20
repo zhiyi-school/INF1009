@@ -31,7 +31,6 @@ public abstract class Entity implements iMoveable{
 
 	protected abstract void despawn(World world);
 	protected abstract void destroy();
-	public abstract void draw(SpriteBatch batch);
 	
 	// Default Constructor
 	public Entity(World world) {
@@ -43,7 +42,7 @@ public abstract class Entity implements iMoveable{
 		createBody(world);
 	}
 	
-	// Parameterized Constructor
+	// Character Constructor
 	public Entity(World world, String textureImage, float posXInput, float posYInput, Boolean aiCheck) {
 		setImage(textureImage);
 		setTexture(textureImage);
@@ -51,6 +50,12 @@ public abstract class Entity implements iMoveable{
 		setPosY(posYInput);
 		setAICheck(aiCheck);
 		createBody(world);
+	}
+	
+	// Map Constructor
+	public Entity(float posXInput, float posYInput) {
+		setPosX(posXInput);
+		setPosY(posYInput);
 	}
 	
 	public String getImage() {
@@ -127,10 +132,16 @@ public abstract class Entity implements iMoveable{
 	public void moveUserControlled(Sound soundEffect) {
 		
 	}
+	public void draw(SpriteBatch batch, boolean Item) {
+		
+	}
 
 	// Map and Orthographic Camera
-	public abstract void update(float deltaTime);
-	
-	public abstract void render(SpriteBatch batch);
+	public void update(float deltaTime) {
+		
+	}
+	public void render(SpriteBatch batch) {
+		
+	}
 
 }
