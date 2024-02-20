@@ -90,14 +90,14 @@ public class EntityManager {
 			if(entity.getAICheck()) {
 				entity.moveUserControlled(soundEffect);
 			}else {
-				entity.moveAIControlled();
+				entity.moveAIControlled(Gdx.graphics.getDeltaTime());
 			}
 		}
 	}
 	private void npcMovement(){
 		for(Entity npc: npcList) {
 			if(npc.getAICheck()) {
-				npc.moveAIControlled();
+				npc.moveAIControlled(Gdx.graphics.getDeltaTime());
 			}
 		}
 	}

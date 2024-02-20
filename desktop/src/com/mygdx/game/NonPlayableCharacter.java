@@ -10,16 +10,15 @@ import com.badlogic.gdx.physics.box2d.World;
 public class NonPlayableCharacter extends Character{
 	
 	private Random rand = new Random();
-	private int randomNum = 0;
 	
 	private float moveSpeed = 50; // Adjust the speed of movement
-    private int moveDir; // Indicates whether the NPC is
-    private static World worldDefault = new World(new Vector2(0, -9.8f), true);
+    private float elapsedTime;
+    private boolean isMovingRight;
     
 	
 	// Default Constructor
-	public NonPlayableCharacter(){
-		super(worldDefault, "", 0, 0, 1, 100, 2, false);
+	public NonPlayableCharacter(World world){
+		super(world, "", 0, 0, 1, 100, 2, false);
 	}
 	
 	// Parameterized Constructor
@@ -52,44 +51,27 @@ public class NonPlayableCharacter extends Character{
 	}
 	
 	// AI movement
-	public void moveAIControlled() {
-		if (randomNum % 2 == 0) {
-			moveDir = 1;	// Move Right
-        } else if(randomNum % 2 == 1){
-        	moveDir = 2;	// Move Left
+	public void moveAIControlled(float delta) {
+		elapsedTime += delta;
+
+        System.out.println(elapsedTime);
+        // Toggle direction every 2 seconds
+        if (elapsedTime >= 4 || getPosX() <= 0) {
+            isMovingRight = !isMovingRight; // Toggle direction
+            elapsedTime = 0; // Reset timer
+        }else if(getPosX() >= Gdx.graphics.getWidth() - (getTexture().getWidth() * 2)) {
+        	isMovingRight = !isMovingRight; // Toggle direction
         }
-//        } else if(randomNum % 5 == 2){
-//        	moveDir = 3;	// Move Up
-//        } else if(randomNum % 5 == 3){
-//        	moveDir = 4;	// Move Down
-//        }
-		
-		npcMove(moveDir);
-        
-        // Check if NPC reaches the boundaries, then change direction
-        if (getPosX() >= Gdx.graphics.getWidth() - (getTexture().getWidth() * 2) || getPosX() <= 0 || getPosY() >= Gdx.graphics.getHeight() - (getTexture().getHeight() * 2) || getPosY() <= 0) {
-        	moveDir = 0;
-        	randomNum = rand.nextInt(100);
+
+        // Move left if isMovingRight is false, otherwise move right
+        if (!isMovingRight) {
+            moveLeft();
+        } else{
+            moveRight();
         }
-        
+        // Update the NPC's position based on Box2D body
         getBody().setTransform(getPosX(), getPosY(), 0);
     }
-	private void npcMove(int direction) {
-		switch(moveDir) {
-		    case 1:
-		    	moveRight();
-		        break;
-		    case 2:
-		    	moveLeft();
-		        break;
-		    case 3:
-		    	moveUp();
-		    	break;
-		    case 4:
-		    	moveDown();
-		    	break;
-		}
-	}
 	
 	public void moveLeft() {
 		setPosX(Math.max(0, getPosX() - moveSpeed * Gdx.graphics.getDeltaTime())); // Ensure x-coordinate cannot go below minX
