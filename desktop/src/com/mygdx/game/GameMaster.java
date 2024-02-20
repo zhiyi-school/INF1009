@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
@@ -11,11 +12,12 @@ import com.badlogic.gdx.utils.ScreenUtils;
 public class GameMaster extends ApplicationAdapter {
 	private EntityManager entityManager;
 	private World world;
-	
+    private Sound soundEffect;
 	
 	@Override
 	public void create() {
-		world = new World(new Vector2(0, -9.8f), true);		
+		world = new World(new Vector2(0, -9.8f), true);
+		soundEffect = Gdx.audio.newSound(Gdx.files.internal("JumpSoundEffect.wav"));
 		entityManager = new EntityManager(world);
 	}	
 	
@@ -43,7 +45,7 @@ public class GameMaster extends ApplicationAdapter {
 	        camera.setToOrtho(false, 1, 1);		
 	        
 			entityManager.entityDraw();
-			entityManager.movement();	
+			entityManager.movement(soundEffect);
 		}	
 	}
 	
@@ -51,5 +53,6 @@ public class GameMaster extends ApplicationAdapter {
     public void dispose() {
         world.dispose();
         entityManager.diposeEntities();
+		soundEffect.dispose();
     }
 }

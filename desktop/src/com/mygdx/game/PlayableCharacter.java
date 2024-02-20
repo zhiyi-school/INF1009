@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -57,7 +58,7 @@ public class PlayableCharacter extends Character{
 	}
 	
 	// Movement controls
-	public void moveUserControlled() {
+	public void moveUserControlled(Sound soundEffect) {
 		if(!getDie()) {
 			if(Gdx.input.isKeyPressed (Keys.A)) {
 				moveLeft();
@@ -66,6 +67,7 @@ public class PlayableCharacter extends Character{
 				moveRight();
 			}
 			if(Gdx.input.isKeyPressed (Keys.SPACE)) {
+				soundEffect.play();
 				jump();
 			}
 			jumpUpdate();

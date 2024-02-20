@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -78,10 +79,10 @@ public class EntityManager {
 	}
 	
 	// Movement for entities
-	private void entityMovement(){
+	private void entityMovement(Sound soundEffect){
 		for(Entity entity: entityList) {
 			if(entity.getAICheck()) {
-				entity.moveUserControlled();
+				entity.moveUserControlled(soundEffect);
 			}else {
 				entity.moveAIControlled();
 			}
@@ -94,8 +95,8 @@ public class EntityManager {
 			}
 		}
 	}
-	public void movement() {
-		entityMovement();
+	public void movement(Sound soundEffect) {
+		entityMovement(soundEffect);
 		npcMovement();
 	}
 	
