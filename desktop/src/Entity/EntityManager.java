@@ -45,7 +45,7 @@ public class EntityManager {
 				100, 200, 100, 10, true);
 		npcList.add(Enemy);
 		
-		Item = new NonPlayableCharacter(world, "Weapon.png", 100, 300, 200, 100, 10, false);
+		Item = new NonPlayableCharacter(world, "Weapon.png", 100, 30, 200, 100, 10, false);
 		npcList.add(Item);
 		
 		gameMap = new Map(0, 0, "gamemap.tmx", MAP_SCALE, orthographicCameraController);
@@ -100,25 +100,25 @@ public class EntityManager {
 	}
 	
 	// Movement for entities
-	private void entityMovement(Sound soundEffect){
+	private void entityMovement(Sound soundEffect, float mapFullWidth){
 		for(Entity pc: pcList) {
 			if(pc.getAICheck()) {
-				pc.moveUserControlled(soundEffect);
+				pc.moveUserControlled(soundEffect, mapFullWidth);
 			}else {
-				pc.moveAIControlled(Gdx.graphics.getDeltaTime());
+				pc.moveAIControlled(Gdx.graphics.getDeltaTime(), mapFullWidth);
 			}
 		}
 	}
-	private void npcMovement(){
+	private void npcMovement(float mapFullWidth){
 		for(NonPlayableCharacter npc: npcList) {
 			if(npc.getAICheck()) {
-				npc.moveAIControlled(Gdx.graphics.getDeltaTime());
+				npc.moveAIControlled(Gdx.graphics.getDeltaTime(), mapFullWidth);
 			}
 		}
 	}
-	public void movement(Sound soundEffect) {
-		entityMovement(soundEffect);
-		npcMovement();
+	public void movement(Sound soundEffect, float mapFullWidth) {
+		entityMovement(soundEffect, mapFullWidth);
+		npcMovement(mapFullWidth);
 	}
 	
 	// Box2d Collision

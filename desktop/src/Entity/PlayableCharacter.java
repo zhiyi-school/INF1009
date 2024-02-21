@@ -58,7 +58,7 @@ public class PlayableCharacter extends Character{
 	}
 	
 	// Movement controls
-	public void moveUserControlled(Sound soundEffect) {
+	public void moveUserControlled(Sound soundEffect, float mapFullWidth) {
 		if(!getDie()) {
 			if(Gdx.input.isKeyPressed (Keys.A)) {
 				moveLeft();
@@ -75,8 +75,8 @@ public class PlayableCharacter extends Character{
 			if(getPosX() <= 0) {
 				setPosX(0);
 			}
-			if(getPosX() >= Gdx.graphics.getWidth() - (getTexture().getWidth() * 3)) {
-				setPosX(Gdx.graphics.getWidth() - (getTexture().getWidth() * 3));
+			if(getPosX() >= mapFullWidth - (getTexture().getWidth() * 3)) {
+				setPosX(mapFullWidth - (getTexture().getWidth() * 3));
 			}
 		}
 	}

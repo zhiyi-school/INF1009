@@ -125,10 +125,10 @@ public abstract class Entity implements iMoveable{
 		aiCheck = aiInput;
 	}
 	
-	public void moveAIControlled(float delta){
+	public void moveAIControlled(float delta, float mapFullWidth){
 		
 	}
-	public void moveUserControlled(Sound soundEffect) {
+	public void moveUserControlled(Sound soundEffect, float mapFullWidth) {
 		
 	}
 	public void draw(SpriteBatch batch, boolean Item) {

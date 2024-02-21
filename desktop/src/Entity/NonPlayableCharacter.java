@@ -53,14 +53,14 @@ public class NonPlayableCharacter extends Character{
 	}
 	
 	// AI movement
-	public void moveAIControlled(float delta) {
+	public void moveAIControlled(float delta, float mapFullWidth) {
 		elapsedTime += delta;
 
         // Toggle direction every 2 seconds
         if (elapsedTime >= 4 || getPosX() <= 0) {
             isMovingRight = !isMovingRight; // Toggle direction
             elapsedTime = 0; // Reset timer
-        }else if(getPosX() >= Gdx.graphics.getWidth() - (getTexture().getWidth() * 2)) {
+        }else if(getPosX() >= mapFullWidth - (getTexture().getWidth() * 2)) {
         	isMovingRight = !isMovingRight; // Toggle direction
         }
 
@@ -73,6 +73,7 @@ public class NonPlayableCharacter extends Character{
         // Update the NPC's position based on Box2D body
         getBody().setTransform(getPosX(), getPosY(), 0);
     }
+	
 	// Apply gravity
 	public void update(float delta) {
 		// Apply gravity
@@ -87,7 +88,6 @@ public class NonPlayableCharacter extends Character{
             verticalVelocity = 0;
         }
         getBody().setTransform(getPosX(), getPosY(), 0);
-        moveAIControlled(delta);
 	}
 	
 	public void moveLeft() {

@@ -81,41 +81,31 @@ public class ScreenManager {
     }
     
     public void setCurrentScreen(String screen) {
-//    	switch(screen) {
-//	    	case "Main":
-//	    		currentScreen = mainMenuScreen;
-//				switchTo(mainMenuScreen);
-//			
-//	    	case "Pause":
-////	    		currentScreen = mainMenuScreen;
-//	    		switchTo(pauseScreen);
-//	    		
-//	    	case "Game":
-//	    		switchTo(gameScreen);
-//	    	
-//	    	case "GameOver":
-//	    		switchTo(gameOverScreen);
-//	    		
-//	    	case "Instruction":
-//	    		switchTo(instructionsScreen);
-//				
-//			default:
-//				currentScreen = gameScreen;
-//    	}	
-    	if(screen == "Main") {
-    		currentScreen = mainMenuScreen;
-			switchTo(mainMenuScreen);
-    	}else if(screen == "Pause") {
-    		switchTo(pauseScreen);
-    	}else if(screen == "Game") {
-    		switchTo(gameScreen);
-    	}else if(screen == "GameOver") {
-    		switchTo(gameOverScreen);
-    	}else if(screen == "Instructions") {
-    		switchTo(instructionsScreen);
-    	}else {
-    		currentScreen = mainMenuScreen;
-    	}
+    	switch(screen) {
+	    	case "Main":
+	    		currentScreen = mainMenuScreen;
+				switchTo(mainMenuScreen);
+				break;
+			
+	    	case "Pause":
+	    		switchTo(pauseScreen);
+				break;
+	    		
+	    	case "Game":
+	    		switchTo(gameScreen);
+				break;
+	    	
+	    	case "GameOver":
+	    		switchTo(gameOverScreen);
+				break;
+	    		
+	    	case "Instruction":
+	    		switchTo(instructionsScreen);
+				break;
+				
+			default:
+				currentScreen = gameScreen;
+    	}	
     }
     
     public void switchTo(Screen screen) {

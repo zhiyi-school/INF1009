@@ -30,6 +30,8 @@ public class GameMaster extends ApplicationAdapter {
 	private float mapTileWidth;
 	private float mapTileHeight;
 	private float tileSize;
+	private float mapFullWidth;
+	private float mapFullHeight;
 	
 	private Screen currentScreen;
     private ScreenManager screenManager;
@@ -55,8 +57,8 @@ public class GameMaster extends ApplicationAdapter {
     	tileSize = entityManager.getMap().getTileSize();
     
     	// Calculate total pixel width and height of entire map
-    	float mapFullWidth = mapTileWidth * tileSize * MAP_SCALE;
-    	float mapFullHeight = mapTileHeight * tileSize * MAP_SCALE;
+    	mapFullWidth = mapTileWidth * tileSize * MAP_SCALE;
+    	mapFullHeight = mapTileHeight * tileSize * MAP_SCALE;
         
     	// Calculate camera boundaries and set them in OrthographicCameraController
     	orthographicCameraController.setCameraBoundaries(mapFullWidth, mapFullHeight);
@@ -109,7 +111,7 @@ public class GameMaster extends ApplicationAdapter {
 	    				update();
 	    			}else {
 	    				entityManager.entityDraw(batch);
-		    			entityManager.movement(soundEffect);
+		    			entityManager.movement(soundEffect, mapFullWidth);
 		    			
 						world.step(Gdx.graphics.getDeltaTime(), 6, 2);
 	    		        // System.out.println(world.getContactCount());
@@ -132,6 +134,8 @@ public class GameMaster extends ApplicationAdapter {
 	      	}
 		}catch(Exception e){
 			System.out.println(e);
+			Gdx.app.exit();
+			
 		}finally{
 			
 		}
