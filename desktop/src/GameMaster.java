@@ -41,6 +41,10 @@ public class GameMaster extends ApplicationAdapter {
 	
 	@Override
 	public void create() {
+
+    	
+    	System.out.println(mapFullWidth);
+		
 		batch = new SpriteBatch();
 		world = new World(new Vector2(0, -9.8f), true);
 		// Create Viewport and Camera
@@ -55,11 +59,11 @@ public class GameMaster extends ApplicationAdapter {
     	mapTileWidth = entityManager.getMap().getMapTileWidth();
     	mapTileHeight = entityManager.getMap().getMapTileHeight();
     	tileSize = entityManager.getMap().getTileSize();
-    
+    	
     	// Calculate total pixel width and height of entire map
     	mapFullWidth = mapTileWidth * tileSize * MAP_SCALE;
     	mapFullHeight = mapTileHeight * tileSize * MAP_SCALE;
-        
+    	
     	// Calculate camera boundaries and set them in OrthographicCameraController
     	orthographicCameraController.setCameraBoundaries(mapFullWidth, mapFullHeight);
         

@@ -32,24 +32,31 @@ public class EntityManager {
 	private static final float MAP_SCALE = 3.0f;
 	
 	public EntityManager(World world, OrthographicCameraController orthographicCameraController) {
+
+
+		entityList = new ArrayList<Entity>();
 		pcList = new ArrayList<PlayableCharacter>();
 		npcList = new ArrayList<NonPlayableCharacter>();
-		entityList = new ArrayList<Entity>();
 		
+		gameMap = new Map(0, 0, "gamemap.tmx", MAP_SCALE, orthographicCameraController);
+    	entityList.add(gameMap);
+    	
+    	float mapFullWidth = gameMap.getMapTileWidth() * gameMap.getTileSize() * MAP_SCALE;
+    	float mapFullHeight = gameMap.getMapTileHeight() * gameMap.getTileSize() * MAP_SCALE;
+    	
 		// Creating Entities. Add them to ArrayList
 		Player1 = new PlayableCharacter(world, "PlayableCharacter.png", 0, 100, 200, 100, 5, false, true);
 		pcList.add(Player1);
 		
-//		rand.nextInt(Gdx.graphics.getHeight() + 1)
-		Enemy = new NonPlayableCharacter(world, "Enemy.png", rand.nextInt(Gdx.graphics.getWidth() - 90 + 1), 
+//		rand.nextInt(mapFullHeight + 1)
+		Enemy = new NonPlayableCharacter(world, "Enemy.png", rand.nextFloat(mapFullWidth + 1), 
 				100, 200, 100, 10, true);
 		npcList.add(Enemy);
 		
 		Item = new NonPlayableCharacter(world, "Weapon.png", 100, 30, 200, 100, 10, false);
 		npcList.add(Item);
 		
-		gameMap = new Map(0, 0, "gamemap.tmx", MAP_SCALE, orthographicCameraController);
-    	entityList.add(gameMap);
+		
 
 		setCollision(world);
 	}
@@ -156,11 +163,13 @@ public class EntityManager {
 				}
 			}
 			if(removeNPC != null) {
+				System.out.println("Remove NPC");
 				npcList.remove(removeNPC);
 				removeNPC.destroy();
 				removeNPC.dispose(world);
 			}
 			if(removePC != null) {
+				System.out.println("Remove PC");
 				pcList.remove(removePC);
 				removePC.destroy();
 				removePC.dispose(world);
