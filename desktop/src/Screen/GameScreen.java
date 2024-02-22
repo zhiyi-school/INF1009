@@ -35,8 +35,22 @@ public class GameScreen extends Scene {
     
     private float mouseX, mouseY;
     
-    public GameScreen(SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font, float buttonWidth, float screenWidth) {
-    	super(batch, shapeRenderer, font, buttonWidth, screenWidth);
+    public GameScreen(SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font, float buttonWidth, float screenWidth, float screenHeight) {
+    	super(batch, shapeRenderer, font, buttonWidth, screenWidth, screenHeight);
+    	setPauseButtonX(getScreenWidth());
+    	setPauseButtonY(getScreenWidth());
+    }
+    public float getPauseButtonX() {
+    	return pauseButtonX;
+    }
+    public void setPauseButtonX(float screenWidth) {
+    	pauseButtonX = screenWidth - buttonWidth;
+    }
+    public float getPauseButtonY() {
+    	return pauseButtonY;
+    }
+    public void setPauseButtonY(float screenWidth) {
+    	pauseButtonY = screenWidth - buttonWidth;
     }
     
 	public Button getPauseButton() {
@@ -45,6 +59,7 @@ public class GameScreen extends Scene {
 	
 	public void gameDisplay() {
 		// Game display
+    	screenManager.setCurrentScreen("Game");
 	}
 	
     public void pauseGame() {
@@ -53,11 +68,7 @@ public class GameScreen extends Scene {
     }
 	
 	@Override
-    public void show() {
-     	batch = getBatch();
-    	shapeRenderer = getShape();
-        font = getMapFont();
-    	
+    public void show() {    	
     	// Display game over text
     	gameText = "MARIO GAME"; 
 
@@ -72,8 +83,7 @@ public class GameScreen extends Scene {
     }
 	
 	@Override
-	public void render(float delta) {
-    	show();
+	public void render(float delta, SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font) {
         // Called to render this screen.
     	
         // Clear the screen
@@ -99,7 +109,7 @@ public class GameScreen extends Scene {
         
         if (pauseButton.hover(mouseX, mouseY)==true) {
         	pauseButton.setColour(Color.YELLOW);
-        	if(Gdx.input.isTouched())
+        	if(Gdx.input.justTouched())
         	{
         		System.out.println("Game paused.");
         		pauseGame();

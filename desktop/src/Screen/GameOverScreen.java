@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Align;
 
 import Entity.EntityManager;
@@ -32,7 +33,7 @@ public class GameOverScreen extends Scene {
 	private float screenWidth;
 	private float buttonSpacing = 25; // Spacing between buttons
 	private float totalButtonWidth = 3 * buttonWidth + 2 * buttonSpacing; // Total width of all buttons and spacing
-	private float startX = (screenWidth - totalButtonWidth) / 2; // Start x position for the first button
+	private float startX; // Start x position for the first button
 	
 	
 	private SpriteBatch batch;
@@ -41,8 +42,9 @@ public class GameOverScreen extends Scene {
     
     private float mouseX, mouseY;
 	
-    public GameOverScreen(SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font, float buttonWidth, float screenWidth) {
-    	super(batch, shapeRenderer, font, buttonWidth, screenWidth);
+    public GameOverScreen(SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font, float buttonWidth, float screenWidth, float screenHeight) {
+    	super(batch, shapeRenderer, font, buttonWidth, screenWidth, screenHeight);
+    	setStartX(getScreenWidth()/2);
     }
     
 	public String getGameOverText() {
@@ -64,6 +66,14 @@ public class GameOverScreen extends Scene {
     public Button getExitButton() {
         return exitButton;
     }
+    
+    public float getStartX() {
+    	return startX;
+    }
+    public void setStartX(float screenWidth) {
+    	startX = (screenWidth - totalButtonWidth) / 2;
+    }
+    
     public void setEntityManager(EntityManager entityManagerInput) {
     	entityManager = entityManagerInput;
     }
@@ -72,7 +82,6 @@ public class GameOverScreen extends Scene {
     }
 	
     public void displayGameOver() {
-//    	setGameOverText("WIN!");
     	if(screenManager.getEntityManager().getEntity("PlayableCharacter") != null) {
         	setGameOverText("WIN! \n THANKS FOR PLAYING");
 		}else {
@@ -113,11 +122,7 @@ public class GameOverScreen extends Scene {
     }
 	
 	@Override
-    public void show() {
-     	batch = getBatch();
-    	shapeRenderer = getShape();
-        font = getMapFont();
-    	
+    public void show() {    	
     	// Display game over text
     	
     	// Calculate the x position to center the buttons horizontally
@@ -142,8 +147,7 @@ public class GameOverScreen extends Scene {
     }
 	
 	@Override
-	public void render(float delta) {
-    	show();
+	public void render(float delta, SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font) {
         // Called to render this screen.
     	
         // Clear the screen
@@ -154,19 +158,18 @@ public class GameOverScreen extends Scene {
     	if(getGameOverText().contains("GAME OVER")) {
             startButton.render(shapeRenderer,batch);
             mainMenuButton.render(shapeRenderer,batch);
-            exitButton.render(shapeRenderer,batch);
     	}
-        
+    	
+        exitButton.render(shapeRenderer,batch);
         //Draw text on screen
+        batch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.begin();
 		font.setColor(Color.BLACK);
-		
 		// Draw game over text
-	    font.getData().setScale(4);
+	    font.getData().setScale(3);
 	    float x = screenWidth / 2f;
 	    float y = Gdx.graphics.getHeight() * 0.8f; 
-	    System.out.println(font.draw(batch, getGameOverText(), 0, 0, 0, Align.center, false));
-	    font.draw(batch, getGameOverText(), 0, 0, 0, Align.center, false);
+	    font.draw(batch, gameOverText, x, y, 0, Align.center, false);
 		batch.end();
 		
 		// Check if the mouse is inside the rectangle
@@ -175,7 +178,7 @@ public class GameOverScreen extends Scene {
         
         if (mainMenuButton.hover(mouseX, mouseY)==true) {
         	mainMenuButton.setColour(Color.YELLOW);
-        	if(Gdx.input.isTouched())
+        	if(Gdx.input.justTouched())
         	{
         		System.out.println("Going back to main menu...");
                 resumeGame();
@@ -184,15 +187,13 @@ public class GameOverScreen extends Scene {
         
         else if (startButton.hover(mouseX, mouseY)==true) {
         	startButton.setColour(Color.YELLOW);
-        	if(Gdx.input.isTouched())
+        	if(Gdx.input.justTouched())
         	{
         		System.out.println("Restarting game!");
 //        		restartGame();
         		if(screenManager.getEntityManager().getEntity("PlayableCharacter") != null) {
-        			System.out.println("Restart NPC");
         			restartGameNPC();
         		}else {
-        			System.out.println("Restart PC");
                     restartGamePC();
         		}
         	}
@@ -201,7 +202,7 @@ public class GameOverScreen extends Scene {
         
         else if (exitButton.hover(mouseX, mouseY)==true) {
         	exitButton.setColour(Color.YELLOW);
-        	if(Gdx.input.isTouched())
+        	if(Gdx.input.justTouched())
         	{
         		System.out.println("Exiting game!");
                 exitGame();

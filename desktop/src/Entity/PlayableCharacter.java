@@ -68,7 +68,9 @@ public class PlayableCharacter extends Character{
 	}
 	
 	public void draw(SpriteBatch batch) {
+		batch.begin();
 		batch.draw(getTexture(), ((getBody().getPosition().x) * 3f) - (getTexture().getWidth() / 80f), (getBody().getPosition().y * 3f)  - (getTexture().getHeight() / 110f), getTexture().getWidth() / 50f, getTexture().getHeight() / 50f);
+		batch.end();
 	}
 	
 	// Dispose 

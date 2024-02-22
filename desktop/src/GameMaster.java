@@ -57,20 +57,20 @@ public class GameMaster extends ApplicationAdapter {
 	
 	@Override
 	public void render() {
-		try {
+//		try {
 	      	float delta = Gdx.graphics.getDeltaTime();
 	      	
 	      	// Draw current screen
       		screenManager.drawCurrent(delta);
-      		screenManager.checkGameStart(debugRenderer, batch, MAP_SCALE);
+      		screenManager.checkGameStart(debugRenderer, MAP_SCALE);
 
-		}catch(Exception e){
-			System.out.println(e);
-			Gdx.app.exit();
-			
-		}finally{
-			
-		}
+//		}catch(Exception e){
+//			System.out.println(e);
+//			Gdx.app.exit();
+//			
+//		}finally{
+//			
+//		}
 	}
 
 	@Override
@@ -82,5 +82,6 @@ public class GameMaster extends ApplicationAdapter {
     	public void dispose() {
     		batch.dispose();
 			world.dispose();
+//			screenManager.screenDispose();
     	}
 }

@@ -59,7 +59,6 @@ public class EntityManager {
 	public void restartGame(World world, OrthographicCameraController orthographicCameraController) {
 		if(pcList.size() > 0) {
 			for(PlayableCharacter pc: pcList) {
-				System.out.println("remove PCs");
 				pc.disposeSoundEffect();
 				pc.destroy();
 				pc.dispose(world);
@@ -111,7 +110,6 @@ public class EntityManager {
 	
 	// Drawing all entities
 	public void entityDraw(SpriteBatch batch) {
-		batch.begin();
 		for(PlayableCharacter pc: pcList) {
 			pc.draw(batch);
 		}
@@ -119,9 +117,8 @@ public class EntityManager {
 			npc.draw(batch);
 		}
 		for(Entity entity: entityList) {
-			entity.render(batch);
+			entity.render();
 		}
-		batch.end();
 	}
 	public void addEntity(Entity entity) {
     	entityList.add(entityList.size(), entity);

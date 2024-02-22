@@ -20,10 +20,9 @@ public class MainMenuScreen extends Scene {
 	
 	// Calculate the x position to center the buttons horizontally
     private float buttonWidth; // Assuming all buttons have the same width
-    private float screenWidth;
     private float buttonSpacing = 25; // Spacing between buttons
     private float totalButtonWidth = 3 * buttonWidth + 2 * buttonSpacing; // Total width of all buttons and spacing
-    private float startX = (screenWidth - totalButtonWidth) / 2; // Start x position for the first button
+    private float startX; // Start x position for the first button
 	
 	private Button startButton;
 	private Button instructionsButton;
@@ -35,8 +34,16 @@ public class MainMenuScreen extends Scene {
     
     private float mouseX, mouseY;
     
-    public MainMenuScreen(SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font, float buttonWidth, float screenWidth) {
-    	super(batch, shapeRenderer, font, buttonWidth, screenWidth);
+    public MainMenuScreen(SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font, float buttonWidth, float screenWidth, float screenHeight) {
+    	super(batch, shapeRenderer, font, buttonWidth, screenWidth, screenHeight);
+    	setStartX(getScreenWidth()/2);
+    }
+    
+    public float getStartX() {
+    	return startX;
+    }
+    public void setStartX(float screenWidth) {
+    	startX = (screenWidth - totalButtonWidth) / 5;
     }
     
     public void startGame() {
@@ -46,12 +53,7 @@ public class MainMenuScreen extends Scene {
     
     @Override
     public void show() {
-     	batch = getBatch();
-    	shapeRenderer = getShape();
-        font = getMapFont();
-
         buttonWidth = getButtonWidth();
-        screenWidth = getScreenWidth();
         
     	// Create start button
     	startButton = new Button(startX + 70, 100, buttonWidth - 70, 60);
@@ -70,8 +72,7 @@ public class MainMenuScreen extends Scene {
         
     }
 
-    public void render(float delta) {
-    	show();
+    public void render(float delta, SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font) {
         // Clear the screen
         Gdx.gl.glClearColor(0, 1, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -81,6 +82,7 @@ public class MainMenuScreen extends Scene {
         exitButton.render(shapeRenderer, batch);
         
         //Draw text on screen
+        batch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.begin();
 		font.setColor(Color.BLACK);
 		font.getData().setScale(3);
@@ -95,7 +97,7 @@ public class MainMenuScreen extends Scene {
         
         if (startButton.hover(mouseX, mouseY)==true) {
         	startButton.setColour(Color.YELLOW);
-        	if(Gdx.input.isTouched())
+        	if(Gdx.input.justTouched())
         	{
 //        		System.out.println("Start clicked!");
         		startGame();
@@ -104,7 +106,7 @@ public class MainMenuScreen extends Scene {
         }
         else if (instructionsButton.hover(mouseX, mouseY)==true) {
         	instructionsButton.setColour(Color.YELLOW);
-        	if(Gdx.input.isTouched())
+        	if(Gdx.input.justTouched())
         	{
         		System.out.println("Instruction clicked!");
         		screenManager.setCurrentScreen("Instruction"); // edited this
@@ -112,7 +114,7 @@ public class MainMenuScreen extends Scene {
         }
         else if (exitButton.hover(mouseX, mouseY)==true) {
         	exitButton.setColour(Color.YELLOW);
-        	if(Gdx.input.isTouched())
+        	if(Gdx.input.justTouched())
         	{
         		Gdx.app.exit();
         	}

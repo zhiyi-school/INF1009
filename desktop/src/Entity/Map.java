@@ -84,7 +84,7 @@ public class Map extends Entity {
     }
 
     @Override
-    public void render(SpriteBatch batch) {
+    public void render() {
         maprenderer.setView(orthographicCameraController.getCamera());
         maprenderer.render();
     }

@@ -1,5 +1,6 @@
 package Entity;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
@@ -74,6 +75,7 @@ public class OrthographicCameraController {
 	}
     public void setProjection(SpriteBatch batch) {
 		batch.begin();
+//    	getCamera().setToOrtho(false, Gdx.graphics.getWidth() / 100f, Gdx.graphics.getHeight() / 100f);
 		batch.setProjectionMatrix(getCamera().combined);
 		batch.end();
 	}

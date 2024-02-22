@@ -23,8 +23,7 @@ public class ScreenManager {
 	private PauseScreen pauseScreen;
 	private GameScreen gameScreen;
 	private GameOverScreen gameOverScreen;
-	// private GameMaster gameScreen;
-	private Screen currentScreen;
+	private Scene currentScreen;
 	private EntityManager entityManager;
 	private OrthographicCameraController orthographicCameraController;
 	private World world;
@@ -33,21 +32,19 @@ public class ScreenManager {
 	private ShapeRenderer shapeRenderer;
     private BitmapFont font;
 	
-    private ArrayList <Screen> screensList;
-    private float screenWidth = Gdx.graphics.getWidth();
-    private float screenHeight = Gdx.graphics.getHeight();
+    private ArrayList <Scene> screensList;
     
 
     public ScreenManager(EntityManager entityManager, World world, OrthographicCameraController orthographicCameraController, SpriteBatch batch) {
-        screensList = new ArrayList<Screen>();
+        screensList = new ArrayList<Scene>();
     	shapeRenderer = new ShapeRenderer();
         font = new BitmapFont();
         
-        mainMenuScreen = new MainMenuScreen(batch, shapeRenderer, font, 170, screenWidth); // Initialize mainMenuScreen
-        instructionsScreen = new InstructionsScreen(batch, shapeRenderer, font, 100, screenWidth); // Initialize instructionsScreen
-        gameScreen = new GameScreen(batch, shapeRenderer, font, 50, screenWidth); // Initialize gameScreen
-        pauseScreen = new PauseScreen(this, gameScreen, batch, shapeRenderer, font, 110, screenWidth); // Initialize pauseScreen with appropriate parameters
-        gameOverScreen = new GameOverScreen(batch, shapeRenderer, font, 110, screenWidth); // Initialize gameOverScreen
+        mainMenuScreen = new MainMenuScreen(batch, shapeRenderer, font, 170, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // Initialize mainMenuScreen
+        instructionsScreen = new InstructionsScreen(batch, shapeRenderer, font, 100, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // Initialize instructionsScreen
+        gameScreen = new GameScreen(batch, shapeRenderer, font, 50, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // Initialize gameScreen
+        pauseScreen = new PauseScreen(this, gameScreen, batch, shapeRenderer, font, 110, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // Initialize pauseScreen with appropriate parameters
+        gameOverScreen = new GameOverScreen(batch, shapeRenderer, font, 110, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // Initialize gameOverScreen
         
         setEntityManager(entityManager);
         setWorld(world);
@@ -67,7 +64,7 @@ public class ScreenManager {
     	pauseScreen.render(delta);
     }
 
-    public void addScreen(Screen screen) {
+    public void addScreen(Scene screen) {
     	screensList.add(screen);
     }
 
@@ -75,7 +72,7 @@ public class ScreenManager {
     	screensList.remove(screen);
     }
     
-    public Screen getCurrentScreen() {
+    public Scene getCurrentScreen() {
     	return currentScreen;
     }
     
@@ -142,16 +139,16 @@ public class ScreenManager {
         } 
     }
     public void drawCurrent(float delta) {
-      	currentScreen = getCurrentScreen();  
+		currentScreen = getCurrentScreen();  
       	if(currentScreen == null) {
       		setCurrentScreen("Main");
       	}else {
-      		currentScreen.show();
-    		currentScreen.render(delta);
+        	currentScreen.show();
+    		currentScreen.render(delta, currentScreen.getBatch(), currentScreen.getShape(), currentScreen.getMapFont());
       	}
     }
     
-    public void checkGameStart(Box2DDebugRenderer debugRenderer, SpriteBatch batch, float MAP_SCALE) {
+    public void checkGameStart(Box2DDebugRenderer debugRenderer, float MAP_SCALE) {
     	if(getCurrentScreen() instanceof GameScreen) {
     		// Clear the screen
 			Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -160,7 +157,7 @@ public class ScreenManager {
 
 			// Debugger
 			debugRenderer.render(world, orthographicCameraController.getCamera().combined.cpy().scl(MAP_SCALE));
-			gameState(batch, world);	
+			gameState(getCurrentScreen().getBatch(), world);	
     	}
     }
     
@@ -187,4 +184,14 @@ public class ScreenManager {
 		entityManager.collisionEquip(world);
 		entityManager.collisionFight(world);
 	}
+    
+    public void screenDispose() {
+    	font.dispose();
+    	shapeRenderer.dispose();
+    	gameOverScreen.dispose();
+    	gameScreen.dispose();
+    	instructionsScreen.dispose();
+    	mainMenuScreen.dispose();
+    	pauseScreen.dispose();
+    }
 }

@@ -10,17 +10,19 @@ public abstract class Scene implements Screen{
 
 	private float buttonWidth;
 	private float screenWidth;
+	private float screenHeight;
 	
 	private SpriteBatch batch;
 	private ShapeRenderer shapeRenderer;
     private BitmapFont font;
 	
-	public Scene(SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font, float buttonWidth, float screenWidth){
+	public Scene(SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font, float buttonWidth, float screenWidth, float screenHeight){
 		setBatch(batch);
 		setShape(shapeRenderer);
 		setMapFont(font);
 		setButtonWidth(buttonWidth);
 		setScreenWidth(screenWidth);
+		setScreenHeight(screenHeight);
 	}
 	
 	public SpriteBatch getBatch() {
@@ -57,13 +59,22 @@ public abstract class Scene implements Screen{
 	public void setScreenWidth(float screenWidthInput) {
 		screenWidth = screenWidthInput;
 	}
+	public float getScreenHeight() {
+		return screenHeight;
+	}
+	public void setScreenHeight(float screenHeightInput) {
+		screenWidth = screenHeightInput;
+	}
 	
 	public void show () {
      	batch = getBatch();
     	shapeRenderer = getShape();
         font = getMapFont();
 	}
-	public abstract void render (float delta);
+	public void render(float delta) {
+		
+	}
+	public abstract void render (float delta, SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font);
 	public abstract void resize (int width, int height);
 	public abstract void pause ();
 	public abstract void resume ();

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.Align;
 
@@ -23,10 +24,9 @@ public class PauseScreen extends Scene {
 	private Button exitButton;
 	
 	private float buttonWidth; // Assuming all buttons have the same width
-	private float screenWidth;
 	private float buttonSpacing = 25; // Spacing between buttons
 	private float totalButtonWidth = 3 * buttonWidth + 2 * buttonSpacing; // Total width of all buttons and spacing
-	private float startX = (screenWidth - totalButtonWidth) / 2; // Start x position for the first button
+	private float startX; // Start x position for the first button
 	
 	
 	private SpriteBatch batch;
@@ -36,8 +36,9 @@ public class PauseScreen extends Scene {
     private float mouseX, mouseY;
     
  // Modify the constructor to accept a GameScreen parameter
-    public PauseScreen(ScreenManager screenManager, Screen screen, SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font, float buttonWidth, float screenWidth) {
-    	super(batch, shapeRenderer, font, buttonWidth, screenWidth);
+    public PauseScreen(ScreenManager screenManager, Screen screen, SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font, float buttonWidth, float screenWidth, float screenHeight) {
+    	super(batch, shapeRenderer, font, buttonWidth, screenWidth, screenHeight);
+    	setStartX(getScreenWidth()/2);
         this.screenManager = screenManager;
         if (screen instanceof GameScreen) {
             this.gameScreen = (GameScreen) screen; // Assign the parameter to the member variable
@@ -65,6 +66,12 @@ public class PauseScreen extends Scene {
     public Button getExitButton() {
         return exitButton;
     }
+    public float getStartX() {
+    	return startX;
+    }
+    public void setStartX(float screenWidth) {
+    	startX = (screenWidth - totalButtonWidth) / 2;
+    }
     
     public void displayPause() {
     	setPauseText("Game paused.");
@@ -87,18 +94,10 @@ public class PauseScreen extends Scene {
     
     @Override
     public void show() {
-        
-    	// Draw Sprite and Shapes in LibGDX
-     	batch = getBatch();
-    	shapeRenderer = getShape();
-        font = getMapFont();
-    	
-    	// Display pause text
     	displayPause();
     	
     	// Calculate the x position to center the buttons horizontally
         buttonWidth = getButtonWidth();
-        screenWidth = getScreenWidth();
         
     	// Create Resume Button
     	resumeButton = new Button(startX, 100, buttonWidth + 10, 60);
@@ -119,10 +118,10 @@ public class PauseScreen extends Scene {
     }
 
     @Override
-    public void render(float delta) {
-    	show();
+    public void render(float delta, SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font) {
         // Called to render this screen.
     	
+//    	batch = getBatch();
         // Clear the screen
         Gdx.gl.glClearColor(0, 1, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -132,6 +131,7 @@ public class PauseScreen extends Scene {
         exitButton.render(shapeRenderer,batch);
         
         //Draw text on screen
+        batch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.begin();
 		font.setColor(Color.BLACK);
 		font.getData().setScale(3);
@@ -143,7 +143,7 @@ public class PauseScreen extends Scene {
 		// Check if the mouse is inside the rectangle
         mouseX = Gdx.input.getX();
         mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
-        
+
         if (resumeButton.hover(mouseX, mouseY)==true) {
         	resumeButton.setColour(Color.YELLOW);
         	if(Gdx.input.isTouched())

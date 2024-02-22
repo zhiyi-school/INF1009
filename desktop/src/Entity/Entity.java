@@ -147,7 +147,7 @@ public abstract class Entity{
 	public void update(float deltaTime) {
 		
 	}
-	public void render(SpriteBatch batch) {
+	public void render() {
 		
 	}
 

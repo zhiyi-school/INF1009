@@ -19,22 +19,18 @@ public class CollisionManager implements ContactListener{
 	    
 	    // Check for PC and Item collision
 	    if ("PlayableCharacter".equals(fixtureA.getUserData()) && "Weapon".equals(fixtureB.getUserData())) {
-	    	System.out.println("Collision detected between PlayableCharacter and Weapon");
 	    	fixtureB.setUserData("equip");
 		        
 	    }else if("Weapon".equals(fixtureA.getUserData()) && "PlayableCharacter".equals(fixtureB.getUserData())) {
-	    	System.out.println("Collision detected between PlayableCharacter and Weapon");	
 	    	fixtureA.setUserData("equip");
 		}
 	    
 	    // Check for PC and Enemy collision
 	    if ("PlayableCharacter".equals(fixtureA.getUserData()) && "Enemy".equals(fixtureB.getUserData())) {
-	       	System.out.println("Collision detected between PlayableCharacter and Enemy");
 	       	fixtureA.setUserData("fight");
 	       	fixtureB.setUserData("fight");
 	        
 	   }else if("Enemy".equals(fixtureA.getUserData()) && "PlayableCharacter".equals(fixtureB.getUserData())) {
-		   	System.out.println("Collision detected between PlayableCharacter and Enemy");	
 		   	fixtureA.setUserData("fight");
 		   	fixtureB.setUserData("fight");
 	   }
@@ -60,7 +56,6 @@ public class CollisionManager implements ContactListener{
 	// NPC kills PlayableCharacter
 	public PlayableCharacter die(PlayableCharacter entity, NonPlayableCharacter npc) {
 		if("fight".equals(entity.getFix().getUserData())&& "fight".equals(npc.getFix().getUserData())) {
-			System.out.println("PC die");
 		    npc.getFix().setUserData("Enemy");
 			return entity;
 		}
@@ -69,7 +64,6 @@ public class CollisionManager implements ContactListener{
 	// PlayableCharacter kills NPC
 	public NonPlayableCharacter kill(PlayableCharacter entity, NonPlayableCharacter npc) {
 		if("fight".equals(entity.getFix().getUserData())&& "fight".equals(npc.getFix().getUserData())) {
-			System.out.println("NPC die");
 		    entity.getFix().setUserData("PlayableCharacter");
 		    entity.setAttackCheck(false);
 			return npc;

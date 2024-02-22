@@ -49,7 +49,6 @@ public class Button {
 		 BitmapFont font = new BitmapFont();
 		 font.setColor(Color.BLACK);
 		 font.getData().setScale(2);
-//		 font.draw(batch, text, this.posX, bounds.y + bounds.height / 2 , bounds.width, Align.center, true);
 		 font.draw(batch, text, bounds.x, bounds.y + bounds.height / 2, bounds.width, Align.center, true);
 		 batch.end();
 	 }
