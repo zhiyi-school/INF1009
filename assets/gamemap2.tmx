@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="30" height="13" tilewidth="13" tileheight="13" infinite="0" nextlayerid="2" nextobjectid="1">
+ <tileset firstgid="1" source="../../Downloads/OOP_PROJECT/assets/NES - Super Mario Bros - Tileset.tsx"/>
+ <layer id="1" name="Tile Layer 1" width="30" height="13">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjALag92sCExrO4hVSy37SLWXVLX0xgBaJx+B
+  </data>
+ </layer>
+</map>
