@@ -25,15 +25,11 @@ public class Map extends Entity {
 	private TiledMap map;
     private OrthogonalTiledMapRenderer maprenderer;
     private OrthographicCameraController orthographicCameraController;
-    private float mapscale;
 
-    public Map(float x, float y, String mapPath, float mapscale, OrthographicCameraController orthographicCameraController) {
+    public Map(float x, float y, String mapPath, float mapscaleInput, OrthographicCameraController orthographicCameraController) {
         super(x, y, mapPath);
-        this.mapscale = mapscale / 100f;
-//        this.mapscale = mapscale * 4f;
         this.map = new TmxMapLoader().load(mapPath);
-        this.maprenderer = new OrthogonalTiledMapRenderer(map, mapscale / 100f);
-//        this.maprenderer = new OrthogonalTiledMapRenderer(map, mapscale * 4f);
+        this.maprenderer = new OrthogonalTiledMapRenderer(map, mapscaleInput / 100f);
         this.orthographicCameraController = orthographicCameraController;
     }
     
@@ -48,12 +44,10 @@ public class Map extends Entity {
 
             bodyDef.type = BodyType.StaticBody;
             bodyDef.position.set((rect.x + rect.width / 2) / 100f, (rect.y + rect.height / 2) / 100f);
-//            bodyDef.position.set((rect.x + rect.width / 2) * 4f, (rect.y + rect.height / 2) * 4f);
 
             body = b2dworld.createBody(bodyDef);
 
             shape.setAsBox(rect.width / 200f, rect.height / 200f);
-//            shape.setAsBox((rect.width / 2) * 4f, (rect.height / 2) * 4f);
             fixtureDef.shape = shape;
             fixture = body.createFixture(fixtureDef);
             int filename = getImage().lastIndexOf('.');

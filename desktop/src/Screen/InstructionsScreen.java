@@ -159,6 +159,7 @@ public class InstructionsScreen extends Scene {
         	{
         		System.out.println("Starting game!");
         		screenManager.setCurrentScreen("Game");
+        		screenManager.getEntityManager().setNum();
         	}
         	
         }

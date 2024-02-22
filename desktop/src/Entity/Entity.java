@@ -12,7 +12,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-public abstract class Entity implements iMoveable{
+public abstract class Entity{
 	
 	// Box2d Variables
 	private BodyDef bodyDef;
@@ -138,13 +138,6 @@ public abstract class Entity implements iMoveable{
 	}
 	protected float getGround() {
 		return ground;
-	}
-	
-	public void moveAIControlled(float delta, float mapFullWidth){
-		
-	}
-	public void moveUserControlled(Sound soundEffect, float mapFullWidth) {
-		
 	}
 	public void draw(SpriteBatch batch, boolean Item) {
 		

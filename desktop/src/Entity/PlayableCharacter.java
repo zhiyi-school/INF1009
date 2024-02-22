@@ -8,14 +8,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class PlayableCharacter extends Character{
-	
-	private static final float JUMP_VELOCITY = 500f; // Adjust this value to control jump height
-    private static final float GRAVITY = -1500f; // Adjust this value to control gravity
-    private boolean isJumping = false;
-    private float verticalVelocity = 0;
-    
+	private Sound soundEffect;
     private boolean attackCheck;
-    
+	private int rightKey;
+	private int leftKey;
+	private int jumpKey;
+	
 	private float defaultX;
 	private float defaultY;
 	
@@ -25,9 +23,13 @@ public class PlayableCharacter extends Character{
 	}
 	
 	// Parameterized Constructor
-	public PlayableCharacter(World world, String textureImage, float x, float y, float speed, float health, float attack, boolean die, Boolean aiCheck) {
+	public PlayableCharacter(World world, String textureImage, float x, float y, float speed, float health, float attack, boolean die, Boolean aiCheck, int leftKey, int rightKey, int jumpKey, String soundEffect) {
 		super(world, textureImage, x, y, speed, health, attack, die, aiCheck);
 		setAttackCheck(false);
+		setLeftKey(leftKey);
+		setRightKey(rightKey);
+		setJumpKey(jumpKey);
+		setSoundEffect(soundEffect);
 	}
 	
 	private void setDefaultX() {
@@ -35,6 +37,34 @@ public class PlayableCharacter extends Character{
 	}
 	private void setDefaultY() {
 		setPosY(defaultY);
+	}
+	
+	public int getLeftKey() {
+		return leftKey;
+	}
+	private void setLeftKey(int leftKeyInput) {
+		leftKey = leftKeyInput;
+	}
+	public int getRightKey() {
+		return rightKey;
+	}
+	private void setRightKey(int rightKeyInput) {
+		rightKey = rightKeyInput;
+	}
+	public int getJumpKey() {
+		return jumpKey;
+	}
+	private void setJumpKey(int jumpKeyInput) {
+		jumpKey = jumpKeyInput;
+	}
+	public void disposeSoundEffect() {
+		soundEffect.dispose();
+	}
+	public Sound getSoundEffect() {
+		return soundEffect;
+	}
+	private void setSoundEffect(String soundInput) {
+		soundEffect = Gdx.audio.newSound(Gdx.files.internal(soundInput));
 	}
 	
 	public void draw(SpriteBatch batch) {
@@ -59,46 +89,44 @@ public class PlayableCharacter extends Character{
 	}
 	
 	// Movement controls
-	public void moveUserControlled(Sound soundEffect, float mapFullWidth) {
+	public void moveUserControlled(float mapFullWidth) {
 		if(!getDie()) {
-			if(Gdx.input.isKeyPressed (Keys.A)) {
+			if(Gdx.input.isKeyPressed (getLeftKey())) {
 				if(getBody().getPosition().x <= 0) {
 					setPosX(0);
 				}else {
 					moveLeft();
 				}
 			}
-			if(Gdx.input.isKeyPressed (Keys.D)) {
+			if(Gdx.input.isKeyPressed (getRightKey())) {
 				moveRight();
 			}
-			if(Gdx.input.isKeyPressed (Keys.SPACE)) {
-				soundEffect.play(0.01f);
+			if(Gdx.input.isKeyPressed (getJumpKey())) {
+				getSoundEffect().play(0.05f);
 				jump();
 			}
 			if(getBody().getPosition().x <= 0) {
-				setPosX(0);
+				getBody().setTransform(new Vector2(0, getBody().getPosition().y), 0);
 			}
 //			System.out.println(mapFullWidth / 3f - (getTexture().getWidth() / 80f));
-			if(getBody().getPosition().x >= (mapFullWidth / 3f) - (getTexture().getWidth() / 80f)) {
-//				System.out.println("in here");
-				setPosX((mapFullWidth / 3f) - (getTexture().getWidth() / 80f));
+			if(getBody().getPosition().x >= (mapFullWidth / 3f)) {
+				getBody().setTransform(new Vector2(mapFullWidth / 3f, getBody().getPosition().y), 0);
 			}
 			
 		}
 	}
 	// Jumping movement. Applies Gravity
     public void jump() {
-//    	getBody().setLinearVelocity(new Vector2(0, 0));
-        getBody().applyLinearImpulse(new Vector2(0, getSpeed() / 1.1f), getBody().getWorldCenter(), true);
+    	if(getBody().getLinearVelocity().y == 0) {
+    		getBody().applyLinearImpulse(new Vector2(0, getSpeed() * 17.5f), getBody().getWorldCenter(), true);
+    	}
     }	
 	
 	protected void moveLeft() {
-//    	getBody().setLinearVelocity(new Vector2(0, 0));
         getBody().applyLinearImpulse(new Vector2(-getSpeed() / 1.65f, 0), getBody().getWorldCenter(), true);
     }
 
 	protected void moveRight() {
-//    	getBody().setLinearVelocity(new Vector2(0, 0));
         getBody().applyLinearImpulse(new Vector2(getSpeed() / 1.65f, 0), getBody().getWorldCenter(), true);
     }
 	

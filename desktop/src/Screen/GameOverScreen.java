@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Align;
 
@@ -71,8 +72,9 @@ public class GameOverScreen extends Scene {
     }
 	
     public void displayGameOver() {
-    	if(screenManager.getEntityManager().checkGame()) {
-        	setGameOverText("WIN!");
+//    	setGameOverText("WIN!");
+    	if(screenManager.getEntityManager().getEntity("PlayableCharacter") != null) {
+        	setGameOverText("WIN! \n THANKS FOR PLAYING");
 		}else {
 	    	setGameOverText("GAME OVER!");
 		}
@@ -85,12 +87,9 @@ public class GameOverScreen extends Scene {
 
     public void restartGamePC() {
         // Restart the game logic here
-    	PlayableCharacter Player = new PlayableCharacter(screenManager.getWorld(), "PlayableCharacter.png", 10, 50, 0.75f, 100, 5, false, true);
+    	PlayableCharacter Player = new PlayableCharacter(screenManager.getWorld(), "PlayableCharacter.png", 10, 50, 0.75f, 100, 5, false, true, Keys.A, Keys.D, Keys.SPACE, "JumpSoundEffect.wav");
     	screenManager.getEntityManager().addPlayableCharacter(Player);
-//    	NonPlayableCharacter Enemy = new NonPlayableCharacter(screenManager.getWorld(), "Enemy.png", 200, 30, 200, 100, 10, true);
-//    	NonPlayableCharacter Item = new NonPlayableCharacter(screenManager.getWorld(), "Weapon.png", 185, 75, 200, 100, 10, false);
-//    	screenManager.getEntityManager().addNonPlayableCharacter(Enemy);
-//    	screenManager.getEntityManager().addNonPlayableCharacter(Item);
+    	screenManager.getEntityManager().setNum();
 		screenManager.setCurrentScreen("Game");
     }
     public void restartGameNPC() {
@@ -99,13 +98,14 @@ public class GameOverScreen extends Scene {
     	NonPlayableCharacter Item = new NonPlayableCharacter(screenManager.getWorld(), "Weapon.png", 185, 75, 200, 100, 10, false);
     	screenManager.getEntityManager().addNonPlayableCharacter(Enemy);
     	screenManager.getEntityManager().addNonPlayableCharacter(Item);
-    	
+    	screenManager.getEntityManager().setNum();
 		screenManager.setCurrentScreen("Game");
     }
     
     public void restartGame() {    	
     	screenManager.getEntityManager().restartGame(screenManager.getWorld(), screenManager.getCamera());
-		screenManager.setCurrentScreen("Game");
+		screenManager.getEntityManager().setNum();
+    	screenManager.setCurrentScreen("Game");
     }
 
     public void exitGame() {
@@ -119,7 +119,6 @@ public class GameOverScreen extends Scene {
         font = getMapFont();
     	
     	// Display game over text
-    	displayGameOver();
     	
     	// Calculate the x position to center the buttons horizontally
         buttonWidth = getButtonWidth();
@@ -150,10 +149,13 @@ public class GameOverScreen extends Scene {
         // Clear the screen
         Gdx.gl.glClearColor(0, 1, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        
-        startButton.render(shapeRenderer,batch);
-        mainMenuButton.render(shapeRenderer,batch);
-        exitButton.render(shapeRenderer,batch);
+
+    	displayGameOver();
+    	if(getGameOverText().contains("GAME OVER")) {
+            startButton.render(shapeRenderer,batch);
+            mainMenuButton.render(shapeRenderer,batch);
+            exitButton.render(shapeRenderer,batch);
+    	}
         
         //Draw text on screen
         batch.begin();
@@ -161,9 +163,10 @@ public class GameOverScreen extends Scene {
 		
 		// Draw game over text
 	    font.getData().setScale(4);
-	    float x = Gdx.graphics.getWidth() / 2f;
+	    float x = screenWidth / 2f;
 	    float y = Gdx.graphics.getHeight() * 0.8f; 
-	    font.draw(batch, gameOverText, x, y, 0, Align.center, false);
+	    System.out.println(font.draw(batch, getGameOverText(), 0, 0, 0, Align.center, false));
+	    font.draw(batch, getGameOverText(), 0, 0, 0, Align.center, false);
 		batch.end();
 		
 		// Check if the mouse is inside the rectangle
@@ -184,14 +187,14 @@ public class GameOverScreen extends Scene {
         	if(Gdx.input.isTouched())
         	{
         		System.out.println("Restarting game!");
-        		restartGame();
-//        		if(screenManager.getEntityManager().getEntity("PlayableCharacter") != null) {
-//        			System.out.println("Restart NPC");
-//        			restartGameNPC();
-//        		}else {
-//        			System.out.println("Restart PC");
-//                    restartGamePC();
-//        		}
+//        		restartGame();
+        		if(screenManager.getEntityManager().getEntity("PlayableCharacter") != null) {
+        			System.out.println("Restart NPC");
+        			restartGameNPC();
+        		}else {
+        			System.out.println("Restart PC");
+                    restartGamePC();
+        		}
         	}
         	
         }

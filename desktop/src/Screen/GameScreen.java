@@ -63,7 +63,7 @@ public class GameScreen extends Scene {
 
     	// Calculate the x position to center the buttons horizontally
         buttonWidth = getButtonWidth();
-        screenWidth = getScreenWidth();
+        screenWidth = Gdx.graphics.getWidth();
         
         // Create Pause Button
         pauseButton = new Button(pauseButtonX, pauseButtonY, buttonWidth, buttonHeight);

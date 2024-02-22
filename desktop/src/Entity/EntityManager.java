@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
@@ -40,7 +41,8 @@ public class EntityManager {
     	entityList.add(gameMap);
     	
 		// Creating Entities. Add them to ArrayList
-		Player1 = new PlayableCharacter(world, "PlayableCharacter.png", 10, 50, 0.75f, 100, 5, false, true);
+		Player1 = new PlayableCharacter(world, "PlayableCharacter.png", 10, 50, 0.75f, 100, 5, false, true, 
+				Keys.A, Keys.D, Keys.SPACE, "JumpSoundEffect.wav");
 		pcList.add(Player1);
 		
 		Enemy = new NonPlayableCharacter(world, "Enemy.png", 200, 30, 200, 100, 10, true);
@@ -50,28 +52,30 @@ public class EntityManager {
 		npcList.add(Item);
 		setCollision(world);
 		
+		// Create physics static bodies by iterating over all map objects
+		getMap().mapObjects(world);	
 	}
 	
 	public void restartGame(World world, OrthographicCameraController orthographicCameraController) {
 		if(pcList.size() > 0) {
 			for(PlayableCharacter pc: pcList) {
 				System.out.println("remove PCs");
+				pc.disposeSoundEffect();
 				pc.destroy();
 				pc.dispose(world);
 			}
+			pcList.clear();
 		}
 		if(npcList.size() > 0) {
 			for(NonPlayableCharacter npc: npcList) {
-				System.out.println("remove NPCs");
 				npc.destroy();
 				npc.dispose(world);
 			}
+			npcList.clear();
 		}
 		
-		pcList.clear();
-		npcList.clear();
 		
-		Player1 = new PlayableCharacter(world, "PlayableCharacter.png", 10, 50, 0.75f, 100, 5, false, true);
+		Player1 = new PlayableCharacter(world, "PlayableCharacter.png", 10, 50, 0.75f, 100, 5, false, true, Keys.A, Keys.D, Keys.SPACE, "JumpSoundEffect.wav");
 		pcList.add(Player1);
 		
 		Enemy = new NonPlayableCharacter(world, "Enemy.png", 200, 30, 200, 100, 10, true);
@@ -127,14 +131,13 @@ public class EntityManager {
 	}
 	public void addNonPlayableCharacter(NonPlayableCharacter npc) {
 		npcList.add(npcList.size(), npc);
-		System.out.println(npcList.size());
 	}
 	
 	// Movement for entities
-	private void entityMovement(Sound soundEffect, float mapFullWidth){
+	private void entityMovement(float mapFullWidth){
 		for(PlayableCharacter pc: pcList) {
 			if(pc.getAICheck()) {
-				pc.moveUserControlled(soundEffect, mapFullWidth);
+				pc.moveUserControlled(mapFullWidth);
 			}else {
 				pc.moveAIControlled(Gdx.graphics.getDeltaTime(), mapFullWidth);
 			}
@@ -147,8 +150,8 @@ public class EntityManager {
 			}
 		}
 	}
-	public void movement(Sound soundEffect, float mapFullWidth) {
-		entityMovement(soundEffect, mapFullWidth);
+	public void movement(float mapFullWidth) {
+		entityMovement(mapFullWidth);
 		npcMovement(mapFullWidth);
 	}
 	
@@ -187,27 +190,22 @@ public class EntityManager {
 				}
 			}
 			if(removeNPC != null) {
-				System.out.println("Remove NPC");
 				removeNPC.destroy();
 				removeNPC.dispose(world);
 				npcList.remove(removeNPC);
 			}
 			if(removePC != null) {
-				System.out.println("Remove PC");
 				removePC.destroy();
 				removePC.dispose(world);
 				pcList.remove(removePC);
 			}
 		}
 	}
+	public void setNum() {
+		count++;
+	}
 	
-	public int getNum() {
-//		for(NonPlayableCharacter npc: npcList) {
-//			if(!"fight".equals(npc.getFix().getUserData())) {
-//				count++;
-//			}
-//		}
-		
+	public int getNum() {		
 		for(NonPlayableCharacter npc: npcList) {
 			if("fight".equals(npc.getFix().getUserData())) {
 				count++;
@@ -219,25 +217,11 @@ public class EntityManager {
 				count++;
 			}
 		}
-		
-//		for(NonPlayableCharacter item: npcList) {
-//			if(!("Weapon".equals(item.getFix().getUserData()) || ("Enemy".equals(item.getFix().getUserData())))) {
-//				pcList.get(0).setAttackCheck(true);
-//				count++;
-//			}
-//		}
-//		for(PlayableCharacter pc: pcList) {
-//			if(!("PlayableCharacter".equals(pc.getFix().getUserData()))) {
-//				pcList.get(0).setAttackCheck(true);
-//				count++;
-//			}
-//		}
 		return count;
 	}
 	
 	public boolean checkGame() {
 		if(pcList.size() > 0) {
-			System.out.println(pcList.size());
 			return true;
 		}
 		return false;
@@ -254,20 +238,9 @@ public class EntityManager {
 	public Map getMap() {
 		return gameMap;
 	}
-	public void setProjection(OrthographicCameraController orthographicCameraController, SpriteBatch batch) {
-		batch.begin();
-		batch.setProjectionMatrix(orthographicCameraController.getCamera().combined);
-		batch.end();
+	public void createMap(World world) {
+		getMap().mapObjects(world);
 	}
-	public void camera(OrthographicCameraController orthographicCameraController, SpriteBatch batch) {
-		// Update camera position to follow character and ensures it does not go out of map boundaries
-		orthographicCameraController.updateCameraPosition((getEntity("PlayableCharacter").getBody().getPosition().x * 3f) - (getEntity("PlayableCharacter").getTexture().getWidth() / 110f), 
-				getEntity("PlayableCharacter").getBody().getPosition().y);
-		orthographicCameraController.applyViewport();
-		// Set the batch projection matrix to camera's combined matrix	
-		setProjection(orthographicCameraController, batch);
-	}
-	
 }
 	
 	

@@ -39,6 +39,11 @@ public class MainMenuScreen extends Scene {
     	super(batch, shapeRenderer, font, buttonWidth, screenWidth);
     }
     
+    public void startGame() {
+    	screenManager.getEntityManager().restartGame(screenManager.getWorld(), screenManager.getCamera());
+    	screenManager.getEntityManager().setNum();
+    }
+    
     @Override
     public void show() {
      	batch = getBatch();
@@ -87,13 +92,13 @@ public class MainMenuScreen extends Scene {
 		// Check if the mouse is inside the rectangle
 		mouseX = Gdx.input.getX();
         mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
-        System.out.println(startButton);
         
         if (startButton.hover(mouseX, mouseY)==true) {
         	startButton.setColour(Color.YELLOW);
         	if(Gdx.input.isTouched())
         	{
 //        		System.out.println("Start clicked!");
+        		startGame();
         		screenManager.setCurrentScreen("Game");
         	}
         }

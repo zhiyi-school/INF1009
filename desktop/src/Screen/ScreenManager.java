@@ -4,10 +4,14 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.ScreenUtils;
 
 import Entity.EntityManager;
 import Entity.OrthographicCameraController;
@@ -31,6 +35,7 @@ public class ScreenManager {
 	
     private ArrayList <Screen> screensList;
     private float screenWidth = Gdx.graphics.getWidth();
+    private float screenHeight = Gdx.graphics.getHeight();
     
 
     public ScreenManager(EntityManager entityManager, World world, OrthographicCameraController orthographicCameraController, SpriteBatch batch) {
@@ -45,8 +50,9 @@ public class ScreenManager {
         gameOverScreen = new GameOverScreen(batch, shapeRenderer, font, 110, screenWidth); // Initialize gameOverScreen
         
         setEntityManager(entityManager);
-        setCamera(orthographicCameraController);
         setWorld(world);
+        setCamera(orthographicCameraController);
+        setScreenManager(this);
     }
     
     public void setScreenManager(ScreenManager screenManagerInput) {
@@ -140,14 +146,45 @@ public class ScreenManager {
       	if(currentScreen == null) {
       		setCurrentScreen("Main");
       	}else {
+      		currentScreen.show();
     		currentScreen.render(delta);
       	}
     }
     
-    public boolean checkGameStart() {
+    public void checkGameStart(Box2DDebugRenderer debugRenderer, SpriteBatch batch, float MAP_SCALE) {
     	if(getCurrentScreen() instanceof GameScreen) {
-    		return true;
+    		// Clear the screen
+			Gdx.gl.glClearColor(0, 0, 0, 1);
+	    	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			ScreenUtils.clear(0, 0, 0.2f, 1);
+
+			// Debugger
+			debugRenderer.render(world, orthographicCameraController.getCamera().combined.cpy().scl(MAP_SCALE));
+			gameState(batch, world);	
     	}
-    	return false;
     }
+    
+    public void gameState(SpriteBatch batch, World world) {
+    	if(entityManager.getNum() > 0) {
+			update();
+		}else {
+			entityManager.entityDraw(batch);
+			entityManager.movement(orthographicCameraController.getMapFullWidth());
+			
+			world.step(Gdx.graphics.getDeltaTime(), 6, 2);
+			
+			if(entityManager.getEntity("PlayableCharacter") != null) {
+				orthographicCameraController.camera(batch);
+			}else {
+				setCurrentScreen("GameOver");
+				update();
+			}
+		}
+    }
+    
+    public void update() {
+		// Update Box2d Objects outside of World Simulation
+		entityManager.collisionEquip(world);
+		entityManager.collisionFight(world);
+	}
 }

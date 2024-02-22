@@ -22,19 +22,11 @@ public class GameMaster extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private EntityManager entityManager;
 	private World world;
-    private Sound soundEffect;
+//    private Sound soundEffect;
 
 	// For Viewport and Camera
 	private OrthographicCameraController orthographicCameraController;
-
-	// For Map dimensions
-	private float mapTileWidth;
-	private float mapTileHeight;
-	private float tileSize;
-	private float mapFullWidth;
-	private float mapFullHeight;
 	
-	private Screen currentScreen;
     private ScreenManager screenManager;
 
 	private Box2DDebugRenderer debugRenderer;
@@ -44,78 +36,34 @@ public class GameMaster extends ApplicationAdapter {
 	
 	@Override
 	public void create() {
+		// Debugger
 		debugRenderer = new Box2DDebugRenderer();
-    	
-    	System.out.println(mapFullWidth);
 		
-		batch = new SpriteBatch();
+		// Creating the World for the game
 		world = new World(new Vector2(0, -9.8f), true);
-//		world = new World(new Vector2(0, 0f), true);
-		// Create Viewport and Camera
-        soundEffect = Gdx.audio.newSound(Gdx.files.internal("JumpSoundEffect.wav"));
-        orthographicCameraController = new OrthographicCameraController(Gdx.graphics.getWidth() / 100f, Gdx.graphics.getHeight() / 100f);
-//        orthographicCameraController = new OrthographicCameraController(Gdx.graphics.getWidth() * 4f, Gdx.graphics.getHeight() * 4f);
+		batch = new SpriteBatch();
+      
+        // Create Viewport and Camera
+        orthographicCameraController = new OrthographicCameraController(Gdx.graphics.getWidth() / 100f, Gdx.graphics.getHeight() / 100f, world);
         entityManager = new EntityManager(world, orthographicCameraController);
-		
-		// Create physics static bodies by iterating over all map objects
-        entityManager.getMap().mapObjects(world);
-
-		// Set up map dimensions
-    	mapTileWidth = entityManager.getMap().getMapTileWidth();
-    	mapTileHeight = entityManager.getMap().getMapTileHeight();
-    	tileSize = entityManager.getMap().getTileSize();
-    	
-    	// Calculate total pixel width and height of entire map
-    	mapFullWidth = (mapTileWidth * tileSize * MAP_SCALE) / 100f;
-    	mapFullHeight = (mapTileHeight * tileSize * MAP_SCALE) / 100f;
+        orthographicCameraController.setEntityManager(entityManager);
     	
     	// Calculate camera boundaries and set them in OrthographicCameraController
-    	orthographicCameraController.setCameraBoundaries(mapFullWidth, mapFullHeight);
+    	orthographicCameraController.setCameraBoundaries();
         
         // Initialize the ScreenManager
         screenManager = new ScreenManager(entityManager, world, orthographicCameraController, batch);
-        screenManager.setScreenManager(screenManager);
 	}	
-	
-	public void update() {
-		entityManager.collisionEquip(world);
-		entityManager.collisionFight(world);
-	}
 	
 	@Override
 	public void render() {
 		try {
 	      	float delta = Gdx.graphics.getDeltaTime();
 	      	
+	      	// Draw current screen
       		screenManager.drawCurrent(delta);
-      		
-    		if(screenManager.checkGameStart()) {
-    			// Clear the screen
-    			Gdx.gl.glClearColor(0, 0, 0, 1);
-    	    	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+      		screenManager.checkGameStart(debugRenderer, batch, MAP_SCALE);
 
-    			ScreenUtils.clear(0, 0, 0.2f, 1);
-    			// System.out.println(entityManager.getNum());
-    			debugRenderer.render(world, orthographicCameraController.getCamera().combined.cpy().scl(MAP_SCALE));
-    			
-    			// Check if update outside of world.set is required
-    			if(entityManager.getNum() > 0) {
-    				update();
-    			}else {
-    				entityManager.entityDraw(batch);
-	    			entityManager.movement(soundEffect, mapFullWidth);
-	    			
-					world.step(Gdx.graphics.getDeltaTime(), 6, 2);
-    		        // System.out.println(world.getContactCount());
-    				
-    				if(entityManager.getEntity("PlayableCharacter") != null) {
-    					entityManager.camera(orthographicCameraController, batch);
-        			}else {
-        				screenManager.setCurrentScreen("GameOver");
-        				update();
-        			}
-    			}
-    		}
 		}catch(Exception e){
 			System.out.println(e);
 			Gdx.app.exit();
@@ -133,8 +81,6 @@ public class GameMaster extends ApplicationAdapter {
 	@Override
     	public void dispose() {
     		batch.dispose();
-//			entityManager.endGame(world);
-			soundEffect.dispose();
 			world.dispose();
     	}
 }
