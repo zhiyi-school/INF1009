@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 
@@ -36,20 +37,24 @@ public class GameMaster extends ApplicationAdapter {
 	private Screen currentScreen;
     private ScreenManager screenManager;
 
+	private Box2DDebugRenderer debugRenderer;
+
 	// Constant variable for enlarging objects
 	private static final float MAP_SCALE = 3.0f;
 	
 	@Override
 	public void create() {
-
+		debugRenderer = new Box2DDebugRenderer();
     	
     	System.out.println(mapFullWidth);
 		
 		batch = new SpriteBatch();
 		world = new World(new Vector2(0, -9.8f), true);
+//		world = new World(new Vector2(0, 0f), true);
 		// Create Viewport and Camera
-        orthographicCameraController = new OrthographicCameraController(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         soundEffect = Gdx.audio.newSound(Gdx.files.internal("JumpSoundEffect.wav"));
+        orthographicCameraController = new OrthographicCameraController(Gdx.graphics.getWidth() / 100f, Gdx.graphics.getHeight() / 100f);
+//        orthographicCameraController = new OrthographicCameraController(Gdx.graphics.getWidth() * 4f, Gdx.graphics.getHeight() * 4f);
         entityManager = new EntityManager(world, orthographicCameraController);
 		
 		// Create physics static bodies by iterating over all map objects
@@ -61,14 +66,14 @@ public class GameMaster extends ApplicationAdapter {
     	tileSize = entityManager.getMap().getTileSize();
     	
     	// Calculate total pixel width and height of entire map
-    	mapFullWidth = mapTileWidth * tileSize * MAP_SCALE;
-    	mapFullHeight = mapTileHeight * tileSize * MAP_SCALE;
+    	mapFullWidth = (mapTileWidth * tileSize * MAP_SCALE) / 100f;
+    	mapFullHeight = (mapTileHeight * tileSize * MAP_SCALE) / 100f;
     	
     	// Calculate camera boundaries and set them in OrthographicCameraController
     	orthographicCameraController.setCameraBoundaries(mapFullWidth, mapFullHeight);
         
         // Initialize the ScreenManager
-        screenManager = new ScreenManager(entityManager, world);
+        screenManager = new ScreenManager(entityManager, world, orthographicCameraController);
         screenManager.setScreenManager(screenManager);
 	}	
 	
@@ -89,27 +94,16 @@ public class GameMaster extends ApplicationAdapter {
 	          	currentScreen.show();
 	    		currentScreen.render(delta);
 	          	
-	    		if(screenManager.getCurrentScreen() instanceof MainMenuScreen) {
-	//    			System.out.println("MainMenu");
+	    		if(screenManager.getCurrentScreen() instanceof GameScreen) {
 	    			
-	    		}else if(screenManager.getCurrentScreen() instanceof InstructionsScreen) {
-	//    			System.out.println("MainMenu");
-	    			
-	    		}else if (screenManager.getCurrentScreen() instanceof PauseScreen) {
-	//    			System.out.println("MainMenu");
-	    			
-	    		}else if (screenManager.getCurrentScreen() instanceof GameOverScreen) {
-	//    			System.out.println("MainMenu");
-	    			
-	    		}else if(screenManager.getCurrentScreen() instanceof GameScreen) {
-	
 	    			// Clear the screen
 	    			Gdx.gl.glClearColor(0, 0, 0, 1);
 	    	    	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	
 	    			ScreenUtils.clear(0, 0, 0.2f, 1);
 	    			// System.out.println(entityManager.getNum());
-	
+	    			debugRenderer.render(world, orthographicCameraController.getCamera().combined.cpy().scl(MAP_SCALE));
+	    			
 	    			// Check if update outside of world.set is required
 	    			if(entityManager.getNum() > 0) {
 	    				update();
@@ -120,20 +114,13 @@ public class GameMaster extends ApplicationAdapter {
 						world.step(Gdx.graphics.getDeltaTime(), 6, 2);
 	    		        // System.out.println(world.getContactCount());
 	    				
-	    				entityManager.update(Gdx.graphics.getDeltaTime());
-	    				
 	    				if(entityManager.getEntity("PlayableCharacter") != null) {
-	    					// Update camera position to follow character and ensures it does not go out of map boundaries
-	    					orthographicCameraController.updateCameraPosition(entityManager.getEntity("PlayableCharacter").getPosX() + 
-	    		    				entityManager.getEntity("PlayableCharacter").getTexture().getWidth() / 2, 240);
-	    		    		orthographicCameraController.applyViewport();
-	    		    		// Set the batch projection matrix to camera's combined matrix	
-	    		    		entityManager.setProjection(orthographicCameraController, batch);
+	    					entityManager.camera(orthographicCameraController, batch);
 	        			}else {
 	        				screenManager.setCurrentScreen("GameOver");
 	        				update();
 	        			}
-	    			}	
+	    			}
 	    		}
 	      	}
 		}catch(Exception e){
@@ -144,21 +131,6 @@ public class GameMaster extends ApplicationAdapter {
 			
 		}
 	}
-	
-	/*
-    public void changeScreen(int screenNumber) {
-//        if (screenNumber == 1) {
-//            currentScreen.hide();
-//            currentScreen = screen1;
-//            currentScreen.show();
-//        } 
-//        else if (screenNumber == 2) {
-//            currentScreen.hide();
-//            currentScreen = screen2;
-//            currentScreen.show();
-//        }
-    }
-*/
 
 	@Override
 	public void resize(int width, int height) {
@@ -168,10 +140,8 @@ public class GameMaster extends ApplicationAdapter {
 	@Override
     	public void dispose() {
     		batch.dispose();
-			entityManager.diposeEntities(world);
+//			entityManager.endGame(world);
 			soundEffect.dispose();
 			world.dispose();
-//			gameScreen.dispose();
-//			pauseScreen.dispose();
     	}
 }

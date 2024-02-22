@@ -1,23 +1,13 @@
 package Screen;
 
-import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.Align;
 
 
@@ -46,6 +36,7 @@ public class GameScreen implements Screen {
 	
     public void pauseGame() {
         // Pause the game logic here
+    	screenManager.setCurrentScreen("Pause");
     }
 	
 	@Override
@@ -107,6 +98,9 @@ public class GameScreen implements Screen {
         		System.out.println("Game paused.");
         		pauseGame();
         	}
+        }else if(Gdx.input.isKeyPressed (Keys.ESCAPE)) {
+        	System.out.println("Game paused.");
+    		pauseGame();
         }
         
         else {

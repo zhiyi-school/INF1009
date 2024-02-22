@@ -1,6 +1,8 @@
 package Entity;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
 public abstract class Character extends Entity{
@@ -11,11 +13,6 @@ public abstract class Character extends Entity{
 	private boolean die;
 	private float health;
 	
-	protected abstract void moveUp();
-	protected abstract void moveDown();
-	protected abstract void moveLeft();
-	protected abstract void moveRight();
-	public abstract void draw(SpriteBatch batch);
 	
 	// Default Constructor
 	public Character(World world) {
@@ -66,7 +63,8 @@ public abstract class Character extends Entity{
 		return speed;
 	}
 	public void setSpeed(float speedInput) {
-		speed = speedInput;
+//		speed = speedInput / 200f;
+		speed = speedInput / 200f;
 	}
 	
 	public float getAttack() {
@@ -90,6 +88,16 @@ public abstract class Character extends Entity{
 		health = healthInput;
 	}
 	
+	public void draw(SpriteBatch batch) {
+		batch.draw(getTexture(), ((getBody().getPosition().x) * 3f) - (getTexture().getWidth() / 110f), (getBody().getPosition().y * 3f)  - (getTexture().getHeight() / 110f), getTexture().getWidth() / 60f, getTexture().getHeight() / 60f);
+	}
+	
+	protected void moveLeft() {
+        getBody().applyLinearImpulse(new Vector2(-getSpeed() * Gdx.graphics.getDeltaTime(), 0), getBody().getWorldCenter(), true);
+    }
+	protected void moveRight() {
+        getBody().applyLinearImpulse(new Vector2(getSpeed() * Gdx.graphics.getDeltaTime(), 0), getBody().getWorldCenter(), true);
+    }
 	
 	
 	

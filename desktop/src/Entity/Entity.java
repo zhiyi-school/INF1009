@@ -26,6 +26,8 @@ public abstract class Entity implements iMoveable{
 	private float posX;
 	private float posY;
 	private Boolean aiCheck;
+	private float ground;
+	float scaleFactor = 100f;
 	
 	protected String image;
 
@@ -38,23 +40,26 @@ public abstract class Entity implements iMoveable{
 		setPosX(0);
 		setPosY(0);
 		setAICheck(true);
-		createBody(world);
+		createBody(world, 0, 0);
+		setGround(0);
 	}
 	
 	// Character Constructor
 	public Entity(World world, String textureImage, float posXInput, float posYInput, Boolean aiCheck) {
 		setImage(textureImage);
 		setTexture(textureImage);
+		setAICheck(aiCheck);
 		setPosX(posXInput);
 		setPosY(posYInput);
-		setAICheck(aiCheck);
-		createBody(world);
+		createBody(world, posXInput, posYInput);
+		setGround(0);
 	}
 	
 	// Map Constructor
-	public Entity(float posXInput, float posYInput) {
+	public Entity(float posXInput, float posYInput, String mapPath) {
 		setPosX(posXInput);
 		setPosY(posYInput);
+		setImage(mapPath);
 	}
 	
 	public String getImage() {
@@ -78,20 +83,21 @@ public abstract class Entity implements iMoveable{
 	public Fixture getFix() {
 		return fixture;
 	}
-	public void createBody(World world) {
+	public void createBody(World world, float posX, float posY) {
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyDef.BodyType.DynamicBody;
-		bodyDef.position.set(getPosX(), getPosY());
+		bodyDef.position.set(posX / 100f, posY / 100f);
+		bodyDef.fixedRotation = true; 
 		body = world.createBody(bodyDef);
 		
 		shape = new PolygonShape();
-        shape.setAsBox(getTexture().getWidth() / 2.5f, getTexture().getHeight() / 2.5f);
+        shape.setAsBox(getTexture().getWidth() / 4f / 100f, getTexture().getHeight() / 4f / 100f);
+//        shape.setAsBox(getTexture().getWidth() / 2.5f * 4f, getTexture().getHeight() / 2.5f * 4f);
         
         fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = 1f; 		// Set density to affect how body responds to forces
-        fixtureDef.friction = 0.4f; 	// Set friction to affect sliding
-        fixtureDef.restitution = 0.1f; 	// Set restitution to affect how bouncy the object is
+        fixtureDef.friction = 2f; 	// Set friction to affect sliding
 
         fixture = body.createFixture(fixtureDef);
         // Set the user data for the fixture to the character instance
@@ -103,17 +109,19 @@ public abstract class Entity implements iMoveable{
 	
 	// Get x Co-ordinate of Entity
 	public float getPosX() {
-		return posX;
+		return getBody().getPosition().x;
 	}
 	public void setPosX(float x) {
+//		posX = getBody().getPosition().x * scaleFactor;
 		posX = x;
 	}
 	
 	// Get y Co-ordinate of Entity
 	public float getPosY() {
-		return posY;
+		return getBody().getPosition().y;
 	}
 	public void setPosY(float y) {
+//		posY = getBody().getPosition().y * scaleFactor;
 		posY = y;
 	}
 	
@@ -123,6 +131,13 @@ public abstract class Entity implements iMoveable{
 	}
 	protected void setAICheck(boolean aiInput) {
 		aiCheck = aiInput;
+	}
+	
+	protected void setGround(float groundInput) {
+		ground = groundInput;
+	}
+	protected float getGround() {
+		return ground;
 	}
 	
 	public void moveAIControlled(float delta, float mapFullWidth){

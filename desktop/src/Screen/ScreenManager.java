@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.physics.box2d.World;
 
 import Entity.EntityManager;
+import Entity.OrthographicCameraController;
 
 public class ScreenManager {
 	
@@ -16,13 +17,14 @@ public class ScreenManager {
 	// private GameMaster gameScreen;
 	private Screen currentScreen;
 	private EntityManager entityManager;
+	private OrthographicCameraController orthographicCameraController;
 	private World world;
 
 	
     private ArrayList<Screen> screensList;
     
 
-    public ScreenManager(EntityManager entityManager, World world) {
+    public ScreenManager(EntityManager entityManager, World world, OrthographicCameraController orthographicCameraController) {
         screensList = new ArrayList<Screen>();
         mainMenuScreen = new MainMenuScreen(); // Initialize mainMenuScreen
         screensList.add(mainMenuScreen);
@@ -40,6 +42,7 @@ public class ScreenManager {
         screensList.add(gameOverScreen);
         
         setEntityManager(entityManager);
+        setCamera(orthographicCameraController);
         setWorld(world);
     }
     
@@ -72,6 +75,12 @@ public class ScreenManager {
     }
     public EntityManager getEntityManager() {
     	return entityManager;
+    }
+    public void setCamera(OrthographicCameraController orthographicCameraControllerInput) {
+    	orthographicCameraController = orthographicCameraControllerInput;
+    }
+    public OrthographicCameraController getCamera() {
+    	return orthographicCameraController;
     }
     public void setWorld(World worldInput) {
     	world = worldInput;

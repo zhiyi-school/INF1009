@@ -1,9 +1,11 @@
 package Entity;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.WorldManifold;
 
 public class CollisionManager implements ContactListener{
 	
@@ -12,28 +14,29 @@ public class CollisionManager implements ContactListener{
 		Fixture fixtureA = contact.getFixtureA();
 	    Fixture fixtureB = contact.getFixtureB();
 	    
+//	    System.out.println(fixtureA);
+//	    System.out.println(fixtureB);
+	    
 	    // Check for PC and Item collision
 	    if ("PlayableCharacter".equals(fixtureA.getUserData()) && "Weapon".equals(fixtureB.getUserData())) {
-		       	// Debug output to confirm collision detection
-		       	System.out.println("Collision detected between PlayableCharacter and Weapon");
-		       	fixtureB.setUserData("equip");
+	    	System.out.println("Collision detected between PlayableCharacter and Weapon");
+	    	fixtureB.setUserData("equip");
 		        
-		   }else if("Weapon".equals(fixtureA.getUserData()) && "PlayableCharacter".equals(fixtureB.getUserData())) {
-			   System.out.println("Collision detected between PlayableCharacter and Weapon");	
-			   fixtureA.setUserData("equip");
+	    }else if("Weapon".equals(fixtureA.getUserData()) && "PlayableCharacter".equals(fixtureB.getUserData())) {
+	    	System.out.println("Collision detected between PlayableCharacter and Weapon");	
+	    	fixtureA.setUserData("equip");
 		}
 	    
 	    // Check for PC and Enemy collision
 	    if ("PlayableCharacter".equals(fixtureA.getUserData()) && "Enemy".equals(fixtureB.getUserData())) {
-	       	// Debug output to confirm collision detection
 	       	System.out.println("Collision detected between PlayableCharacter and Enemy");
 	       	fixtureA.setUserData("fight");
 	       	fixtureB.setUserData("fight");
 	        
 	   }else if("Enemy".equals(fixtureA.getUserData()) && "PlayableCharacter".equals(fixtureB.getUserData())) {
-		   System.out.println("Collision detected between PlayableCharacter and Enemy");	
-		   fixtureA.setUserData("fight");
-		   fixtureB.setUserData("fight");
+		   	System.out.println("Collision detected between PlayableCharacter and Enemy");	
+		   	fixtureA.setUserData("fight");
+		   	fixtureB.setUserData("fight");
 	   }
 	}
 
@@ -55,7 +58,7 @@ public class CollisionManager implements ContactListener{
 	
 	
 	// NPC kills PlayableCharacter
-	public PlayableCharacter die(PlayableCharacter entity, NonPlayableCharacter npc, World world) {
+	public PlayableCharacter die(PlayableCharacter entity, NonPlayableCharacter npc) {
 		if("fight".equals(entity.getFix().getUserData())&& "fight".equals(npc.getFix().getUserData())) {
 			System.out.println("PC die");
 		    npc.getFix().setUserData("Enemy");
@@ -64,7 +67,7 @@ public class CollisionManager implements ContactListener{
 	    return null;
 	}
 	// PlayableCharacter kills NPC
-	public NonPlayableCharacter kill(PlayableCharacter entity, NonPlayableCharacter npc, World world) {
+	public NonPlayableCharacter kill(PlayableCharacter entity, NonPlayableCharacter npc) {
 		if("fight".equals(entity.getFix().getUserData())&& "fight".equals(npc.getFix().getUserData())) {
 			System.out.println("NPC die");
 		    entity.getFix().setUserData("PlayableCharacter");

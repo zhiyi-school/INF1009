@@ -7,6 +7,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -14,41 +15,60 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Map extends Entity {
+
+	private BodyDef bodyDef;
+	private Body body;
+	private PolygonShape shape;
+	private FixtureDef fixtureDef;
+	private Fixture fixture;
+	
 	private TiledMap map;
     private OrthogonalTiledMapRenderer maprenderer;
     private OrthographicCameraController orthographicCameraController;
     private float mapscale;
 
     public Map(float x, float y, String mapPath, float mapscale, OrthographicCameraController orthographicCameraController) {
-        super(x, y);
-        this.mapscale = mapscale;
+        super(x, y, mapPath);
+        this.mapscale = mapscale / 100f;
+//        this.mapscale = mapscale * 4f;
         this.map = new TmxMapLoader().load(mapPath);
-        this.maprenderer = new OrthogonalTiledMapRenderer(map, mapscale);
+        this.maprenderer = new OrthogonalTiledMapRenderer(map, mapscale / 100f);
+//        this.maprenderer = new OrthogonalTiledMapRenderer(map, mapscale * 4f);
         this.orthographicCameraController = orthographicCameraController;
     }
     
     // Create physics static bodies by iterating over all map objects
     public void mapObjects(World b2dworld) {
-    	BodyDef bodyDef = new BodyDef();
-        PolygonShape shape = new PolygonShape();
-        FixtureDef fixtureDef = new FixtureDef();
-        Body body;
+    	bodyDef = new BodyDef();
+        shape = new PolygonShape();
+        fixtureDef = new FixtureDef();
 
         for (RectangleMapObject rectangleObject : this.map.getLayers().get(1).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = rectangleObject.getRectangle();
 
             bodyDef.type = BodyType.StaticBody;
-            bodyDef.position.set(rect.x + rect.width / 2, rect.y + rect.height / 2);
+            bodyDef.position.set((rect.x + rect.width / 2) / 100f, (rect.y + rect.height / 2) / 100f);
+//            bodyDef.position.set((rect.x + rect.width / 2) * 4f, (rect.y + rect.height / 2) * 4f);
 
             body = b2dworld.createBody(bodyDef);
 
-            shape.setAsBox(rect.width / 2, rect.height / 2);
+            shape.setAsBox(rect.width / 200f, rect.height / 200f);
+//            shape.setAsBox((rect.width / 2) * 4f, (rect.height / 2) * 4f);
             fixtureDef.shape = shape;
-            body.createFixture(fixtureDef);
+            fixture = body.createFixture(fixtureDef);
+            int filename = getImage().lastIndexOf('.');
+            String strippedFilename = getImage().substring(0, filename);
+            fixture.setUserData(strippedFilename);
         }
-
         shape.dispose();
     }
+    
+    public Body getBody() {
+		return body;
+	}
+	public Fixture getFix() {
+		return fixture;
+	}
     
     // Setup map dimensions
     public int getMapTileWidth() {

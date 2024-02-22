@@ -75,16 +75,26 @@ public class GameOverScreen implements Screen {
 
     public void restartGamePC() {
         // Restart the game logic here
-    	PlayableCharacter Player = new PlayableCharacter(screenManager.getWorld(), "PlayableCharacter.png", 0, 100, 200, 100, 5, false, true);
+    	PlayableCharacter Player = new PlayableCharacter(screenManager.getWorld(), "PlayableCharacter.png", 10, 50, 0.75f, 100, 5, false, true);
     	screenManager.getEntityManager().addPlayableCharacter(Player);
+//    	NonPlayableCharacter Enemy = new NonPlayableCharacter(screenManager.getWorld(), "Enemy.png", 200, 30, 200, 100, 10, true);
+//    	NonPlayableCharacter Item = new NonPlayableCharacter(screenManager.getWorld(), "Weapon.png", 185, 75, 200, 100, 10, false);
+//    	screenManager.getEntityManager().addNonPlayableCharacter(Enemy);
+//    	screenManager.getEntityManager().addNonPlayableCharacter(Item);
 		screenManager.setCurrentScreen("Game");
     }
     public void restartGameNPC() {
         // Restart the game logic here
-    	NonPlayableCharacter Enemy = new NonPlayableCharacter(screenManager.getWorld(), "Enemy.png", rand.nextInt(Gdx.graphics.getWidth() - 90 + 1), 100, 200, 100, 10, true);
-    	NonPlayableCharacter Item = new NonPlayableCharacter(screenManager.getWorld(), "Weapon.png", 100, 30, 200, 100, 10, false);
+    	NonPlayableCharacter Enemy = new NonPlayableCharacter(screenManager.getWorld(), "Enemy.png", 200, 30, 200, 100, 10, true);
+    	NonPlayableCharacter Item = new NonPlayableCharacter(screenManager.getWorld(), "Weapon.png", 185, 75, 200, 100, 10, false);
     	screenManager.getEntityManager().addNonPlayableCharacter(Enemy);
     	screenManager.getEntityManager().addNonPlayableCharacter(Item);
+    	
+		screenManager.setCurrentScreen("Game");
+    }
+    
+    public void restartGame() {    	
+    	screenManager.getEntityManager().restartGame(screenManager.getWorld(), screenManager.getCamera());
 		screenManager.setCurrentScreen("Game");
     }
 
@@ -167,11 +177,12 @@ public class GameOverScreen implements Screen {
         	if(Gdx.input.isTouched())
         	{
         		System.out.println("Restarting game!");
+//        		restartGame();
         		if(screenManager.getEntityManager().getEntity("PlayableCharacter") != null) {
-        			System.out.println("NPC");
+        			System.out.println("Restart NPC");
         			restartGameNPC();
         		}else {
-        			System.out.println("PC");
+        			System.out.println("Restart PC");
                     restartGamePC();
         		}
         	}

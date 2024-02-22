@@ -58,7 +58,7 @@ public class InstructionsScreen implements Screen {
     }
     
     public void displayInstructions() {
-    	setInstructionsText("These are the instructions for the game. \n To move left, press on the left arrow. \n To move right, press on the right arrow.");
+    	setInstructionsText("These are the instructions for the game. \n To move left, press the A key. \n To move right, press the D key. \n To Jump, press the Space Bar");
     }
     
     public void returnToMenu() {
