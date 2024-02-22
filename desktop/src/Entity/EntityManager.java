@@ -53,6 +53,21 @@ public class EntityManager {
 	}
 	
 	public void restartGame(World world, OrthographicCameraController orthographicCameraController) {
+		if(pcList.size() > 0) {
+			for(PlayableCharacter pc: pcList) {
+				System.out.println("remove PCs");
+				pc.destroy();
+				pc.dispose(world);
+			}
+		}
+		if(npcList.size() > 0) {
+			for(NonPlayableCharacter npc: npcList) {
+				System.out.println("remove NPCs");
+				npc.destroy();
+				npc.dispose(world);
+			}
+		}
+		
 		pcList.clear();
 		npcList.clear();
 		
@@ -117,7 +132,7 @@ public class EntityManager {
 	
 	// Movement for entities
 	private void entityMovement(Sound soundEffect, float mapFullWidth){
-		for(Entity pc: pcList) {
+		for(PlayableCharacter pc: pcList) {
 			if(pc.getAICheck()) {
 				pc.moveUserControlled(soundEffect, mapFullWidth);
 			}else {

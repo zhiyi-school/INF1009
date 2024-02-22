@@ -11,39 +11,42 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 
-
-public class MainMenuScreen implements Screen {
+public class MainMenuScreen extends Scene {
 	private ScreenManager screenManager; // edited this
 	
 	private Screen pauseScreen;
 	private Screen currentScreen;
 	private Screen instructionsScreen; // edited this
 	
+	// Calculate the x position to center the buttons horizontally
+    private float buttonWidth; // Assuming all buttons have the same width
+    private float screenWidth;
+    private float buttonSpacing = 25; // Spacing between buttons
+    private float totalButtonWidth = 3 * buttonWidth + 2 * buttonSpacing; // Total width of all buttons and spacing
+    private float startX = (screenWidth - totalButtonWidth) / 2; // Start x position for the first button
+	
 	private Button startButton;
 	private Button instructionsButton;
-	private Button exitButton;
-	
+	private Button exitButton;	
+
 	private SpriteBatch batch;
-	
 	private ShapeRenderer shapeRenderer;
     private BitmapFont font;
     
     private float mouseX, mouseY;
     
+    public MainMenuScreen(SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font, float buttonWidth, float screenWidth) {
+    	super(batch, shapeRenderer, font, buttonWidth, screenWidth);
+    }
     
     @Override
     public void show() {
-    	
-    	// Draw Sprite and Shapes in LibGDX
-     	batch = new SpriteBatch();
-    	shapeRenderer = new ShapeRenderer();
-    	
-    	// Calculate the x position to center the buttons horizontally
-        float buttonWidth = 170; // Assuming all buttons have the same width
-        float screenWidth = Gdx.graphics.getWidth();
-        float buttonSpacing = 25; // Spacing between buttons
-        float totalButtonWidth = 3 * buttonWidth + 2 * buttonSpacing; // Total width of all buttons and spacing
-        float startX = (screenWidth - totalButtonWidth) / 2; // Start x position for the first button
+     	batch = getBatch();
+    	shapeRenderer = getShape();
+        font = getMapFont();
+
+        buttonWidth = getButtonWidth();
+        screenWidth = getScreenWidth();
         
     	// Create start button
     	startButton = new Button(startX + 70, 100, buttonWidth - 70, 60);
@@ -59,12 +62,11 @@ public class MainMenuScreen implements Screen {
     	exitButton = new Button(startX + 2 * (buttonWidth + buttonSpacing), 100, buttonWidth - 70, 60);
     	exitButton.setText("Exit");
     	exitButton.setColour(Color.RED);
-    	
-        font = new BitmapFont();
         
     }
 
     public void render(float delta) {
+    	show();
         // Clear the screen
         Gdx.gl.glClearColor(0, 1, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -85,6 +87,7 @@ public class MainMenuScreen implements Screen {
 		// Check if the mouse is inside the rectangle
 		mouseX = Gdx.input.getX();
         mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
+        System.out.println(startButton);
         
         if (startButton.hover(mouseX, mouseY)==true) {
         	startButton.setColour(Color.YELLOW);
@@ -122,11 +125,6 @@ public class MainMenuScreen implements Screen {
     public void setScreenManager(ScreenManager screenManagerInput) {
     	screenManager = screenManagerInput;
     }
-
-    @Override
-    public void resize(int width, int height) {
-        
-    }
     
     @Override
     public void dispose() {
@@ -134,10 +132,18 @@ public class MainMenuScreen implements Screen {
     	startButton.dispose();
     	instructionsButton.dispose();
     	exitButton.dispose();
-    	batch.dispose();
-    	shapeRenderer.dispose();
-        font.dispose();
     }
+	
+	public String getScreen() {
+		String screen = "mainMenu";
+		return screen;
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
 	public void pause() {
@@ -155,10 +161,5 @@ public class MainMenuScreen implements Screen {
 	public void hide() {
 		// TODO Auto-generated method stub
 		
-	}
-	
-	public String getScreen() {
-		String screen = "mainMenu";
-		return screen;
 	}
 }

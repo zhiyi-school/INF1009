@@ -60,11 +60,11 @@ public abstract class Character extends Entity{
 	}
 	
 	public float getSpeed() {
-		return speed;
+		return speed / 200f;
 	}
 	public void setSpeed(float speedInput) {
 //		speed = speedInput / 200f;
-		speed = speedInput / 200f;
+		speed = speedInput ;
 	}
 	
 	public float getAttack() {

@@ -12,7 +12,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.Align;
 
 
-public class PauseScreen implements Screen {
+public class PauseScreen extends Scene {
 	private ScreenManager screenManager; // edited this
 	private Screen gameScreen;
 	
@@ -21,15 +21,23 @@ public class PauseScreen implements Screen {
 	private Button restartButton;
 //	private Button instructionsButton;
 	private Button exitButton;
-	private SpriteBatch batch;
 	
+	private float buttonWidth; // Assuming all buttons have the same width
+	private float screenWidth;
+	private float buttonSpacing = 25; // Spacing between buttons
+	private float totalButtonWidth = 3 * buttonWidth + 2 * buttonSpacing; // Total width of all buttons and spacing
+	private float startX = (screenWidth - totalButtonWidth) / 2; // Start x position for the first button
+	
+	
+	private SpriteBatch batch;
 	private ShapeRenderer shapeRenderer;
     private BitmapFont font;
     
     private float mouseX, mouseY;
     
  // Modify the constructor to accept a GameScreen parameter
-    public PauseScreen(ScreenManager screenManager, Screen screen) {
+    public PauseScreen(ScreenManager screenManager, Screen screen, SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font, float buttonWidth, float screenWidth) {
+    	super(batch, shapeRenderer, font, buttonWidth, screenWidth);
         this.screenManager = screenManager;
         if (screen instanceof GameScreen) {
             this.gameScreen = (GameScreen) screen; // Assign the parameter to the member variable
@@ -69,6 +77,8 @@ public class PauseScreen implements Screen {
     
     public void restartGame() {
         // Restart the game logic here
+    	screenManager.getEntityManager().restartGame(screenManager.getWorld(), screenManager.getCamera());
+    	screenManager.switchTo(gameScreen);
     }
 
     public void exitGame() {
@@ -79,19 +89,17 @@ public class PauseScreen implements Screen {
     public void show() {
         
     	// Draw Sprite and Shapes in LibGDX
-     	batch = new SpriteBatch();
-    	shapeRenderer = new ShapeRenderer();
+     	batch = getBatch();
+    	shapeRenderer = getShape();
+        font = getMapFont();
     	
     	// Display pause text
     	displayPause();
     	
     	// Calculate the x position to center the buttons horizontally
-        float buttonWidth = 110; // Assuming all buttons have the same width
-        float screenWidth = Gdx.graphics.getWidth();
-        float buttonSpacing = 25; // Spacing between buttons
-        float totalButtonWidth = 3 * buttonWidth + 2 * buttonSpacing; // Total width of all buttons and spacing
-        float startX = (screenWidth - totalButtonWidth) / 2; // Start x position for the first button
-    	
+        buttonWidth = getButtonWidth();
+        screenWidth = getScreenWidth();
+        
     	// Create Resume Button
     	resumeButton = new Button(startX, 100, buttonWidth + 10, 60);
     	resumeButton.setText("Resume");
@@ -107,12 +115,12 @@ public class PauseScreen implements Screen {
     	exitButton.setText("Exit");
     	exitButton.setColour(Color.RED);
     	
-        font = new BitmapFont();
      
     }
 
     @Override
     public void render(float delta) {
+    	show();
         // Called to render this screen.
     	
         // Clear the screen

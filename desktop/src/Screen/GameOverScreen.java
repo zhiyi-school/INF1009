@@ -16,17 +16,23 @@ import Entity.NonPlayableCharacter;
 import Entity.PlayableCharacter;
 
 
-public class GameOverScreen implements Screen {
+public class GameOverScreen extends Scene {
 	
 	// private Screen gameOverScreen;
 	private ScreenManager screenManager;
 	private EntityManager entityManager;
-	private Random rand = new Random();
 	
 	private String gameOverText;
 	private Button startButton;
 	private Button mainMenuButton;
 	private Button exitButton;
+	
+	private float buttonWidth; // Assuming all buttons have the same width
+	private float screenWidth;
+	private float buttonSpacing = 25; // Spacing between buttons
+	private float totalButtonWidth = 3 * buttonWidth + 2 * buttonSpacing; // Total width of all buttons and spacing
+	private float startX = (screenWidth - totalButtonWidth) / 2; // Start x position for the first button
+	
 	
 	private SpriteBatch batch;
 	private ShapeRenderer shapeRenderer;
@@ -34,6 +40,10 @@ public class GameOverScreen implements Screen {
     
     private float mouseX, mouseY;
 	
+    public GameOverScreen(SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font, float buttonWidth, float screenWidth) {
+    	super(batch, shapeRenderer, font, buttonWidth, screenWidth);
+    }
+    
 	public String getGameOverText() {
 		return gameOverText;
 	}
@@ -104,20 +114,17 @@ public class GameOverScreen implements Screen {
 	
 	@Override
     public void show() {
-		// Draw Sprite and Shapes in LibGDX
-     	batch = new SpriteBatch();
-    	shapeRenderer = new ShapeRenderer();
+     	batch = getBatch();
+    	shapeRenderer = getShape();
+        font = getMapFont();
     	
     	// Display game over text
     	displayGameOver();
     	
     	// Calculate the x position to center the buttons horizontally
-        float buttonWidth = 110; // Assuming all buttons have the same width
-        float screenWidth = Gdx.graphics.getWidth();
-        float buttonSpacing = 25; // Spacing between buttons
-        float totalButtonWidth = 3 * buttonWidth + 2 * buttonSpacing; // Total width of all buttons and spacing
-        float startX = (screenWidth - totalButtonWidth) / 2; // Start x position for the first button
-    	
+        buttonWidth = getButtonWidth();
+        screenWidth = getScreenWidth();
+        
         // Create Back Button
         mainMenuButton = new Button(startX + 10, 100, buttonWidth, 60);
         mainMenuButton.setText("Menu");
@@ -133,11 +140,11 @@ public class GameOverScreen implements Screen {
         exitButton.setText("Exit");
         exitButton.setColour(Color.RED);
     	
-        font = new BitmapFont();
     }
 	
 	@Override
 	public void render(float delta) {
+    	show();
         // Called to render this screen.
     	
         // Clear the screen
@@ -177,14 +184,14 @@ public class GameOverScreen implements Screen {
         	if(Gdx.input.isTouched())
         	{
         		System.out.println("Restarting game!");
-//        		restartGame();
-        		if(screenManager.getEntityManager().getEntity("PlayableCharacter") != null) {
-        			System.out.println("Restart NPC");
-        			restartGameNPC();
-        		}else {
-        			System.out.println("Restart PC");
-                    restartGamePC();
-        		}
+        		restartGame();
+//        		if(screenManager.getEntityManager().getEntity("PlayableCharacter") != null) {
+//        			System.out.println("Restart NPC");
+//        			restartGameNPC();
+//        		}else {
+//        			System.out.println("Restart PC");
+//                    restartGamePC();
+//        		}
         	}
         	
         }

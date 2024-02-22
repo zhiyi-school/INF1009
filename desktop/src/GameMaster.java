@@ -73,7 +73,7 @@ public class GameMaster extends ApplicationAdapter {
     	orthographicCameraController.setCameraBoundaries(mapFullWidth, mapFullHeight);
         
         // Initialize the ScreenManager
-        screenManager = new ScreenManager(entityManager, world, orthographicCameraController);
+        screenManager = new ScreenManager(entityManager, world, orthographicCameraController, batch);
         screenManager.setScreenManager(screenManager);
 	}	
 	
@@ -86,43 +86,36 @@ public class GameMaster extends ApplicationAdapter {
 	public void render() {
 		try {
 	      	float delta = Gdx.graphics.getDeltaTime();
-	      	currentScreen = screenManager.getCurrentScreen();      	
 	      	
-	      	if(currentScreen == null) {
-	      		screenManager.setCurrentScreen("Instruction");
-	      	}else {
-	          	currentScreen.show();
-	    		currentScreen.render(delta);
-	          	
-	    		if(screenManager.getCurrentScreen() instanceof GameScreen) {
+      		screenManager.drawCurrent(delta);
+      		
+    		if(screenManager.checkGameStart()) {
+    			// Clear the screen
+    			Gdx.gl.glClearColor(0, 0, 0, 1);
+    	    	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+    			ScreenUtils.clear(0, 0, 0.2f, 1);
+    			// System.out.println(entityManager.getNum());
+    			debugRenderer.render(world, orthographicCameraController.getCamera().combined.cpy().scl(MAP_SCALE));
+    			
+    			// Check if update outside of world.set is required
+    			if(entityManager.getNum() > 0) {
+    				update();
+    			}else {
+    				entityManager.entityDraw(batch);
+	    			entityManager.movement(soundEffect, mapFullWidth);
 	    			
-	    			// Clear the screen
-	    			Gdx.gl.glClearColor(0, 0, 0, 1);
-	    	    	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-	
-	    			ScreenUtils.clear(0, 0, 0.2f, 1);
-	    			// System.out.println(entityManager.getNum());
-	    			debugRenderer.render(world, orthographicCameraController.getCamera().combined.cpy().scl(MAP_SCALE));
-	    			
-	    			// Check if update outside of world.set is required
-	    			if(entityManager.getNum() > 0) {
-	    				update();
-	    			}else {
-	    				entityManager.entityDraw(batch);
-		    			entityManager.movement(soundEffect, mapFullWidth);
-		    			
-						world.step(Gdx.graphics.getDeltaTime(), 6, 2);
-	    		        // System.out.println(world.getContactCount());
-	    				
-	    				if(entityManager.getEntity("PlayableCharacter") != null) {
-	    					entityManager.camera(orthographicCameraController, batch);
-	        			}else {
-	        				screenManager.setCurrentScreen("GameOver");
-	        				update();
-	        			}
-	    			}
-	    		}
-	      	}
+					world.step(Gdx.graphics.getDeltaTime(), 6, 2);
+    		        // System.out.println(world.getContactCount());
+    				
+    				if(entityManager.getEntity("PlayableCharacter") != null) {
+    					entityManager.camera(orthographicCameraController, batch);
+        			}else {
+        				screenManager.setCurrentScreen("GameOver");
+        				update();
+        			}
+    			}
+    		}
 		}catch(Exception e){
 			System.out.println(e);
 			Gdx.app.exit();

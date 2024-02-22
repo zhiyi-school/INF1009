@@ -78,8 +78,10 @@ public class PlayableCharacter extends Character{
 			if(getBody().getPosition().x <= 0) {
 				setPosX(0);
 			}
-			if(getBody().getPosition().x >= mapFullWidth) {
-				setPosX(mapFullWidth);
+//			System.out.println(mapFullWidth / 3f - (getTexture().getWidth() / 80f));
+			if(getBody().getPosition().x >= (mapFullWidth / 3f) - (getTexture().getWidth() / 80f)) {
+//				System.out.println("in here");
+				setPosX((mapFullWidth / 3f) - (getTexture().getWidth() / 80f));
 			}
 			
 		}
@@ -87,17 +89,17 @@ public class PlayableCharacter extends Character{
 	// Jumping movement. Applies Gravity
     public void jump() {
 //    	getBody().setLinearVelocity(new Vector2(0, 0));
-        getBody().applyLinearImpulse(new Vector2(0, getSpeed()), getBody().getWorldCenter(), true);
+        getBody().applyLinearImpulse(new Vector2(0, getSpeed() / 1.1f), getBody().getWorldCenter(), true);
     }	
 	
 	protected void moveLeft() {
 //    	getBody().setLinearVelocity(new Vector2(0, 0));
-        getBody().applyLinearImpulse(new Vector2(-getSpeed() / 1.5f, 0), getBody().getWorldCenter(), true);
+        getBody().applyLinearImpulse(new Vector2(-getSpeed() / 1.65f, 0), getBody().getWorldCenter(), true);
     }
 
 	protected void moveRight() {
 //    	getBody().setLinearVelocity(new Vector2(0, 0));
-        getBody().applyLinearImpulse(new Vector2(getSpeed() / 1.5f, 0), getBody().getWorldCenter(), true);
+        getBody().applyLinearImpulse(new Vector2(getSpeed() / 1.65f, 0), getBody().getWorldCenter(), true);
     }
 	
 	public void resetPosition() {

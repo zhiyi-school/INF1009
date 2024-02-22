@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Align;
 
 
-public class GameScreen implements Screen {
+public class GameScreen extends Scene {
 	
 	// private Screen gameScreen;
 	private ScreenManager screenManager;
@@ -19,13 +19,26 @@ public class GameScreen implements Screen {
 	private String gameText;
 	private Button pauseButton;
 	
+
+	private float buttonWidth; // Assuming all buttons have the same width
+	private float buttonHeight = 60; // Assuming all buttons have the same height
+	private float screenWidth;
+	private float screenHeight = Gdx.graphics.getHeight();
+    
+    // Position the pause button in the top right-hand corner
+    float pauseButtonX = screenWidth - buttonWidth;
+    float pauseButtonY = screenHeight - buttonHeight;
+	
 	private SpriteBatch batch;
 	private ShapeRenderer shapeRenderer;
     private BitmapFont font;
     
     private float mouseX, mouseY;
     
-	
+    public GameScreen(SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font, float buttonWidth, float screenWidth) {
+    	super(batch, shapeRenderer, font, buttonWidth, screenWidth);
+    }
+    
 	public Button getPauseButton() {
         return pauseButton;
     }
@@ -41,33 +54,26 @@ public class GameScreen implements Screen {
 	
 	@Override
     public void show() {
-		// Draw Sprite and Shapes in LibGDX
-     	batch = new SpriteBatch();
-    	shapeRenderer = new ShapeRenderer();
+     	batch = getBatch();
+    	shapeRenderer = getShape();
+        font = getMapFont();
     	
     	// Display game over text
     	gameText = "MARIO GAME"; 
 
     	// Calculate the x position to center the buttons horizontally
-        float buttonWidth = 50; // Assuming all buttons have the same width
-        float buttonHeight = 60; // Assuming all buttons have the same height
-        float screenWidth = Gdx.graphics.getWidth();
-        float screenHeight = Gdx.graphics.getHeight();
-        
-        // Position the pause button in the top right-hand corner
-        float pauseButtonX = screenWidth - buttonWidth;
-        float pauseButtonY = screenHeight - buttonHeight;
+        buttonWidth = getButtonWidth();
+        screenWidth = getScreenWidth();
         
         // Create Pause Button
         pauseButton = new Button(pauseButtonX, pauseButtonY, buttonWidth, buttonHeight);
         pauseButton.setText("I I");
         pauseButton.setColour(Color.RED);
-        
-        font = new BitmapFont();
     }
 	
 	@Override
 	public void render(float delta) {
+    	show();
         // Called to render this screen.
     	
         // Clear the screen
