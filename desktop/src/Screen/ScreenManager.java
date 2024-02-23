@@ -61,7 +61,38 @@ public class ScreenManager {
         setCamera(orthographicCameraController);
         setScreenManager(this);
     }
+     // Render Screen
+    public void drawCurrent(float delta) {
+	    // currentScreen will call getCurrentScreen() to return a Screen
+		currentScreen = getCurrentScreen();  
+      	// If currentScreen has nothing assigned, set the current screen to MainMenuScreen
+	    if(currentScreen == null) 
+	{
+      		setCurrentScreen("Main");
+      	}
+	else { 
+		// If currentScreen has been assigned with a screen, then show the screen
+        	currentScreen.show();
+    		currentScreen.render(delta, currentScreen.getBatch(), currentScreen.getShape(), currentScreen.getMapFont());
+      	}
+    }
     
+    // Checking for game state
+    public void checkGameStart(Box2DDebugRenderer debugRenderer, float MAP_SCALE) {
+		backgroundMusic.setLooping(true); // Set the music to loop
+		backgroundMusic.setVolume(0.1f);
+		backgroundMusic.play();
+		
+    	if(getCurrentScreen() instanceof GameScreen) {
+			Gdx.gl.glClearColor(0, 0, 0, 1);
+	    	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			ScreenUtils.clear(0, 0, 0.2f, 1);
+			
+			// Debugger
+			debugRenderer.render(world, orthographicCameraController.getCamera().combined.cpy().scl(MAP_SCALE));
+			gameState(getCurrentScreen().getBatch(), world);
+    	}
+    }
     public void setScreenManager(ScreenManager screenManagerInput) {
     	mainMenuScreen.setScreenManager(screenManagerInput);
         instructionsScreen.setScreenManager(screenManagerInput);
@@ -133,38 +164,7 @@ public class ScreenManager {
         } 
     }
     
-    // Render Screen
-    public void drawCurrent(float delta) {
-	    // currentScreen will call getCurrentScreen() to return a Screen
-		currentScreen = getCurrentScreen();  
-      	// If currentScreen has nothing assigned, set the current screen to MainMenuScreen
-	    if(currentScreen == null) 
-	{
-      		setCurrentScreen("Main");
-      	}
-	else { 
-		// If currentScreen has been assigned with a screen, then show the screen
-        	currentScreen.show();
-    		currentScreen.render(delta, currentScreen.getBatch(), currentScreen.getShape(), currentScreen.getMapFont());
-      	}
-    }
-    
-    // Checking for game state
-    public void checkGameStart(Box2DDebugRenderer debugRenderer, float MAP_SCALE) {
-		backgroundMusic.setLooping(true); // Set the music to loop
-		backgroundMusic.setVolume(0.1f);
-		backgroundMusic.play();
-		
-    	if(getCurrentScreen() instanceof GameScreen) {
-			Gdx.gl.glClearColor(0, 0, 0, 1);
-	    	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-			ScreenUtils.clear(0, 0, 0.2f, 1);
-			
-			// Debugger
-			debugRenderer.render(world, orthographicCameraController.getCamera().combined.cpy().scl(MAP_SCALE));
-			gameState(getCurrentScreen().getBatch(), world);
-    	}
-    }
+   
     
     public void gameState(SpriteBatch batch, World world) {
 		// Update Box2d Objects outside of World Simulation
