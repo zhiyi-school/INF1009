@@ -2,11 +2,8 @@ package Entity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -37,7 +34,7 @@ public class EntityManager {
 		pcList = new ArrayList<PlayableCharacter>();
 		npcList = new ArrayList<NonPlayableCharacter>();
 		
-		gameMap = new Map(0, 0, "gameMap.tmx", MAP_SCALE, orthographicCameraController);
+		gameMap = new Map("gameMap.tmx", MAP_SCALE, orthographicCameraController);
     	entityList.add(gameMap);
     	
 		// Creating Entities. Add them to ArrayList
@@ -73,7 +70,6 @@ public class EntityManager {
 			npcList.clear();
 		}
 		
-		
 		Player1 = new PlayableCharacter(world, "PlayableCharacter.png", 10, 50, 0.75f, 100, 5, false, true, Keys.A, Keys.D, Keys.SPACE, "JumpSoundEffect.wav");
 		pcList.add(Player1);
 		
@@ -85,26 +81,28 @@ public class EntityManager {
 		
 	}
 	
-	public void endGame(World world) {
-		diposeEntities(world);
-	}
-	
 	// Dispose all entities
 	public void diposeEntities(World world) {
-		for(PlayableCharacter pc: pcList) {
-			pc.destroy();
-			pc.dispose(world);
+		if(pcList.size() > 0) {
+			for(PlayableCharacter pc: pcList) {
+				pc.destroy();
+				pc.dispose(world);
+			}
 		}
-		for(NonPlayableCharacter npc: npcList) {
-			npc.destroy();
-			npc.dispose(world);
+		if(npcList.size() > 0) {
+			for(NonPlayableCharacter npc: npcList) {
+				npc.destroy();
+				npc.dispose(world);
+			}
 		}
-		for(Entity entity: entityList) {
-			if (entity instanceof Map) {
-        		((Map) entity).dispose(world);
-    		}else {
-    			entity.dispose(world);
-    		}
+		if(entityList.size() > 0) {
+			for(Entity entity: entityList) {
+				if (entity instanceof Map) {
+	        		((Map) entity).dispose(world);
+	    		}else {
+	    			entity.dispose(world);
+	    		}
+			}
 		}
 	}
 	
@@ -119,15 +117,6 @@ public class EntityManager {
 		for(Entity entity: entityList) {
 			entity.render();
 		}
-	}
-	public void addEntity(Entity entity) {
-    	entityList.add(entityList.size(), entity);
-	}
-	public void addPlayableCharacter(PlayableCharacter pc) {
-		pcList.add(pcList.size(), pc);
-	}
-	public void addNonPlayableCharacter(NonPlayableCharacter npc) {
-		npcList.add(npcList.size(), npc);
 	}
 	
 	// Movement for entities
@@ -171,6 +160,8 @@ public class EntityManager {
 			npcList.remove(removeItem);
 		}
 	}
+	
+	// Check which Entity to dispose
 	public void collisionFight(World world) {
 		if(getNum() != 0) {
 			for(PlayableCharacter pc: pcList) {
@@ -198,6 +189,7 @@ public class EntityManager {
 			}
 		}
 	}
+	
 	public void setNum() {
 		count++;
 	}
@@ -217,11 +209,23 @@ public class EntityManager {
 		return count;
 	}
 	
+	// Check if there is still a Player
 	public boolean checkGame() {
 		if(pcList.size() > 0) {
 			return true;
 		}
 		return false;
+	}
+	
+	// Access to Lists
+	public void addEntity(Entity entity) {
+    	entityList.add(entityList.size(), entity);
+	}
+	public void addPlayableCharacter(PlayableCharacter pc) {
+		pcList.add(pcList.size(), pc);
+	}
+	public void addNonPlayableCharacter(NonPlayableCharacter npc) {
+		npcList.add(npcList.size(), npc);
 	}
 	
 	public PlayableCharacter getEntity(String entityInput) {
@@ -232,6 +236,8 @@ public class EntityManager {
 		}
 		return null;
 	}
+	
+	// Map
 	public Map getMap() {
 		return gameMap;
 	}

@@ -1,11 +1,9 @@
 package Entity;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.physics.box2d.WorldManifold;
 
 public class CollisionManager implements ContactListener{
 	
@@ -13,9 +11,6 @@ public class CollisionManager implements ContactListener{
 	public void beginContact(Contact contact) {
 		Fixture fixtureA = contact.getFixtureA();
 	    Fixture fixtureB = contact.getFixtureB();
-	    
-//	    System.out.println(fixtureA);
-//	    System.out.println(fixtureB);
 	    
 	    // Check for PC and Item collision
 	    if ("PlayableCharacter".equals(fixtureA.getUserData()) && "Weapon".equals(fixtureB.getUserData())) {
@@ -61,6 +56,7 @@ public class CollisionManager implements ContactListener{
 		}
 	    return null;
 	}
+	
 	// PlayableCharacter kills NPC
 	public NonPlayableCharacter kill(PlayableCharacter entity, NonPlayableCharacter npc) {
 		if("fight".equals(entity.getFix().getUserData())&& "fight".equals(npc.getFix().getUserData())) {
@@ -70,6 +66,7 @@ public class CollisionManager implements ContactListener{
 		}
 		return null;
 	}
+	
 	// Item equipped, remove from screen
 	public boolean equip(NonPlayableCharacter item, World world) {
 		if("equip".equals(item.getFix().getUserData())) {

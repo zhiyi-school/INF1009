@@ -1,6 +1,5 @@
 package Entity;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -26,8 +25,8 @@ public class Map extends Entity {
     private OrthogonalTiledMapRenderer maprenderer;
     private OrthographicCameraController orthographicCameraController;
 
-    public Map(float x, float y, String mapPath, float mapscaleInput, OrthographicCameraController orthographicCameraController) {
-        super(x, y, mapPath);
+    public Map(String mapPath, float mapscaleInput, OrthographicCameraController orthographicCameraController) {
+        super(mapPath);
         this.map = new TmxMapLoader().load(mapPath);
         this.maprenderer = new OrthogonalTiledMapRenderer(map, mapscaleInput / 100f);
         this.orthographicCameraController = orthographicCameraController;
@@ -77,13 +76,6 @@ public class Map extends Entity {
     	return map.getProperties().get("tilewidth", Integer.class);
     }
 
-    // Abstract classes
-    @Override
-    public void update(float deltaTime) {
-
-    }
-
-    @Override
     public void render() {
         maprenderer.setView(orthographicCameraController.getCamera());
         maprenderer.render();
@@ -92,18 +84,14 @@ public class Map extends Entity {
     public TiledMap getMap() {
         return map;
     }
-
+    
+    // Dispose
     public void dispose(World world) {
         map.dispose();
         maprenderer.dispose();
     }
     public void destroy() {
 		getTexture().dispose();
-	}
-    public void despawn(World world) {
-		getTexture().dispose();
-		getBody().destroyFixture(getFix());
-		world.destroyBody(getBody());
 	}
 }
 

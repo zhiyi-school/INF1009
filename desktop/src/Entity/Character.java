@@ -14,7 +14,6 @@ public abstract class Character extends Entity implements iMoveable{
 	private boolean die;
 	private float health;
 	
-	
 	// Default Constructor
 	public Character(World world) {
 		super(world, "", 0, 0, false);

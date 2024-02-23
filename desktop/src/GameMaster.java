@@ -80,8 +80,9 @@ public class GameMaster extends ApplicationAdapter {
 	
 	@Override
     	public void dispose() {
+			entityManager.diposeEntities(world);
+			screenManager.screenDispose();
     		batch.dispose();
 			world.dispose();
-//			screenManager.screenDispose();
     	}
 }

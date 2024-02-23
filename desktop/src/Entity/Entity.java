@@ -2,7 +2,6 @@ package Entity;
 
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -14,7 +13,6 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public abstract class Entity{
 	
-	// Box2d Variables
 	private BodyDef bodyDef;
 	private Body body;
 	private PolygonShape shape;
@@ -22,14 +20,9 @@ public abstract class Entity{
 	private Fixture fixture;
 	private Texture texture;
 	
-	// Variables to draw entity
-	private float posX;
-	private float posY;
 	private Boolean aiCheck;
 	private float ground;
-	float scaleFactor = 100f;
-	
-	protected String image;
+	private String image;
 
 	protected abstract void dispose(World world);
 	
@@ -37,8 +30,6 @@ public abstract class Entity{
 	public Entity(World world) {
 		setImage("");
 		setTexture("");
-		setPosX(0);
-		setPosY(0);
 		setAICheck(true);
 		createBody(world, 0, 0);
 		setGround(0);
@@ -49,16 +40,12 @@ public abstract class Entity{
 		setImage(textureImage);
 		setTexture(textureImage);
 		setAICheck(aiCheck);
-		setPosX(posXInput);
-		setPosY(posYInput);
 		createBody(world, posXInput, posYInput);
 		setGround(0);
 	}
 	
 	// Map Constructor
-	public Entity(float posXInput, float posYInput, String mapPath) {
-		setPosX(posXInput);
-		setPosY(posYInput);
+	public Entity(String mapPath) {
 		setImage(mapPath);
 	}
 	
@@ -107,24 +94,6 @@ public abstract class Entity{
         shape.dispose();
 	}
 	
-	// Get x Co-ordinate of Entity
-	public float getPosX() {
-		return getBody().getPosition().x;
-	}
-	public void setPosX(float x) {
-//		posX = getBody().getPosition().x * scaleFactor;
-		posX = x;
-	}
-	
-	// Get y Co-ordinate of Entity
-	public float getPosY() {
-		return getBody().getPosition().y;
-	}
-	public void setPosY(float y) {
-//		posY = getBody().getPosition().y * scaleFactor;
-		posY = y;
-	}
-	
 	// Check if Entity is user controlled
 	protected boolean getAICheck() {
 		return aiCheck;
@@ -144,9 +113,6 @@ public abstract class Entity{
 	}
 
 	// Map and Orthographic Camera
-	public void update(float deltaTime) {
-		
-	}
 	public void render() {
 		
 	}

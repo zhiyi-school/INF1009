@@ -1,7 +1,6 @@
 package Entity;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -13,9 +12,6 @@ public class PlayableCharacter extends Character{
 	private int rightKey;
 	private int leftKey;
 	private int jumpKey;
-	
-	private float defaultX;
-	private float defaultY;
 	
 	// Default Constructor
 	public PlayableCharacter(World world){
@@ -30,13 +26,6 @@ public class PlayableCharacter extends Character{
 		setRightKey(rightKey);
 		setJumpKey(jumpKey);
 		setSoundEffect(soundEffect);
-	}
-	
-	private void setDefaultX() {
-		setPosX(defaultX);
-	}
-	private void setDefaultY() {
-		setPosY(defaultY);
 	}
 	
 	public int getLeftKey() {
@@ -94,46 +83,38 @@ public class PlayableCharacter extends Character{
 	public void moveUserControlled(float mapFullWidth) {
 		if(!getDie()) {
 			if(Gdx.input.isKeyPressed (getLeftKey())) {
-				if(getBody().getPosition().x <= 0) {
-					setPosX(0);
-				}else {
-					moveLeft();
-				}
+				moveLeft();
 			}
 			if(Gdx.input.isKeyPressed (getRightKey())) {
 				moveRight();
 			}
 			if(Gdx.input.isKeyPressed (getJumpKey())) {
-				getSoundEffect().play(0.05f);
+				getSoundEffect().play(0.01f);
 				jump();
 			}
+			
+			// Checking if the Player is at Map Boundaries
 			if(getBody().getPosition().x <= 0) {
 				getBody().setTransform(new Vector2(0, getBody().getPosition().y), 0);
 			}
-//			System.out.println(mapFullWidth / 3f - (getTexture().getWidth() / 80f));
 			if(getBody().getPosition().x >= (mapFullWidth / 3f)) {
 				getBody().setTransform(new Vector2(mapFullWidth / 3f, getBody().getPosition().y), 0);
 			}
 			
 		}
 	}
-	// Jumping movement. Applies Gravity
+	
+	// Movement
     public void jump() {
+    	// Jump only if on the ground
     	if(getBody().getLinearVelocity().y == 0) {
     		getBody().applyLinearImpulse(new Vector2(0, getSpeed() * 17.5f), getBody().getWorldCenter(), true);
     	}
     }	
-	
 	protected void moveLeft() {
         getBody().applyLinearImpulse(new Vector2(-getSpeed() / 1.65f, 0), getBody().getWorldCenter(), true);
     }
-
 	protected void moveRight() {
         getBody().applyLinearImpulse(new Vector2(getSpeed() / 1.65f, 0), getBody().getWorldCenter(), true);
     }
-	
-	public void resetPosition() {
-		setDefaultX();
-		setDefaultY();
-	}
 }

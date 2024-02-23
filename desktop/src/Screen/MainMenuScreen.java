@@ -5,32 +5,21 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 
 public class MainMenuScreen extends Scene {
-	private ScreenManager screenManager; // edited this
+	private ScreenManager screenManager;
 	
-	private Screen pauseScreen;
-	private Screen currentScreen;
-	private Screen instructionsScreen; // edited this
-	
-	// Calculate the x position to center the buttons horizontally
-    private float buttonWidth; // Assuming all buttons have the same width
-    private float buttonSpacing = 25; // Spacing between buttons
-    private float totalButtonWidth = 3 * buttonWidth + 2 * buttonSpacing; // Total width of all buttons and spacing
-    private float startX; // Start x position for the first button
+    private float buttonWidth; 
+    private float buttonSpacing = 25;
+    private float totalButtonWidth = 3 * buttonWidth + 2 * buttonSpacing; 
+    private float startX;
 	
 	private Button startButton;
 	private Button instructionsButton;
 	private Button exitButton;	
-
-	private SpriteBatch batch;
-	private ShapeRenderer shapeRenderer;
-    private BitmapFont font;
     
     private float mouseX, mouseY;
     
@@ -39,6 +28,10 @@ public class MainMenuScreen extends Scene {
     	setStartX(getScreenWidth()/2);
     }
     
+    public String getScreen() {
+		String screen = "Main";
+		return screen;
+	}
     public float getStartX() {
     	return startX;
     }
@@ -49,23 +42,21 @@ public class MainMenuScreen extends Scene {
     public void startGame() {
     	screenManager.getEntityManager().restartGame(screenManager.getWorld(), screenManager.getCamera());
     	screenManager.getEntityManager().setNum();
+		screenManager.setCurrentScreen("Game");
     }
     
     @Override
     public void show() {
         buttonWidth = getButtonWidth();
         
-    	// Create start button
     	startButton = new Button(startX + 70, 100, buttonWidth - 70, 60);
     	startButton.setText("Start");
     	startButton.setColour(Color.RED);
     	
-    	// Create instruction button
     	instructionsButton = new Button(startX + buttonWidth + buttonSpacing, 100, buttonWidth, 60);
     	instructionsButton.setText("Instructions");
     	instructionsButton.setColour(Color.RED);
     	
-    	// Create exit button
     	exitButton = new Button(startX + 2 * (buttonWidth + buttonSpacing), 100, buttonWidth - 70, 60);
     	exitButton.setText("Exit");
     	exitButton.setColour(Color.RED);
@@ -73,15 +64,13 @@ public class MainMenuScreen extends Scene {
     }
 
     public void render(float delta, SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font) {
-        // Clear the screen
         Gdx.gl.glClearColor(0, 1, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
-        startButton.render(shapeRenderer,batch);
-        instructionsButton.render(shapeRenderer,batch);
-        exitButton.render(shapeRenderer, batch);
+        startButton.render(shapeRenderer,batch, font);
+        instructionsButton.render(shapeRenderer,batch, font);
+        exitButton.render(shapeRenderer, batch, font);
         
-        //Draw text on screen
         batch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.begin();
 		font.setColor(Color.BLACK);
@@ -91,42 +80,33 @@ public class MainMenuScreen extends Scene {
 	    font.draw(batch, "Welcome to our game!", x, y, 0, Align.center, false);
 		batch.end();
 		
-		// Check if the mouse is inside the rectangle
+		// Check for click on button
 		mouseX = Gdx.input.getX();
         mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
         
         if (startButton.hover(mouseX, mouseY)==true) {
         	startButton.setColour(Color.YELLOW);
-        	if(Gdx.input.justTouched())
-        	{
-//        		System.out.println("Start clicked!");
+        	if(Gdx.input.justTouched()){
         		startGame();
-        		screenManager.setCurrentScreen("Game");
+        		
         	}
-        }
-        else if (instructionsButton.hover(mouseX, mouseY)==true) {
+        }else if (instructionsButton.hover(mouseX, mouseY)==true) {
         	instructionsButton.setColour(Color.YELLOW);
-        	if(Gdx.input.justTouched())
-        	{
-        		System.out.println("Instruction clicked!");
-        		screenManager.setCurrentScreen("Instruction"); // edited this
+        	if(Gdx.input.justTouched()){
+        		screenManager.setCurrentScreen("Instruction"); 
+        		
         	}
-        }
-        else if (exitButton.hover(mouseX, mouseY)==true) {
+        }else if (exitButton.hover(mouseX, mouseY)==true) {
         	exitButton.setColour(Color.YELLOW);
-        	if(Gdx.input.justTouched())
-        	{
+        	if(Gdx.input.justTouched()){
         		Gdx.app.exit();
         	}
         	
-        }
-        else {
+        }else {
         	startButton.setColour(Color.RED);
         	instructionsButton.setColour(Color.RED);
         	exitButton.setColour(Color.RED);
         }
-
-        
     }
     
     public void setScreenManager(ScreenManager screenManagerInput) {
@@ -135,23 +115,14 @@ public class MainMenuScreen extends Scene {
     
     @Override
     public void dispose() {
-    	// Dispose stage when it's no longer needed
-    	startButton.dispose();
-    	instructionsButton.dispose();
-    	exitButton.dispose();
     }
-	
-	public String getScreen() {
-		String screen = "mainMenu";
-		return screen;
-	}
-
+    
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub

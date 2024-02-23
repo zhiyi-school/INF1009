@@ -1,10 +1,5 @@
 package Entity;
 
-import java.util.Random;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class NonPlayableCharacter extends Character{
@@ -12,7 +7,6 @@ public class NonPlayableCharacter extends Character{
     private float elapsedTime;
     private boolean isMovingRight;
     
-	
 	// Default Constructor
 	public NonPlayableCharacter(World world){
 		super(world, "", 0, 0, 1, 100, 2, false);
@@ -37,12 +31,12 @@ public class NonPlayableCharacter extends Character{
 	public void moveAIControlled(float delta, float mapFullWidth) {
 		elapsedTime += delta;
 
-        // Toggle direction every 2 seconds
-        if (elapsedTime >= 10 || getPosX() <= 0) {
-            isMovingRight = !isMovingRight; // Toggle direction
-            elapsedTime = 0; // Reset timer
-        }else if(getPosX() >= mapFullWidth - (getTexture().getWidth() * 2)) {
-        	isMovingRight = !isMovingRight; // Toggle direction
+        // Toggle direction every 10 seconds
+        if (elapsedTime >= 10 || getBody().getPosition().x <= 0) {
+            isMovingRight = !isMovingRight; 
+            elapsedTime = 0; 
+        }else if(getBody().getPosition().x >= mapFullWidth - (getTexture().getWidth() * 2)) {
+        	isMovingRight = !isMovingRight; 
         }
 
         // Move left if isMovingRight is false, otherwise move right

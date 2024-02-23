@@ -1,6 +1,5 @@
 package Entity;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
@@ -35,6 +34,29 @@ public class OrthographicCameraController {
     	float cameraY = Math.max(cameraMinY, Math.min(cameraMaxY, targetY));
     	camera.position.set(cameraX, cameraY, 0);
     	camera.update();
+    }
+    
+    public float getMapFullWidth() {
+    	return mapFullWidth;
+    }
+    public float getMapFullHeight() {
+    	return mapFullHeight;
+    }
+
+    public OrthographicCamera getCamera() {
+        return camera;
+    }
+    public void setEntityManager(EntityManager entityManagerInput) {
+    	entityManager = entityManagerInput;
+    }
+    public EntityManager getEntityManager() {
+    	return entityManager;
+    }
+    public void setWorld(World worldInput){
+    	world = worldInput;
+    }
+    public World getWorld() {
+    	return world;
     }
     
     // Constrain camera to map boundaries
@@ -75,32 +97,7 @@ public class OrthographicCameraController {
 	}
     public void setProjection(SpriteBatch batch) {
 		batch.begin();
-//    	getCamera().setToOrtho(false, Gdx.graphics.getWidth() / 100f, Gdx.graphics.getHeight() / 100f);
 		batch.setProjectionMatrix(getCamera().combined);
 		batch.end();
 	}
-    
-
-    public float getMapFullWidth() {
-    	return mapFullWidth;
-    }
-    public float getMapFullHeight() {
-    	return mapFullHeight;
-    }
-
-    public OrthographicCamera getCamera() {
-        return camera;
-    }
-    public void setEntityManager(EntityManager entityManagerInput) {
-    	entityManager = entityManagerInput;
-    }
-    public EntityManager getEntityManager() {
-    	return entityManager;
-    }
-    public void setWorld(World worldInput){
-    	world = worldInput;
-    }
-    public World getWorld() {
-    	return world;
-    }
 }

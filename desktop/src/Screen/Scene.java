@@ -1,6 +1,5 @@
 package Screen;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -71,6 +70,8 @@ public abstract class Scene implements Screen{
     	shapeRenderer = getShape();
         font = getMapFont();
 	}
+	public abstract String getScreen();
+	
 	public void render(float delta) {
 		
 	}
