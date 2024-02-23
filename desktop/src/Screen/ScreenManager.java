@@ -83,7 +83,7 @@ public class ScreenManager {
 	}
     
     	// Checking for game state
-    	public void checkGameStart(Box2DDebugRenderer debugRenderer, float MAP_SCALE) {
+    	public void checkGameStart(float MAP_SCALE) {
 		backgroundMusic.setLooping(true); // Set the music to loop
 		backgroundMusic.setVolume(0.1f);
 		backgroundMusic.play();
@@ -93,8 +93,6 @@ public class ScreenManager {
 		    		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 				ScreenUtils.clear(0, 0, 0.2f, 1);
 				
-				// Debugger
-				debugRenderer.render(world, orthographicCameraController.getCamera().combined.cpy().scl(MAP_SCALE));
 				gameState(getCurrentScreen().getBatch(), world);
 	    	}
 	}

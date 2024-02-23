@@ -1,21 +1,11 @@
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.ScreenUtils;
-
 import Entity.EntityManager;
 import Entity.OrthographicCameraController;
-import Screen.GameOverScreen;
-import Screen.GameScreen;
-import Screen.InstructionsScreen;
-import Screen.MainMenuScreen;
-import Screen.PauseScreen;
 import Screen.ScreenManager;
 
 public class GameMaster extends ApplicationAdapter {
@@ -25,8 +15,7 @@ public class GameMaster extends ApplicationAdapter {
 
 	// For Viewport and Camera
 	private OrthographicCameraController orthographicCameraController;
-    	private ScreenManager screenManager;
-	private Box2DDebugRenderer debugRenderer;
+	private ScreenManager screenManager;
 
 	// Constant variable for enlarging objects
 	private static final float MAP_SCALE = 3.0f;
@@ -34,7 +23,6 @@ public class GameMaster extends ApplicationAdapter {
 	@Override
 	public void create() {
 		// Debugger
-		debugRenderer = new Box2DDebugRenderer();
 		
 		// Creating the World for the game
 		world = new World(new Vector2(0, -9.8f), true);
@@ -59,7 +47,7 @@ public class GameMaster extends ApplicationAdapter {
 		      	
 		      	// The app will always call screenManager to render screens using drawCurrent() method
 	      		screenManager.drawCurrent(delta);
-	      		screenManager.checkGameStart(debugRenderer, MAP_SCALE);
+	      		screenManager.checkGameStart(MAP_SCALE);
 
 		}
 		catch(Exception e){
