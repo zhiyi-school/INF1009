@@ -103,8 +103,11 @@ public class ScreenManager {
     	return currentScreen;
     }
     public void setCurrentScreen(String screenString) {
+	    // Loop through each Screen in screenList
     	for(Scene screen: screensList) {
+		// There is an abstract method in Scene class called getScreen() that returns a String type
     		if(screen.getScreen() == screenString) {
+			// If the screenString is in the screenList, assign it to currentScreen
     			currentScreen = screen;
     		}
     	}
