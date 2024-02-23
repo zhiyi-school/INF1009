@@ -33,13 +33,14 @@ public class ScreenManager {
     private Music backgroundMusic;
     private ArrayList <Scene> screensList;
     
-
+	// Create a constructor
     public ScreenManager(EntityManager entityManager, World world, OrthographicCameraController orthographicCameraController, SpriteBatch batch) {
         screensList = new ArrayList<Scene>();
     	shapeRenderer = new ShapeRenderer();
         font = new BitmapFont();
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("themeSong.mp3"));
-        
+
+	    // Create an object of mainMenuScreen, add to the screensList
         mainMenuScreen = new MainMenuScreen(batch, shapeRenderer, font, 170, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         screensList.add(mainMenuScreen);
         
@@ -96,7 +97,8 @@ public class ScreenManager {
     public void removeScreen(Scene screen) {
     	screensList.remove(screen);
     }
-    
+
+	// This function returns a Scene type 
     public Scene getCurrentScreen() {
     	return currentScreen;
     }
