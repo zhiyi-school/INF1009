@@ -26,7 +26,7 @@ public class PauseScreen extends Scene {
 	
     private float mouseX, mouseY;
     
-    public PauseScreen(ScreenManager screenManager, Screen screen, SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font, float buttonWidth, float screenWidth, float screenHeight) {
+    public PauseScreen(ScreenManager screenManager, Scene screen, SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font, float buttonWidth, float screenWidth, float screenHeight) {
     	super(batch, shapeRenderer, font, buttonWidth, screenWidth, screenHeight);
     	setStartX(getScreenWidth()/2);
         this.screenManager = screenManager;

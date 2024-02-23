@@ -93,7 +93,7 @@ public class MainMenuScreen extends Scene {
         if (startButton.hover(mouseX, mouseY)==true) {
         	startButton.setColour(Color.YELLOW); // button changes colour to yellow
 		// Detect if is being clicked
-        	if(Gdx.input.justTouched()){
+        	if(Gdx.input.justTouched()) {
         		startGame();
         	}
         }
