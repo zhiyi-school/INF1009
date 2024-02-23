@@ -13,7 +13,7 @@ public abstract class Scene implements Screen{
 	
 	private SpriteBatch batch;
 	private ShapeRenderer shapeRenderer;
-    private BitmapFont font;
+	private BitmapFont font;
 	
 	public Scene(SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font, float buttonWidth, float screenWidth, float screenHeight){
 		setBatch(batch);
@@ -27,6 +27,7 @@ public abstract class Scene implements Screen{
 	public SpriteBatch getBatch() {
 		return batch;
 	}
+	
 	public void setBatch(SpriteBatch batchInput) {
 		batch = batchInput;
 	}
@@ -34,6 +35,7 @@ public abstract class Scene implements Screen{
 	public ShapeRenderer getShape() {
 		return shapeRenderer;
 	}
+	
 	public void setShape(ShapeRenderer shapeRendererInput) {
 		shapeRenderer = shapeRendererInput;
 	}
@@ -41,6 +43,7 @@ public abstract class Scene implements Screen{
 	public BitmapFont getMapFont() {
 		return font;
 	}
+	
 	public void setMapFont(BitmapFont fontInput) {
 		font = fontInput;
 	}
@@ -48,6 +51,7 @@ public abstract class Scene implements Screen{
 	public float getButtonWidth() {
 		return buttonWidth;
 	}
+	
 	public void setButtonWidth(float buttonWidthInput) {
 		buttonWidth = buttonWidthInput;
 	}
@@ -55,26 +59,31 @@ public abstract class Scene implements Screen{
 	public float getScreenWidth() {
 		return screenWidth;
 	}
+	
 	public void setScreenWidth(float screenWidthInput) {
 		screenWidth = screenWidthInput;
 	}
+	
 	public float getScreenHeight() {
 		return screenHeight;
 	}
+	
 	public void setScreenHeight(float screenHeightInput) {
 		screenWidth = screenHeightInput;
 	}
 	
 	public void show () {
-     	batch = getBatch();
-    	shapeRenderer = getShape();
-        font = getMapFont();
+	     	batch = getBatch();
+	    	shapeRenderer = getShape();
+	        font = getMapFont();
 	}
+	
 	public abstract String getScreen();
 	
 	public void render(float delta) {
 		
 	}
+	
 	public abstract void render (float delta, SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font);
 	public abstract void resize (int width, int height);
 	public abstract void pause ();
