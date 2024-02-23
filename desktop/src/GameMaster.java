@@ -25,7 +25,7 @@ public class GameMaster extends ApplicationAdapter {
 
 	// For Viewport and Camera
 	private OrthographicCameraController orthographicCameraController;
-    private ScreenManager screenManager;
+    	private ScreenManager screenManager;
 	private Box2DDebugRenderer debugRenderer;
 
 	// Constant variable for enlarging objects
@@ -74,7 +74,7 @@ public class GameMaster extends ApplicationAdapter {
 
 	@Override
 	public void resize(int width, int height) {
-    	orthographicCameraController.resize(width, height);
+    		orthographicCameraController.resize(width, height);
 	}
 	
 	@Override
