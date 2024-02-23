@@ -61,7 +61,7 @@ public class ScreenManager {
         setCamera(orthographicCameraController);
         setScreenManager(this);
     }
-     // Render Screen
+     // This function will always be called to load screen into the game
     public void drawCurrent(float delta) {
 	    // currentScreen will call getCurrentScreen() to return a Screen
 		currentScreen = getCurrentScreen();  
