@@ -1,4 +1,5 @@
 package Screen;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
@@ -16,14 +17,13 @@ public class Button {
 		 this.bounds = new Rectangle(x, y, width, height);
 	 }
 	 
-	 public void setColour(Color colour)
-	{
-			this.color= colour;
-	}
+	 public void setColour(Color colour) {
+		this.color= colour;
+	 }
 	 
 	 public void setText(String text) {
-		    this.text = text != null ? text : ""; // Ensure text is not null
-		}
+		this.text = text != null ? text : ""; // Ensure text is not null
+	}
 	 
 	 public boolean hover(float touchX, float touchY) {
 		 return bounds.contains(touchX, touchY);
