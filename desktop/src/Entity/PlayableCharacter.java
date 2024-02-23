@@ -31,19 +31,19 @@ public class PlayableCharacter extends Character{
 	public int getLeftKey() {
 		return leftKey;
 	}
-	private void setLeftKey(int leftKeyInput) {
+	public void setLeftKey(int leftKeyInput) {
 		leftKey = leftKeyInput;
 	}
 	public int getRightKey() {
 		return rightKey;
 	}
-	private void setRightKey(int rightKeyInput) {
+	public void setRightKey(int rightKeyInput) {
 		rightKey = rightKeyInput;
 	}
 	public int getJumpKey() {
 		return jumpKey;
 	}
-	private void setJumpKey(int jumpKeyInput) {
+	public void setJumpKey(int jumpKeyInput) {
 		jumpKey = jumpKeyInput;
 	}
 	public void disposeSoundEffect() {
@@ -52,10 +52,16 @@ public class PlayableCharacter extends Character{
 	public Sound getSoundEffect() {
 		return soundEffect;
 	}
-	private void setSoundEffect(String soundInput) {
+	public void setSoundEffect(String soundInput) {
 		soundEffect = Gdx.audio.newSound(Gdx.files.internal(soundInput));
 	}
-	
+	public boolean getAttackCheck() {
+		return attackCheck;
+	}
+	public void setAttackCheck(boolean attackInput) {
+		attackCheck = attackInput;
+	}
+
 	public void draw(SpriteBatch batch) {
 		batch.begin();
 		batch.draw(getTexture(), ((getBody().getPosition().x) * 3f) - (getTexture().getWidth() / 80f), (getBody().getPosition().y * 3f)  - (getTexture().getHeight() / 110f), getTexture().getWidth() / 50f, getTexture().getHeight() / 50f);
@@ -70,13 +76,6 @@ public class PlayableCharacter extends Character{
 	}
 	public void destroy(){
 		getTexture().dispose();
-	}
-	
-	public boolean getAttackCheck() {
-		return attackCheck;
-	}
-	public void setAttackCheck(boolean attackInput) {
-		attackCheck = attackInput;
 	}
 	
 	// Movement controls

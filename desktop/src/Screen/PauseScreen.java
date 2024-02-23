@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.Align;
 
 public class PauseScreen extends Scene {
 	private ScreenManager screenManager;
-	private Screen gameScreen;
+	private Scene gameScreen;
 	
 	private String pauseText;
 	private Button resumeButton;

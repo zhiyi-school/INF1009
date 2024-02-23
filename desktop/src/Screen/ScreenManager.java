@@ -93,7 +93,7 @@ public class ScreenManager {
     	screensList.add(screen);
     }
 
-    public void removeScreen(Screen screen) {
+    public void removeScreen(Scene screen) {
     	screensList.remove(screen);
     }
     
@@ -109,7 +109,7 @@ public class ScreenManager {
     }
     
     // Switching between screens
-    public void switchTo(Screen screen) {
+    public void switchTo(Scene screen) {
     	if (screen instanceof MainMenuScreen) {
     		currentScreen = mainMenuScreen;
             
