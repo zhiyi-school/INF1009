@@ -23,9 +23,7 @@ public abstract class Scene implements Screen{
 		setScreenWidth(screenWidth);
 		setScreenHeight(screenHeight);
 	}
-	public void exitGame() {
-        	Gdx.app.exit();
-	}
+	
 	public SpriteBatch getBatch() {
 		return batch;
 	}
