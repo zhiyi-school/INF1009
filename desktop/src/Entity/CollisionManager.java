@@ -49,19 +49,19 @@ public class CollisionManager implements ContactListener{
 	
 	
 	// NPC kills PlayableCharacter
-	public PlayableCharacter die(PlayableCharacter entity, NonPlayableCharacter npc) {
-		if("fight".equals(entity.getFix().getUserData())&& "fight".equals(npc.getFix().getUserData())) {
+	public PlayableCharacter die(PlayableCharacter pc, NonPlayableCharacter npc) {
+		if("fight".equals(pc.getFix().getUserData())&& "fight".equals(npc.getFix().getUserData())) {
 		    npc.getFix().setUserData("Enemy");
-			return entity;
+			return pc;
 		}
 	    return null;
 	}
 	
 	// PlayableCharacter kills NPC
-	public NonPlayableCharacter kill(PlayableCharacter entity, NonPlayableCharacter npc) {
-		if("fight".equals(entity.getFix().getUserData())&& "fight".equals(npc.getFix().getUserData())) {
-		    entity.getFix().setUserData("PlayableCharacter");
-		    entity.setAttackCheck(false);
+	public NonPlayableCharacter kill(PlayableCharacter pc, NonPlayableCharacter npc) {
+		if("fight".equals(pc.getFix().getUserData())&& "fight".equals(npc.getFix().getUserData())) {
+			pc.getFix().setUserData("PlayableCharacter");
+			pc.setAttackCheck(false);
 			return npc;
 		}
 		return null;

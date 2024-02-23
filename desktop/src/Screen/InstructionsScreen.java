@@ -65,7 +65,6 @@ public class InstructionsScreen extends Scene {
     }
     
     public void returnToMenu() {
-    	screenManager.getEntityManager().restartGame(screenManager.getWorld(), screenManager.getCamera());
 		screenManager.setCurrentScreen("Main");
     }
 

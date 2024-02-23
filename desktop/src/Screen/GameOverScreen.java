@@ -75,7 +75,7 @@ public class GameOverScreen extends Scene {
     }
 	
     public void displayGameOver() {
-    	if(screenManager.getEntityManager().getEntity("PlayableCharacter") != null) {
+    	if(screenManager.getEntityManager().getPC("PlayableCharacter") != null) {
         	setGameOverText("WIN! \n THANKS FOR PLAYING");
 		}else {
 	    	setGameOverText("GAME OVER!");
@@ -158,7 +158,7 @@ public class GameOverScreen extends Scene {
         }else if (startButton.hover(mouseX, mouseY)==true) {
         	startButton.setColour(Color.YELLOW);
         	if(Gdx.input.justTouched()){
-        		if(screenManager.getEntityManager().getEntity("PlayableCharacter") != null) {
+        		if(screenManager.getEntityManager().getPC("PlayableCharacter") != null) {
         			restartGameNPC();
         		}else {
                     restartGamePC();

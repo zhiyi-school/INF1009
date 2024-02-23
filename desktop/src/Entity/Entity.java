@@ -3,7 +3,6 @@ package Entity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -21,7 +20,6 @@ public abstract class Entity{
 	private Texture texture;
 	
 	private Boolean aiCheck;
-	private float ground;
 	private String image;
 
 	protected abstract void dispose(World world);
@@ -32,7 +30,6 @@ public abstract class Entity{
 		setTexture("");
 		setAICheck(true);
 		createBody(world, 0, 0);
-		setGround(0);
 	}
 	
 	// Character Constructor
@@ -41,7 +38,6 @@ public abstract class Entity{
 		setTexture(textureImage);
 		setAICheck(aiCheck);
 		createBody(world, posXInput, posYInput);
-		setGround(0);
 	}
 	
 	// Map Constructor
@@ -95,22 +91,13 @@ public abstract class Entity{
 	}
 	
 	// Check if Entity is user controlled
-	protected boolean getAICheck() {
+	public boolean getAICheck() {
 		return aiCheck;
 	}
-	protected void setAICheck(boolean aiInput) {
+	public void setAICheck(boolean aiInput) {
 		aiCheck = aiInput;
 	}
 	
-	protected void setGround(float groundInput) {
-		ground = groundInput;
-	}
-	protected float getGround() {
-		return ground;
-	}
-	public void draw(SpriteBatch batch, boolean Item) {
-		
-	}
 
 	// Map and Orthographic Camera
 	public void render() {

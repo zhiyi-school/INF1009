@@ -64,8 +64,10 @@ public class EntityManager {
 		}
 		if(npcList.size() > 0) {
 			for(NonPlayableCharacter npc: npcList) {
-				npc.destroy();
-				npc.dispose(world);
+				if(npc.getFix() != null) {
+					npc.destroy();
+					npc.dispose(world);
+				}
 			}
 			npcList.clear();
 		}
@@ -91,8 +93,10 @@ public class EntityManager {
 		}
 		if(npcList.size() > 0) {
 			for(NonPlayableCharacter npc: npcList) {
-				npc.destroy();
-				npc.dispose(world);
+				if(npc.getFix() != null) {
+					npc.destroy();
+					npc.dispose(world);
+				}
 			}
 		}
 		if(entityList.size() > 0) {
@@ -120,7 +124,7 @@ public class EntityManager {
 	}
 	
 	// Movement for entities
-	private void entityMovement(float mapFullWidth){
+	private void pcMovement(float mapFullWidth){
 		for(PlayableCharacter pc: pcList) {
 			if(pc.getAICheck()) {
 				pc.moveUserControlled(mapFullWidth);
@@ -137,7 +141,7 @@ public class EntityManager {
 		}
 	}
 	public void movement(float mapFullWidth) {
-		entityMovement(mapFullWidth);
+		pcMovement(mapFullWidth);
 		npcMovement(mapFullWidth);
 	}
 	
@@ -150,7 +154,7 @@ public class EntityManager {
 		return contactListener;
 	}
 	public void collisionEquip(World world) {
-		if(entityList.size() != 0) {
+		if(getNum() != 0) {
 			for(NonPlayableCharacter item: npcList) {
 				if(getCollision().equip(item, world)) {
 					removeItem = item;
@@ -228,7 +232,7 @@ public class EntityManager {
 		npcList.add(npcList.size(), npc);
 	}
 	
-	public PlayableCharacter getEntity(String entityInput) {
+	public PlayableCharacter getPC(String entityInput) {
 		for(PlayableCharacter pc: pcList) {
 			if(entityInput.equals(pc.getFix().getUserData())){
 				return pc;

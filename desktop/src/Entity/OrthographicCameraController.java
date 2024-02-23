@@ -89,8 +89,8 @@ public class OrthographicCameraController {
     
     public void camera(SpriteBatch batch) {
 		// Update camera position to follow character and ensures it does not go out of map boundaries
-		updateCameraPosition((entityManager.getEntity("PlayableCharacter").getBody().getPosition().x * 3f) - (entityManager.getEntity("PlayableCharacter").getTexture().getWidth() / 110f), 
-				entityManager.getEntity("PlayableCharacter").getBody().getPosition().y);
+		updateCameraPosition((entityManager.getPC("PlayableCharacter").getBody().getPosition().x * 3f) - (entityManager.getPC("PlayableCharacter").getTexture().getWidth() / 110f), 
+				entityManager.getPC("PlayableCharacter").getBody().getPosition().y);
 		applyViewport();
 		// Set the batch projection matrix to camera's combined matrix	
 		setProjection(batch);

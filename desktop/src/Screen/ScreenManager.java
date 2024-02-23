@@ -166,7 +166,7 @@ public class ScreenManager {
 			
 			world.step(Gdx.graphics.getDeltaTime(), 6, 2);
 			
-			if(entityManager.getEntity("PlayableCharacter") != null) {
+			if(entityManager.getPC("PlayableCharacter") != null) {
 				orthographicCameraController.camera(batch);
 			}else {
 				setCurrentScreen("GameOver");
