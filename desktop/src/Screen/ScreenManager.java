@@ -135,10 +135,15 @@ public class ScreenManager {
     
     // Render Screen
     public void drawCurrent(float delta) {
+	    // currentScreen will call getCurrentScreen() to return a Screen
 		currentScreen = getCurrentScreen();  
-      	if(currentScreen == null) {
+      	// If currentScreen has nothing assigned, set the current screen to MainMenuScreen
+	    if(currentScreen == null) 
+	{
       		setCurrentScreen("Main");
-      	}else {
+      	}
+	else { 
+		// If currentScreen has been assigned with a screen, then show the screen
         	currentScreen.show();
     		currentScreen.render(delta, currentScreen.getBatch(), currentScreen.getShape(), currentScreen.getMapFont());
       	}
