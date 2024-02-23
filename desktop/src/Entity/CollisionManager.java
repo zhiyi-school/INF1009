@@ -14,26 +14,20 @@ public class CollisionManager implements ContactListener{
 	    
 	    // Check for PC and Item collision
 	    if ("PlayableCharacter".equals(fixtureA.getUserData()) && "Weapon".equals(fixtureB.getUserData())) {
-		       	// Debug output to confirm collision detection
-		       	System.out.println("Collision detected between PlayableCharacter and Weapon");
-		       	fixtureB.setUserData("equip");
+	    	fixtureB.setUserData("equip");
 		        
-		   }else if("Weapon".equals(fixtureA.getUserData()) && "PlayableCharacter".equals(fixtureB.getUserData())) {
-			   System.out.println("Collision detected between PlayableCharacter and Weapon");	
-			   fixtureA.setUserData("equip");
+	    }else if("Weapon".equals(fixtureA.getUserData()) && "PlayableCharacter".equals(fixtureB.getUserData())) {
+	    	fixtureA.setUserData("equip");
 		}
 	    
 	    // Check for PC and Enemy collision
 	    if ("PlayableCharacter".equals(fixtureA.getUserData()) && "Enemy".equals(fixtureB.getUserData())) {
-	       	// Debug output to confirm collision detection
-	       	System.out.println("Collision detected between PlayableCharacter and Enemy");
 	       	fixtureA.setUserData("fight");
 	       	fixtureB.setUserData("fight");
 	        
 	   }else if("Enemy".equals(fixtureA.getUserData()) && "PlayableCharacter".equals(fixtureB.getUserData())) {
-		   System.out.println("Collision detected between PlayableCharacter and Enemy");	
-		   fixtureA.setUserData("fight");
-		   fixtureB.setUserData("fight");
+		   	fixtureA.setUserData("fight");
+		   	fixtureB.setUserData("fight");
 	   }
 	}
 
@@ -55,24 +49,24 @@ public class CollisionManager implements ContactListener{
 	
 	
 	// NPC kills PlayableCharacter
-	public PlayableCharacter die(PlayableCharacter entity, NonPlayableCharacter npc, World world) {
-		if("fight".equals(entity.getFix().getUserData())&& "fight".equals(npc.getFix().getUserData())) {
-			System.out.println("PC die");
+	public PlayableCharacter die(PlayableCharacter pc, NonPlayableCharacter npc) {
+		if("fight".equals(pc.getFix().getUserData())&& "fight".equals(npc.getFix().getUserData())) {
 		    npc.getFix().setUserData("Enemy");
-			return entity;
+			return pc;
 		}
 	    return null;
 	}
+	
 	// PlayableCharacter kills NPC
-	public NonPlayableCharacter kill(PlayableCharacter entity, NonPlayableCharacter npc, World world) {
-		if("fight".equals(entity.getFix().getUserData())&& "fight".equals(npc.getFix().getUserData())) {
-			System.out.println("NPC die");
-		    entity.getFix().setUserData("PlayableCharacter");
-		    entity.setAttackCheck(false);
+	public NonPlayableCharacter kill(PlayableCharacter pc, NonPlayableCharacter npc) {
+		if("fight".equals(pc.getFix().getUserData())&& "fight".equals(npc.getFix().getUserData())) {
+			pc.getFix().setUserData("PlayableCharacter");
+			pc.setAttackCheck(false);
 			return npc;
 		}
 		return null;
 	}
+	
 	// Item equipped, remove from screen
 	public boolean equip(NonPlayableCharacter item, World world) {
 		if("equip".equals(item.getFix().getUserData())) {

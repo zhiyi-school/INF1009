@@ -1,22 +1,17 @@
 package Entity;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class PlayableCharacter extends Character{
-	
-	private static final float JUMP_VELOCITY = 500f; // Adjust this value to control jump height
-    private static final float GRAVITY = -1500f; // Adjust this value to control gravity
-    private boolean isJumping = false;
-    private float verticalVelocity = 0;
-    
+	private Sound soundEffect;
     private boolean attackCheck;
-    
-	private float defaultX;
-	private float defaultY;
+	private int rightKey;
+	private int leftKey;
+	private int jumpKey;
 	
 	// Default Constructor
 	public PlayableCharacter(World world){
@@ -24,20 +19,53 @@ public class PlayableCharacter extends Character{
 	}
 	
 	// Parameterized Constructor
-	public PlayableCharacter(World world, String textureImage, float x, float y, float speed, float health, float attack, boolean die, Boolean aiCheck) {
+	public PlayableCharacter(World world, String textureImage, float x, float y, float speed, float health, float attack, boolean die, Boolean aiCheck, int leftKey, int rightKey, int jumpKey, String soundEffect) {
 		super(world, textureImage, x, y, speed, health, attack, die, aiCheck);
 		setAttackCheck(false);
+		setLeftKey(leftKey);
+		setRightKey(rightKey);
+		setJumpKey(jumpKey);
+		setSoundEffect(soundEffect);
 	}
 	
-	private void setDefaultX() {
-		setPosX(defaultX);
+	public int getLeftKey() {
+		return leftKey;
 	}
-	private void setDefaultY() {
-		setPosY(defaultY);
+	public void setLeftKey(int leftKeyInput) {
+		leftKey = leftKeyInput;
 	}
-	
+	public int getRightKey() {
+		return rightKey;
+	}
+	public void setRightKey(int rightKeyInput) {
+		rightKey = rightKeyInput;
+	}
+	public int getJumpKey() {
+		return jumpKey;
+	}
+	public void setJumpKey(int jumpKeyInput) {
+		jumpKey = jumpKeyInput;
+	}
+	public void disposeSoundEffect() {
+		soundEffect.dispose();
+	}
+	public Sound getSoundEffect() {
+		return soundEffect;
+	}
+	public void setSoundEffect(String soundInput) {
+		soundEffect = Gdx.audio.newSound(Gdx.files.internal(soundInput));
+	}
+	public boolean getAttackCheck() {
+		return attackCheck;
+	}
+	public void setAttackCheck(boolean attackInput) {
+		attackCheck = attackInput;
+	}
+
 	public void draw(SpriteBatch batch) {
-		batch.draw(getTexture(), getPosX(), getPosY(), getTexture().getWidth() * 3, getTexture().getHeight() * 3);
+		batch.begin();
+		batch.draw(getTexture(), ((getBody().getPosition().x) * 3f) - (getTexture().getWidth() / 80f), (getBody().getPosition().y * 3f)  - (getTexture().getHeight() / 110f), getTexture().getWidth() / 50f, getTexture().getHeight() / 50f);
+		batch.end();
 	}
 	
 	// Dispose 
@@ -50,79 +78,42 @@ public class PlayableCharacter extends Character{
 		getTexture().dispose();
 	}
 	
-	public boolean getAttackCheck() {
-		return attackCheck;
-	}
-	public void setAttackCheck(boolean attackInput) {
-		attackCheck = attackInput;
-	}
-	
 	// Movement controls
-	public void moveUserControlled(Sound soundEffect) {
+	public void moveUserControlled(float mapFullWidth) {
 		if(!getDie()) {
-			if(Gdx.input.isKeyPressed (Keys.A)) {
+			if(Gdx.input.isKeyPressed (getLeftKey())) {
 				moveLeft();
 			}
-			if(Gdx.input.isKeyPressed (Keys.D)) {
+			if(Gdx.input.isKeyPressed (getRightKey())) {
 				moveRight();
 			}
-			if(Gdx.input.isKeyPressed (Keys.SPACE)) {
-				soundEffect.play();
+			if(Gdx.input.isKeyPressed (getJumpKey())) {
+				getSoundEffect().play(0.01f);
 				jump();
 			}
-			jumpUpdate();
-			//System.out.println(getPosX());
-			if(getPosX() <= 0) {
-				setPosX(0);
+			
+			// Checking if the Player is at Map Boundaries
+			if(getBody().getPosition().x <= 0) {
+				getBody().setTransform(new Vector2(0, getBody().getPosition().y), 0);
 			}
-			if(getPosX() >= Gdx.graphics.getWidth() - (getTexture().getWidth() * 3)) {
-				setPosX(Gdx.graphics.getWidth() - (getTexture().getWidth() * 3));
+			if(getBody().getPosition().x >= (mapFullWidth / 3f)) {
+				getBody().setTransform(new Vector2(mapFullWidth / 3f, getBody().getPosition().y), 0);
 			}
+			
 		}
 	}
-	// Jumping movement
-    public void jumpUpdate() {
-        // Apply gravity
-        verticalVelocity += GRAVITY * Gdx.graphics.getDeltaTime();
-
-        // Update position based on vertical velocity
-        setPosY(getPosY() + verticalVelocity * Gdx.graphics.getDeltaTime());
-        
-        // Set the position of the Box2D body
-        getBody().setTransform(getPosX(), getPosY(), 0); // Assuming no rotation
-        
-        // Check if the character is on the ground
-        if (getPosY() <= 0) {
-            setPosY(0);
-            isJumping = false;
-            verticalVelocity = 0;
-        }
-    }
-	private void jump() {
-        if (!isJumping) {
-            verticalVelocity = JUMP_VELOCITY;
-            isJumping = true;
-        }
-    }
-	public void resetPosition() {
-		setDefaultX();
-		setDefaultY();
-	}
 	
-	
+	// Movement
+    public void jump() {
+    	// Jump only if on the ground
+    	if(getBody().getLinearVelocity().y == 0) {
+    		getBody().applyLinearImpulse(new Vector2(0, getSpeed() * 17.5f), getBody().getWorldCenter(), true);
+    	}
+    }	
 	protected void moveLeft() {
-        setPosX(getPosX() - (getSpeed() * Gdx.graphics.getDeltaTime()));
+        getBody().applyLinearImpulse(new Vector2(-getSpeed() / 1.65f, 0), getBody().getWorldCenter(), true);
     }
-
 	protected void moveRight() {
-        setPosX(getPosX() + (getSpeed() * Gdx.graphics.getDeltaTime()));
-    }
-
-	protected void moveUp() {
-        setPosY(getPosY() + (getSpeed() * Gdx.graphics.getDeltaTime()));
-    }
-
-	protected void moveDown() {
-        setPosY(getPosY() - (getSpeed() * Gdx.graphics.getDeltaTime()));
+        getBody().applyLinearImpulse(new Vector2(getSpeed() / 1.65f, 0), getBody().getWorldCenter(), true);
     }
 }

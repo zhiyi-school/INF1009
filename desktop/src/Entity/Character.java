@@ -1,21 +1,18 @@
 package Entity;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
-public abstract class Character extends Entity{
+public abstract class Character extends Entity implements iMoveable{
 	
 	private String image;
 	private float speed;
 	private float attack;
 	private boolean die;
 	private float health;
-	
-	protected abstract void moveUp();
-	protected abstract void moveDown();
-	protected abstract void moveLeft();
-	protected abstract void moveRight();
-	public abstract void draw(SpriteBatch batch);
 	
 	// Default Constructor
 	public Character(World world) {
@@ -63,10 +60,10 @@ public abstract class Character extends Entity{
 	}
 	
 	public float getSpeed() {
-		return speed;
+		return speed / 200f;
 	}
 	public void setSpeed(float speedInput) {
-		speed = speedInput;
+		speed = speedInput ;
 	}
 	
 	public float getAttack() {
@@ -90,8 +87,23 @@ public abstract class Character extends Entity{
 		health = healthInput;
 	}
 	
+	public void draw(SpriteBatch batch) {
+		batch.begin();
+		batch.draw(getTexture(), ((getBody().getPosition().x) * 3f) - (getTexture().getWidth() / 110f), (getBody().getPosition().y * 3f)  - (getTexture().getHeight() / 110f), getTexture().getWidth() / 60f, getTexture().getHeight() / 60f);
+		batch.end();
+	}
 	
+	public void moveAIControlled(float delta, float mapFullWidth){
+		
+	}
+	public void moveUserControlled(Sound soundEffect, float mapFullWidth) {
+		
+	}
 	
-	
-
+	protected void moveLeft() {
+        getBody().applyLinearImpulse(new Vector2(-getSpeed() * Gdx.graphics.getDeltaTime(), 0), getBody().getWorldCenter(), true);
+    }
+	protected void moveRight() {
+        getBody().applyLinearImpulse(new Vector2(getSpeed() * Gdx.graphics.getDeltaTime(), 0), getBody().getWorldCenter(), true);
+    }
 }
