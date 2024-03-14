@@ -10,12 +10,13 @@ import com.badlogic.gdx.physics.box2d.World;
 public class EntityManager {
 
 	private int pundeh;
+	private float exd;
 	
 	private List<PlayableCharacter> pcList;
 	private List<NonPlayableCharacter> npcList;
 	private List<Entity> entityList;
 	
-	private PlayableCharacter Player1;	
+	private PlayableCharacter Player1;
 	private NonPlayableCharacter Enemy;	
 	private NonPlayableCharacter Item;	
 	private Map gameMap;
