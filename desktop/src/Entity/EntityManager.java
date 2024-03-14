@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class EntityManager {
+
+	private int pundeh;
 	
 	private List<PlayableCharacter> pcList;
 	private List<NonPlayableCharacter> npcList;
