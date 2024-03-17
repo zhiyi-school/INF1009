@@ -1,5 +1,6 @@
 package Entity;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class NonPlayableCharacter extends Character{
@@ -45,5 +46,13 @@ public class NonPlayableCharacter extends Character{
         } else{
             moveRight();
         }
+        
+        // Checking if the Player is at Map Boundaries
+		if(getBody().getPosition().x <= 0) {
+			getBody().setTransform(new Vector2(0, getBody().getPosition().y), 0);
+		}
+		if(getBody().getPosition().x >= (mapFullWidth / 3f)) {
+			getBody().setTransform(new Vector2(mapFullWidth / 3f, getBody().getPosition().y), 0);
+		}
     }
 }

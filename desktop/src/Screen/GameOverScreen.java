@@ -1,5 +1,7 @@
 package Screen;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -27,6 +29,7 @@ public class GameOverScreen extends Scene {
 	private float buttonSpacing = 25; 
 	private float totalButtonWidth = 3 * buttonWidth + 2 * buttonSpacing; 
 	private float startX; 
+	private Random rand = new Random();
     
     	private float mouseX, mouseY;
 	
@@ -90,19 +93,22 @@ public class GameOverScreen extends Scene {
     	}
 
     	public void restartGamePC() {
-	    	PlayableCharacter Player = new PlayableCharacter(screenManager.getWorld(), "PlayableCharacter.png", 10, 50, 0.75f, 100, 5, false, true, Keys.A, Keys.D, Keys.SPACE, "JumpSoundEffect.wav");
+	    	PlayableCharacter Player = new PlayableCharacter(screenManager.getWorld(), "PlayableCharacter.png", 10, 50, 0.75f, 3.0f, 5, false, true, Keys.A, Keys.D, Keys.W, Keys.S, "JumpSoundEffect.wav");
 	    	screenManager.getEntityManager().addPlayableCharacter(Player);
 	    	screenManager.getEntityManager().setNum();
 		screenManager.setCurrentScreen("Game");
 	}
 	
     	public void restartGameNPC() {
-	    	NonPlayableCharacter Enemy = new NonPlayableCharacter(screenManager.getWorld(), "Enemy.png", 200, 30, 200, 100, 10, true);
-	    	NonPlayableCharacter Item = new NonPlayableCharacter(screenManager.getWorld(), "Weapon.png", 185, 75, 200, 100, 10, false);
-	    	screenManager.getEntityManager().addNonPlayableCharacter(Enemy);
+	    	NonPlayableCharacter Enemy = new NonPlayableCharacter(screenManager.getWorld(), "Enemy.png", rand.nextFloat(Gdx.graphics.getWidth()), 
+	    			rand.nextFloat(Gdx.graphics.getHeight()) + 10, 200, 100, 10, true);
+//	    	NonPlayableCharacter Item = new NonPlayableCharacter(screenManager.getWorld(), "Weapon.png", rand.nextFloat(Gdx.graphics.getWidth()), 
+//	    			rand.nextFloat(Gdx.graphics.getHeight()) + 10, 200, 100, 10, false);
+	    	NonPlayableCharacter Item = new NonPlayableCharacter(screenManager.getWorld(), "Weapon.png", 10, rand.nextFloat(Gdx.graphics.getHeight()), 200, 100, 10, false);
+			screenManager.getEntityManager().addNonPlayableCharacter(Enemy);
 	    	screenManager.getEntityManager().addNonPlayableCharacter(Item);
 	    	screenManager.getEntityManager().setNum();
-		screenManager.setCurrentScreen("Game");
+	    	screenManager.setCurrentScreen("Game");
     	}
 
     	public void exitGame() {
@@ -165,9 +171,8 @@ public class GameOverScreen extends Scene {
 	        	if (Gdx.input.justTouched()){
 	        		if (screenManager.getEntityManager().getPC("PlayableCharacter") != null) {
 	        			restartGameNPC();
-	        		}
-				else {
-	                    		restartGamePC();
+	        		}else {
+	        			restartGamePC();
 	        		}
 	        	}
 	        }

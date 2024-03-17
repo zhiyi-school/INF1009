@@ -22,12 +22,12 @@ public class CollisionManager implements ContactListener{
 	    
 	    // Check for PC and Enemy collision
 	    if ("PlayableCharacter".equals(fixtureA.getUserData()) && "Enemy".equals(fixtureB.getUserData())) {
-	       	fixtureA.setUserData("fight");
-	       	fixtureB.setUserData("fight");
+	       	fixtureA.setUserData("PlayableCharacter_fight");
+	       	fixtureB.setUserData("Enemy_fight");
 	        
 	   }else if("Enemy".equals(fixtureA.getUserData()) && "PlayableCharacter".equals(fixtureB.getUserData())) {
-		   	fixtureA.setUserData("fight");
-		   	fixtureB.setUserData("fight");
+		   	fixtureA.setUserData("Enemy_fight");
+		   	fixtureB.setUserData("PlayableCharacter_fight");
 	   }
 	}
 
@@ -50,9 +50,17 @@ public class CollisionManager implements ContactListener{
 	
 	// NPC kills PlayableCharacter
 	public PlayableCharacter die(PlayableCharacter pc, NonPlayableCharacter npc) {
-		if("fight".equals(pc.getFix().getUserData())&& "fight".equals(npc.getFix().getUserData())) {
+		if(pc.getHealth() == 1 && ((String) pc.getFix().getUserData()).contains("fight") && ((String) npc.getFix().getUserData()).contains("fight")) {
 		    npc.getFix().setUserData("Enemy");
+			pc.getFix().setUserData("PlayableCharacter");
+			pc.setHealth(pc.getHealth() - 1);
 			return pc;
+		}else if(((String) pc.getFix().getUserData()).contains("fight") && ((String) npc.getFix().getUserData()).contains("fight")){
+			npc.getFix().setUserData("Enemy");
+			pc.getFix().setUserData("PlayableCharacter");
+			pc.setDefaultPos();
+			pc.setHealth(pc.getHealth() - 1);
+			return null;
 		}
 	    return null;
 	}
@@ -62,6 +70,7 @@ public class CollisionManager implements ContactListener{
 		if("fight".equals(pc.getFix().getUserData())&& "fight".equals(npc.getFix().getUserData())) {
 			pc.getFix().setUserData("PlayableCharacter");
 			pc.setAttackCheck(false);
+			npc.getFix().setUserData("Enemy");
 			return npc;
 		}
 		return null;
