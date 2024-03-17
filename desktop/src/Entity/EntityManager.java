@@ -18,6 +18,7 @@ public class EntityManager {
 	private PlayableCharacter Player1;	
 	private NonPlayableCharacter Enemy;	
 	private NonPlayableCharacter Item;	
+	private NonPlayableCharacter test;	
 	private Map gameMap;
 
 	private PlayableCharacter removePC;
@@ -49,8 +50,11 @@ public class EntityManager {
 		npcList.add(Enemy);
 		
 //		Item = new NonPlayableCharacter(world, "Weapon.png",  rand.nextFloat(Gdx.graphics.getWidth()), rand.nextFloat(Gdx.graphics.getHeight()) + 10, 200, 100, 10, false);
-		Item = new NonPlayableCharacter(world, "letters_img/A.png", rand.nextFloat(Gdx.graphics.getWidth()), rand.nextFloat(Gdx.graphics.getHeight()), 200, 100, 10, false);
+		Item = new NonPlayableCharacter(world, "Weapon.png", rand.nextFloat(Gdx.graphics.getWidth()), rand.nextFloat(Gdx.graphics.getHeight()), 200, 100, 10, false);
 		npcList.add(Item);
+		
+		test = new NonPlayableCharacter(world, "letters_img/A.png", 20, 60, 200, 100, 10, false);
+		npcList.add(test);
 		setCollision(world);
 		
 		// Create physics static bodies by iterating over all map objects
@@ -85,6 +89,9 @@ public class EntityManager {
 //		Item = new NonPlayableCharacter(world, "Weapon.png", rand.nextFloat(Gdx.graphics.getWidth()), rand.nextFloat(Gdx.graphics.getHeight()) + 10, 200, 100, 10, false);
 		Item = new NonPlayableCharacter(world, "Weapon.png", 50, rand.nextFloat(Gdx.graphics.getHeight()), 200, 100, 10, false);
 		npcList.add(Item);
+		
+		test = new NonPlayableCharacter(world, "letters_img/A.png", 20, 60, 200, 100, 10, false);
+		npcList.add(test);
 		
 	}
 	

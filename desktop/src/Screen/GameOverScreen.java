@@ -105,8 +105,12 @@ public class GameOverScreen extends Scene {
 //	    	NonPlayableCharacter Item = new NonPlayableCharacter(screenManager.getWorld(), "Weapon.png", rand.nextFloat(Gdx.graphics.getWidth()), 
 //	    			rand.nextFloat(Gdx.graphics.getHeight()) + 10, 200, 100, 10, false);
 	    	NonPlayableCharacter Item = new NonPlayableCharacter(screenManager.getWorld(), "Weapon.png", 50, rand.nextFloat(Gdx.graphics.getHeight()), 200, 100, 10, false);
-			screenManager.getEntityManager().addNonPlayableCharacter(Enemy);
+	    	screenManager.getEntityManager().addNonPlayableCharacter(Enemy);
 	    	screenManager.getEntityManager().addNonPlayableCharacter(Item);
+	    	
+	    	NonPlayableCharacter test = new NonPlayableCharacter(screenManager.getWorld(), "letters_img/A.png", 20, 60, 200, 100, 10, false);
+			screenManager.getEntityManager().addNonPlayableCharacter(test);
+			
 	    	screenManager.getEntityManager().setNum();
 	    	screenManager.setCurrentScreen("Game");
     	}
