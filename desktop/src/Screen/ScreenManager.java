@@ -175,6 +175,7 @@ public class ScreenManager {
     
 	public void gameState(SpriteBatch batch, World world) {
 		// Update Box2d Objects outside of World Simulation
+		entityManager.count();
     	if (entityManager.getNum() > 0) {
 			update();
 		}else {
@@ -183,14 +184,10 @@ public class ScreenManager {
 				
 			world.step(Gdx.graphics.getDeltaTime(), 6, 2);
 			
-//			if (entityManager.getPC("PlayableCharacter").getFix() != null) {
-			if(entityManager.getPC("PlayableCharacter").getHealth() > 0 && entityManager.getPC("PlayableCharacter").getFix() != null) {
-//				System.out.println("not null");
+			if(entityManager.getPC("PlayableCharacter") != null) {
 				orthographicCameraController.camera(batch);
 			}else {
-				System.out.println("here is over");
 				setCurrentScreen("GameOver");
-				System.out.println(getCurrentScreen());
 				update();
 			}
 		}

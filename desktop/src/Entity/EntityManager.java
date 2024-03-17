@@ -41,7 +41,7 @@ public class EntityManager {
     	entityList.add(gameMap);
     	
 		// Creating Entities. Add them to ArrayList
-		Player1 = new PlayableCharacter(world, "PlayableCharacter.png", 10, 50, 0.75f, 1.0f, 5, false, true, 
+		Player1 = new PlayableCharacter(world, "PlayableCharacter.png", 10, 50, 0.75f, 1, 5, false, true, 
 				Keys.A, Keys.D, Keys.SPACE, Keys.S, "JumpSoundEffect.wav");
 		pcList.add(Player1);
 		
@@ -76,7 +76,7 @@ public class EntityManager {
 			npcList.clear();
 		}
 		
-		Player1 = new PlayableCharacter(world, "PlayableCharacter.png", 10, 50, 0.75f, 1.0f, 5, false, true, Keys.A, Keys.D, Keys.W, Keys.S, "JumpSoundEffect.wav");
+		Player1 = new PlayableCharacter(world, "PlayableCharacter.png", 10, 50, 0.75f, 3, 5, false, true, Keys.A, Keys.D, Keys.W, Keys.S, "JumpSoundEffect.wav");
 		pcList.add(Player1);
 		
 		Enemy = new NonPlayableCharacter(world, "Enemy.png", rand.nextFloat(100) + 250, rand.nextFloat(Gdx.graphics.getHeight()/10) + 10, 200, 100, 10, true);
@@ -122,7 +122,6 @@ public class EntityManager {
 		}
 		for(NonPlayableCharacter npc: npcList) {
 			npc.draw(batch);
-			System.out.println(npc.getBody().getPosition().x);
 		}
 		for(Entity entity: entityList) {
 			entity.render();
@@ -193,7 +192,6 @@ public class EntityManager {
 				npcList.remove(removeNPC);
 			}
 			if(removePC != null) {
-				System.out.println("removePC");
 				removePC.destroy();
 				removePC.dispose(world);
 				pcList.remove(removePC);
@@ -204,8 +202,11 @@ public class EntityManager {
 	public void setNum() {
 		count++;
 	}
+	public int getNum() {
+		return count;
+	}
 	
-	public int getNum() {		
+	public void count() {		
 		for(NonPlayableCharacter npc: npcList) {
 			if(((String) npc.getFix().getUserData()).contains("fight")) {
 				count++;
@@ -217,7 +218,6 @@ public class EntityManager {
 				count++;
 			}
 		}
-		return count;
 	}
 	
 	// Check if there is still a Player

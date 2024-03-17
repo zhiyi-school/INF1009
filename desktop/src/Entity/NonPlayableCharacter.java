@@ -14,8 +14,8 @@ public class NonPlayableCharacter extends Character{
 	}
 	
 	// Parameterized Constructor
-	public NonPlayableCharacter(World world, String textureImage, float x, float y, float speed, float health, float attack, Boolean aiCheck) {
-		super(world, textureImage, x, y, speed, health, attack, aiCheck);
+	public NonPlayableCharacter(World world, String textureImage, float x, float y, float speed, int lives, float attack, Boolean aiCheck) {
+		super(world, textureImage, x, y, speed, lives, attack, aiCheck);
 	}
 	
 	// Dispose 

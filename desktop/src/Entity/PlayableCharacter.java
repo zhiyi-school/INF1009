@@ -22,8 +22,8 @@ public class PlayableCharacter extends Character{
 	}
 	
 	// Parameterized Constructor
-	public PlayableCharacter(World world, String textureImage, float x, float y, float speed, float health, float attack, boolean die, Boolean aiCheck, int leftKey, int rightKey, int jumpKey, int downKey, String soundEffect) {
-		super(world, textureImage, x, y, speed, health, attack, die, aiCheck);
+	public PlayableCharacter(World world, String textureImage, float x, float y, float speed, int lives, float attack, boolean die, Boolean aiCheck, int leftKey, int rightKey, int jumpKey, int downKey, String soundEffect) {
+		super(world, textureImage, x, y, speed, lives, attack, die, aiCheck);
 		setAttackCheck(false);
 		setLeftKey(leftKey);
 		setRightKey(rightKey);

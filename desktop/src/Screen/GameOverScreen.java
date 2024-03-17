@@ -93,7 +93,7 @@ public class GameOverScreen extends Scene {
     	}
 
     	public void restartGamePC() {
-	    	PlayableCharacter Player = new PlayableCharacter(screenManager.getWorld(), "PlayableCharacter.png", 10, 50, 0.75f, 3.0f, 5, false, true, Keys.A, Keys.D, Keys.W, Keys.S, "JumpSoundEffect.wav");
+	    	PlayableCharacter Player = new PlayableCharacter(screenManager.getWorld(), "PlayableCharacter.png", 10, 50, 0.75f, 3, 5, false, true, Keys.A, Keys.D, Keys.W, Keys.S, "JumpSoundEffect.wav");
 	    	screenManager.getEntityManager().addPlayableCharacter(Player);
 	    	screenManager.getEntityManager().setNum();
 		screenManager.setCurrentScreen("Game");
@@ -104,7 +104,7 @@ public class GameOverScreen extends Scene {
 	    			rand.nextFloat(Gdx.graphics.getHeight()) + 10, 200, 100, 10, true);
 //	    	NonPlayableCharacter Item = new NonPlayableCharacter(screenManager.getWorld(), "Weapon.png", rand.nextFloat(Gdx.graphics.getWidth()), 
 //	    			rand.nextFloat(Gdx.graphics.getHeight()) + 10, 200, 100, 10, false);
-	    	NonPlayableCharacter Item = new NonPlayableCharacter(screenManager.getWorld(), "Weapon.png", 10, rand.nextFloat(Gdx.graphics.getHeight()), 200, 100, 10, false);
+	    	NonPlayableCharacter Item = new NonPlayableCharacter(screenManager.getWorld(), "Weapon.png", 50, rand.nextFloat(Gdx.graphics.getHeight()), 200, 100, 10, false);
 			screenManager.getEntityManager().addNonPlayableCharacter(Enemy);
 	    	screenManager.getEntityManager().addNonPlayableCharacter(Item);
 	    	screenManager.getEntityManager().setNum();
