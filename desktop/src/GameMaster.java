@@ -41,22 +41,22 @@ public class GameMaster extends ApplicationAdapter {
 	
 	@Override
 	public void render() {
-		try {
-		      	float delta = Gdx.graphics.getDeltaTime();
-		      	
-		      	// The app will always call screenManager to render screens using drawCurrent() method
-	      		screenManager.drawCurrent(delta);
-	      		screenManager.checkGameStart(MAP_SCALE);
+//		try {
+	      	float delta = Gdx.graphics.getDeltaTime();
+	      	
+	      	// The app will always call screenManager to render screens using drawCurrent() method
+      		screenManager.drawCurrent(delta);
+      		screenManager.checkGameStart(MAP_SCALE);
 
-		}
-		catch(Exception e){
-			System.out.println(e);
-			Gdx.app.exit();
-			
-		}
-		finally{
-			
-		}
+//		}
+//		catch(Exception e){
+//			System.out.println(e);
+//			Gdx.app.exit();
+//			
+//		}
+//		finally{
+//			
+//		}
 	}
 
 	@Override

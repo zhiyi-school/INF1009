@@ -12,7 +12,7 @@ public abstract class Character extends Entity implements iMoveable{
 	private float speed;
 	private float attack;
 	private boolean die;
-	private float health;
+	private int lives;
 	
 	// Default Constructor
 	public Character(World world) {
@@ -22,32 +22,32 @@ public abstract class Character extends Entity implements iMoveable{
 		setSpeed(1);
 		setAttack(0);
 		setDie(false);
-		setHealth(100);
+		setLives(1);
 	}
 	
 	// Parameterized Constructor
-	public Character(World world, String textureImage, float posXInput, float posYInput, String image, float speed, float attack, boolean die, float health, Boolean aiCheck) {
+	public Character(World world, String textureImage, float posXInput, float posYInput, String image, float speed, float attack, boolean die, int lives, Boolean aiCheck) {
 		super(world, textureImage, posXInput, posYInput, aiCheck);
 		setImage(image);
 		setSpeed(speed);
 		setAttack(attack);
 		setDie(die);
-		setHealth(health);
+		setLives(lives);
 	}
 	
 	// NonPlayableCharacter
-	public Character(World world, String textureImage, float x, float y, float speed, float health, float attack, Boolean aiCheck) {
+	public Character(World world, String textureImage, float x, float y, float speed, int lives, float attack, Boolean aiCheck) {
 		super(world, textureImage, x, y, aiCheck);
 		setSpeed(speed);
-		setHealth(health);
+		setLives(lives);
 		setAttack(attack);
 	}
 	
 	// PlayableCharacter
-	public Character(World world, String textureImage, float x, float y, float speed, float health, float attack, boolean die, Boolean aiCheck) {
+	public Character(World world, String textureImage, float x, float y, float speed, int lives, float attack, boolean die, Boolean aiCheck) {
 		super(world, textureImage, x, y, aiCheck);
 		setSpeed(speed);
-		setHealth(health);
+		setLives(lives);
 		setAttack(attack);
 		setDie(die);
 	}
@@ -80,11 +80,11 @@ public abstract class Character extends Entity implements iMoveable{
 		die = dieInput;
 	}
 	
-	public float getHealth() {
-		return health;
+	public int getLives() {
+		return lives;
 	}
-	public void setHealth(float healthInput) {
-		health = healthInput;
+	public void setLives(int livesInput) {
+		lives = livesInput;
 	}
 	
 	public void draw(SpriteBatch batch) {

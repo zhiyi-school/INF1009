@@ -175,24 +175,23 @@ public class ScreenManager {
     
 	public void gameState(SpriteBatch batch, World world) {
 		// Update Box2d Objects outside of World Simulation
-	    	if (entityManager.getNum() > 0) {
+		entityManager.count();
+    	if (entityManager.getNum() > 0) {
 			update();
-		}
-		else {
+		}else {
 			entityManager.entityDraw(batch);
 			entityManager.movement(orthographicCameraController.getMapFullWidth());
 				
 			world.step(Gdx.graphics.getDeltaTime(), 6, 2);
-				
-			if (entityManager.getPC("PlayableCharacter") != null) {
+			
+			if(entityManager.getPC("PlayableCharacter") != null) {
 				orthographicCameraController.camera(batch);
-			}
-			else {
+			}else {
 				setCurrentScreen("GameOver");
 				update();
 			}
 		}
-	    }
+	}
     
 	public void update() {
 		entityManager.collisionEquip(world);

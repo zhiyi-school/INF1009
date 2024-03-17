@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="3" nextobjectid="32">
- <tileset firstgid="1" source="../../Downloads/OOP_PROJECT/assets/NES - Super Mario Bros - Tileset.tsx"/>
+ <tileset firstgid="1" source="NES - Super Mario Bros - Tileset.tsx"/>
  <layer id="1" name="graphics" width="30" height="30">
   <data encoding="base64" compression="zlib">
    eJzbzcrAsHuAML3BULWX3DAjVw8l8rS0l1g19E63QzVdkWvfcPcvuh3D1b+4zB5o/xLKZ9Sua5DV0NPv6HbRM30PRBofqPITn/m0tJuQ2bSqkwY6/w6EnSOhHhwIe0ktS9H1EcsnxSxcasgBlJYNtLR3IDAAhHyjgQ==
