@@ -1,4 +1,4 @@
-package Screen;
+package GameEngine.Entity.Screen;
 
 import java.util.Random;
 
@@ -11,9 +11,9 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Align;
 
-import Entity.EntityManager;
-import Entity.NonPlayableCharacter;
-import Entity.PlayableCharacter;
+import GameEngine.Entity.EntityManager;
+import GameEngine.Entity.NonPlayableCharacter;
+import GameEngine.Entity.PlayableCharacter;
 
 
 public class GameOverScreen extends Scene {

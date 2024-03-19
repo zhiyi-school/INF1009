@@ -1,4 +1,4 @@
-package Entity;
+package GameEngine.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,12 +10,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class EntityManager {
+
 	
 	private List<PlayableCharacter> pcList;
 	private List<NonPlayableCharacter> npcList;
 	private List<Entity> entityList;
 	
-	private PlayableCharacter Player1;	
+	private PlayableCharacter Player1;
 	private NonPlayableCharacter Enemy;	
 	private NonPlayableCharacter Item;	
 	private NonPlayableCharacter test;	
