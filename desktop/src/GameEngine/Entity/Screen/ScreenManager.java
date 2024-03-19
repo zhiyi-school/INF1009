@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import GameEngine.Entity.EntityManager;
 import GameEngine.Entity.OrthographicCameraController;
@@ -19,9 +20,8 @@ import GameEngine.Entity.OrthographicCameraController;
 public class ScreenManager {
 
     private final HUD hud;
-
-
     private Stage stage;
+    
     private MainMenuScreen mainMenuScreen;
     private InstructionsScreen instructionsScreen;
     private PauseScreen pauseScreen;
@@ -38,11 +38,13 @@ public class ScreenManager {
     private ArrayList<Scene> screensList;
 
     // Create a constructor
-    public ScreenManager(EntityManager entityManager, World world, OrthographicCameraController orthographicCameraController, SpriteBatch batch, Stage stage, HUD hud) {
-        this.stage = stage; // Assign the passed stage
-        this.hud = hud; // Assign the passed HUD instance
-
-        hud=new HUD();
+    public ScreenManager(EntityManager entityManager, World world, OrthographicCameraController orthographicCameraController, SpriteBatch batch) {
+    	setEntityManager(entityManager);
+        setWorld(world);
+        setCamera(orthographicCameraController);
+        
+        hud = new HUD(new Stage(new ScreenViewport()), entityManager.getPCLives()); // Create HUD instance
+    	stage = hud.getStage();
 
         screensList = new ArrayList<Scene>();
         shapeRenderer = new ShapeRenderer();
@@ -67,17 +69,10 @@ public class ScreenManager {
 
         // Create an object of gameOverScreen, add to the screensList
         gameOverScreen = new GameOverScreen(batch, shapeRenderer, font, 110, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        screensList.add(gameOverScreen);
+        screensList.add(gameOverScreen);     
 
-        setEntityManager(entityManager);
-        setWorld(world);
-        setCamera(orthographicCameraController);
         setScreenManager(this);
     }
-
-
-
-
 
 
     // This function will always be called to load screen into the game
@@ -103,11 +98,22 @@ public class ScreenManager {
 
             // If it's the game screen, render the HUD
             if (isGameScreen) {
-                hud.render();
+                hud.render(entityManager.getPCLives());
             }
         }
     }
+    
+    public void resize(int width, int height) {
+    	orthographicCameraController.resize(width, height);
+		hud.resize(width, height); // Resize the HUD
 
+//		int viewportWidth = stage.getViewport().getScreenWidth();
+//		int viewportHeight = stage.getViewport().getScreenHeight();
+//		System.out.println("Viewport width: " + viewportWidth + ", height: " + viewportHeight);
+
+		hud.getStage().getViewport().update(width, height, true);
+    }
+    
     // Checking for game state
     public void checkGameStart(float MAP_SCALE) {
         backgroundMusic.setLooping(true); // Set the music to loop
@@ -121,6 +127,10 @@ public class ScreenManager {
 
             gameState(getCurrentScreen().getBatch(), world);
         }
+
+		hud.render(entityManager.getPCLives());
+		stage.act();
+		stage.draw();
     }
 
     public void setScreenManager(ScreenManager screenManagerInput) {
@@ -169,8 +179,6 @@ public class ScreenManager {
         return currentScreen;
     }
 
-
-
     public void setCurrentScreen(String screenString) {
         // Loop through each Screen in screenList
         for (Scene screen : screensList) {
@@ -199,6 +207,7 @@ public class ScreenManager {
 
     public void gameState(SpriteBatch batch, World world) {
         // Update Box2d Objects outside of World Simulation
+    	entityManager.count();
         if (entityManager.getNum() > 0) {
             update();
         } else {
@@ -207,7 +216,7 @@ public class ScreenManager {
 
             world.step(Gdx.graphics.getDeltaTime(), 6, 2);
 
-            if (entityManager.getPC("PlayableCharacter") != null) {
+            if (entityManager.getPC("PlayableCharacter") != null && entityManager.getPCLives() > 0) {
                 orthographicCameraController.camera(batch);
             } else {
                 setCurrentScreen("GameOver");
@@ -225,5 +234,6 @@ public class ScreenManager {
         font.dispose();
         shapeRenderer.dispose();
         backgroundMusic.dispose();
+        hud.dispose(); // Dispose the HUD
     }
 }

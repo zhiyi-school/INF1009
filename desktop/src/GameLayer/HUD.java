@@ -10,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import GameEngine.Entity.EntityManager;
+
 public class HUD extends Actor {
     private int worldTimer;
     private float timeCount;
@@ -20,25 +22,26 @@ public class HUD extends Actor {
     private Label scoreLabel;
     private Label timeLabel;
     private Label livesLabel;
+    private LabelStyle labelStyle;
 
     private HUD hud;
 
     private Label backgroundLabel;
 
 
-    public HUD() {
+    public HUD(Stage stageInput, int pcLives) {
         worldTimer = 300;
         timeCount = 0;
-        lives = 3;
+        lives = pcLives;
         score = 0;
-        stage = new Stage(new ScreenViewport());
+        stage = stageInput;
         Gdx.input.setInputProcessor(stage);
 
         // Create a BitmapFont instance for the labels
         BitmapFont font = new BitmapFont();
 
         // Create LabelStyle with the font
-        LabelStyle labelStyle = new LabelStyle(font, Color.WHITE);
+        labelStyle = new LabelStyle(font, Color.WHITE);
 
         stage.getViewport().setWorldSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
@@ -65,10 +68,10 @@ public class HUD extends Actor {
         livesLabel.setPosition(stage.getWidth() - livesLabel.getWidth() - labelPadding, labelY - livesLabel.getHeight());
 
         // Logging the position and size of HUD elements after setting positions
-        System.out.println("Countdown Label: X=" + countdownLabel.getX() + ", Y=" + countdownLabel.getY() + ", Width=" + countdownLabel.getWidth() + ", Height=" + countdownLabel.getHeight());
-        System.out.println("Score Label: X=" + scoreLabel.getX() + ", Y=" + scoreLabel.getY() + ", Width=" + scoreLabel.getWidth() + ", Height=" + scoreLabel.getHeight());
-        System.out.println("Time Label: X=" + timeLabel.getX() + ", Y=" + timeLabel.getY() + ", Width=" + timeLabel.getWidth() + ", Height=" + timeLabel.getHeight());
-        System.out.println("Lives Label: X=" + livesLabel.getX() + ", Y=" + livesLabel.getY() + ", Width=" + livesLabel.getWidth() + ", Height=" + livesLabel.getHeight());
+//        System.out.println("Countdown Label: X=" + countdownLabel.getX() + ", Y=" + countdownLabel.getY() + ", Width=" + countdownLabel.getWidth() + ", Height=" + countdownLabel.getHeight());
+//        System.out.println("Score Label: X=" + scoreLabel.getX() + ", Y=" + scoreLabel.getY() + ", Width=" + scoreLabel.getWidth() + ", Height=" + scoreLabel.getHeight());
+//        System.out.println("Time Label: X=" + timeLabel.getX() + ", Y=" + timeLabel.getY() + ", Width=" + timeLabel.getWidth() + ", Height=" + timeLabel.getHeight());
+//        System.out.println("Lives Label: X=" + livesLabel.getX() + ", Y=" + livesLabel.getY() + ", Width=" + livesLabel.getWidth() + ", Height=" + livesLabel.getHeight());
     }
 
 
@@ -80,7 +83,7 @@ public class HUD extends Actor {
         stage.getViewport().update(width, height, true);
     }
 
-    public void render() {
+    public void render(int livesLeft) {
         float delta = Gdx.graphics.getDeltaTime();
         timeCount += delta;
         if (timeCount >= 1) {
@@ -88,12 +91,16 @@ public class HUD extends Actor {
             countdownLabel.setText(String.format("%03d", worldTimer));
             timeCount = 0;
         }
-
-
-
-
+        livesLabel.setText("LIVES x " + livesLeft);
+        
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
+    }
+    public Stage getStage() {
+    	return stage;
+    }
+    public void setStage(Stage stageInput) {
+    	stage = stageInput;
     }
 
     public void dispose() {

@@ -43,7 +43,7 @@ public class EntityManager {
     	entityList.add(gameMap);
     	
 		// Creating Entities. Add them to ArrayList
-		Player1 = new PlayableCharacter(world, "PlayableCharacter.png", 10, 50, 0.75f, 1, 5, false, true, 
+		Player1 = new PlayableCharacter(world, "PlayableCharacter.png", 10, 50, 0.75f, 3, 5, false, true, 
 				Keys.A, Keys.D, Keys.SPACE, Keys.S, "JumpSoundEffect.wav");
 		pcList.add(Player1);
 		
@@ -257,6 +257,14 @@ public class EntityManager {
 	}
 	public int getPCList() {
 		return pcList.size();
+	}
+	
+	public int getPCLives() {
+		if(getPC("PlayableCharacter") == null) {
+			return 0;
+		}else {
+			return getPC("PlayableCharacter").getLives();
+		}
 	}
 	
 	// Map

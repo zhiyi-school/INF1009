@@ -33,7 +33,6 @@ public class GameMaster extends ApplicationAdapter {
 		world = new World(new Vector2(0, -9.8f), true);
 		batch = new SpriteBatch();
 
-
 		// Create Viewport and Camera
 		orthographicCameraController = new OrthographicCameraController(Gdx.graphics.getWidth() / 100f, Gdx.graphics.getHeight() / 100f, world);
 		entityManager = new EntityManager(world, orthographicCameraController);
@@ -42,11 +41,8 @@ public class GameMaster extends ApplicationAdapter {
 		// Calculate camera boundaries and set them in OrthographicCameraController
 		orthographicCameraController.setCameraBoundaries();
 
-		hud = new HUD(); // Create HUD instance
-
-		stage = new Stage(new ScreenViewport());
 		Gdx.input.setInputProcessor(stage);
-		screenManager = new ScreenManager(entityManager, world, orthographicCameraController, batch, stage, hud);
+		screenManager = new ScreenManager(entityManager, world, orthographicCameraController, batch);
 
 
 	}
@@ -59,17 +55,6 @@ public class GameMaster extends ApplicationAdapter {
 			// The app will always call screenManager to render screens using drawCurrent() method
 			screenManager.drawCurrent(delta);
 			screenManager.checkGameStart(MAP_SCALE);
-
-
-			hud.render();
-			stage.act();
-			stage.draw();
-
-
-
-
-
-
 
 		}
 		catch(Exception e){
@@ -84,15 +69,7 @@ public class GameMaster extends ApplicationAdapter {
 
 	@Override
 	public void resize(int width, int height) {
-		orthographicCameraController.resize(width, height);
-		hud.resize(width, height); // Resize the HUD
-
-		Stage stage = new Stage();
-		int viewportWidth = stage.getViewport().getScreenWidth();
-		int viewportHeight = stage.getViewport().getScreenHeight();
-		System.out.println("Viewport width: " + viewportWidth + ", height: " + viewportHeight);
-
-		stage.getViewport().update(width, height, true);
+		screenManager.resize(width, height);
 	}
 
 	@Override
@@ -101,6 +78,5 @@ public class GameMaster extends ApplicationAdapter {
 		screenManager.screenDispose();
 		batch.dispose();
 		world.dispose();
-		hud.dispose(); // Dispose the HUD
 	}
 }
