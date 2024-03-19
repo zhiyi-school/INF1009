@@ -113,7 +113,7 @@ public class GameOverScreen extends Scene {
 			
 			NonPlayableCharacter Door = new NonPlayableCharacter(screenManager.getWorld(), "DoorClosed.png", 10, 400, 200, 100, 10, false);
 			screenManager.getEntityManager().addNonPlayableCharacter(Door);
-			
+
 	    	screenManager.getEntityManager().setNum();
 	    	screenManager.setCurrentScreen("Game");
     	}

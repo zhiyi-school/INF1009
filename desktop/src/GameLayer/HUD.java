@@ -29,11 +29,11 @@ public class HUD extends Actor {
     private Label backgroundLabel;
 
 
-    public HUD(Stage stageInput, int pcLives) {
-        worldTimer = 300;
-        timeCount = 0;
-        lives = pcLives;
-        score = 0;
+    public HUD(Stage stageInput, int worldTimerInput,int pcLives) {
+    	setWorldTimer(worldTimerInput);
+    	setTimeCount(0);
+    	setHUDLives(pcLives);
+    	setScore(0);
         stage = stageInput;
         Gdx.input.setInputProcessor(stage);
 
@@ -46,10 +46,10 @@ public class HUD extends Actor {
         stage.getViewport().setWorldSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         // Initialize the labels with appropriate text and style
-        countdownLabel = new Label(String.format("%03d", worldTimer), labelStyle);
-        scoreLabel = new Label(String.format("%06d", score), labelStyle);
+        countdownLabel = new Label(String.format("%03d", getWorldTimer()), labelStyle);
+        scoreLabel = new Label(String.format("%06d", getScore()), labelStyle);
         timeLabel = new Label("TIME", labelStyle);
-        livesLabel = new Label("LIVES x " + lives, labelStyle);
+        livesLabel = new Label("LIVES x " + getHUDLives(), labelStyle);
 
 
         // Add labels to the stage
@@ -87,14 +87,38 @@ public class HUD extends Actor {
         float delta = Gdx.graphics.getDeltaTime();
         timeCount += delta;
         if (timeCount >= 1) {
-            worldTimer--;
-            countdownLabel.setText(String.format("%03d", worldTimer));
+            setWorldTimer(getWorldTimer() - 1);
+            countdownLabel.setText(String.format("%03d", getWorldTimer()));
             timeCount = 0;
         }
         livesLabel.setText("LIVES x " + livesLeft);
         
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
+    }
+    public void setWorldTimer(int worldTimerInput) {
+    	worldTimer = worldTimerInput;
+    }
+    public int getWorldTimer() {
+    	return worldTimer;
+    }
+    public void setTimeCount(int timeCountInput) {
+    	timeCount = timeCountInput;
+    }
+    public float getTimeCount() {
+    	return timeCount;
+    }
+    public void setHUDLives(int livesInput) {
+    	lives = livesInput;
+    }
+    public int getHUDLives() {
+    	return lives;
+    }
+    public void setScore(int scoreInput) {
+    	score = scoreInput;
+    }
+    public int getScore() {
+    	return score;
     }
     public Stage getStage() {
     	return stage;
