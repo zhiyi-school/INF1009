@@ -3,6 +3,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+//import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+
 import Entity.EntityManager;
 import Entity.OrthographicCameraController;
 import Screen.ScreenManager;
@@ -18,6 +20,8 @@ public class GameMaster extends ApplicationAdapter {
 
 	// Constant variable for enlarging objects
 	private static final float MAP_SCALE = 3.0f;
+	
+	//private Box2DDebugRenderer debugRenderer; 
 	
 	@Override
 	public void create() {
@@ -37,6 +41,8 @@ public class GameMaster extends ApplicationAdapter {
         
         // Initialize the ScreenManager
         screenManager = new ScreenManager(entityManager, world, orthographicCameraController, batch);
+        
+        //debugRenderer = new Box2DDebugRenderer();
 	}	
 	
 	@Override
@@ -47,6 +53,8 @@ public class GameMaster extends ApplicationAdapter {
 	      	// The app will always call screenManager to render screens using drawCurrent() method
       		screenManager.drawCurrent(delta);
       		screenManager.checkGameStart(MAP_SCALE);
+      		
+      		//debugRenderer.render(world, orthographicCameraController.getCamera().combined);
 
 //		}
 //		catch(Exception e){
@@ -70,5 +78,6 @@ public class GameMaster extends ApplicationAdapter {
 			screenManager.screenDispose();
     		batch.dispose();
 			world.dispose();
+			//debugRenderer.dispose();
     	}
 }
