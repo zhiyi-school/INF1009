@@ -1,4 +1,4 @@
-package Entity;
+package GameEngine.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +9,6 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class EntityManager {
 
-	private int pundeh;
-	private float exd;
 	
 	private List<PlayableCharacter> pcList;
 	private List<NonPlayableCharacter> npcList;
