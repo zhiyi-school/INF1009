@@ -22,12 +22,12 @@ public class CollisionManager implements ContactListener{
 	    
 	    // Check for PC and Enemy collision
 	    if ("PlayableCharacter".equals(fixtureA.getUserData()) && "Enemy".equals(fixtureB.getUserData())) {
-	       	fixtureA.setUserData("fight");
-	       	fixtureB.setUserData("fight");
+	       	fixtureA.setUserData("PlayableCharacter_fight");
+	       	fixtureB.setUserData("Enemy_fight");
 	        
 	   }else if("Enemy".equals(fixtureA.getUserData()) && "PlayableCharacter".equals(fixtureB.getUserData())) {
-		   	fixtureA.setUserData("fight");
-		   	fixtureB.setUserData("fight");
+		   	fixtureA.setUserData("Enemy_fight");
+		   	fixtureB.setUserData("PlayableCharacter_fight");
 	   }
 	}
 
@@ -49,19 +49,28 @@ public class CollisionManager implements ContactListener{
 	
 	
 	// NPC kills PlayableCharacter
-	public PlayableCharacter die(PlayableCharacter pc, NonPlayableCharacter npc) {
-		if("fight".equals(pc.getFix().getUserData())&& "fight".equals(npc.getFix().getUserData())) {
+	public PlayableCharacter die(PlayableCharacter pc, NonPlayableCharacter npc) {		
+		if(pc.getLives() == 1 && ((String) pc.getFix().getUserData()).contains("fight") && ((String) npc.getFix().getUserData()).contains("fight")) {
 		    npc.getFix().setUserData("Enemy");
+			pc.getFix().setUserData("PlayableCharacter");
+			pc.setLives(pc.getLives() - 1);
 			return pc;
+		}else if(((String) pc.getFix().getUserData()).contains("fight") && ((String) npc.getFix().getUserData()).contains("fight")){
+			npc.getFix().setUserData("Enemy");
+			pc.getFix().setUserData("PlayableCharacter");
+			pc.setLives(pc.getLives() - 1);
+			pc.setDefaultPos();
+			return null;
 		}
 	    return null;
 	}
 	
 	// PlayableCharacter kills NPC
 	public NonPlayableCharacter kill(PlayableCharacter pc, NonPlayableCharacter npc) {
-		if("fight".equals(pc.getFix().getUserData())&& "fight".equals(npc.getFix().getUserData())) {
+		if(((String) pc.getFix().getUserData()).contains("fight") && ((String) npc.getFix().getUserData()).contains("fight")) {
 			pc.getFix().setUserData("PlayableCharacter");
 			pc.setAttackCheck(false);
+			npc.getFix().setUserData("Enemy");
 			return npc;
 		}
 		return null;
@@ -69,7 +78,7 @@ public class CollisionManager implements ContactListener{
 	
 	// Item equipped, remove from screen
 	public boolean equip(NonPlayableCharacter item, World world) {
-		if("equip".equals(item.getFix().getUserData())) {
+		if(((String) item.getFix().getUserData()).contains("equip")) {
 			item.getFix().setUserData("Weapon");
 			item.dispose(world);
 		    item.destroy();
