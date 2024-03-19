@@ -20,6 +20,7 @@ public class EntityManager {
 	private NonPlayableCharacter Enemy;	
 	private NonPlayableCharacter Item;	
 	private NonPlayableCharacter test;	
+	private NonPlayableCharacter Door;	
 	private Map gameMap;
 
 	private PlayableCharacter removePC;
@@ -56,6 +57,9 @@ public class EntityManager {
 		
 		test = new NonPlayableCharacter(world, "letters_img/A.png", 20, 60, 200, 100, 10, false);
 		npcList.add(test);
+		
+		Door = new NonPlayableCharacter(world, "DoorClosed.png", 10, 400, 200, 100, 10, false);
+		npcList.add(Door);
 		setCollision(world);
 		
 		// Create physics static bodies by iterating over all map objects
@@ -93,6 +97,9 @@ public class EntityManager {
 		
 		test = new NonPlayableCharacter(world, "letters_img/A.png", 20, 60, 200, 100, 10, false);
 		npcList.add(test);
+		
+		Door = new NonPlayableCharacter(world, "DoorClosed.png", 10, 400, 200, 100, 10, false);
+		npcList.add(Door);
 		
 	}
 	
