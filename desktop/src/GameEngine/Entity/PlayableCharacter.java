@@ -1,4 +1,4 @@
-package Entity;
+package GameEngine.Entity;
 
 import java.io.File;
 import java.io.FileNotFoundException;

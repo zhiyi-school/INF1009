@@ -1,16 +1,22 @@
+import GameLayer.HUD; // Import HUD class
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import Entity.EntityManager;
-import Entity.OrthographicCameraController;
-import Screen.ScreenManager;
+import GameEngine.Entity.EntityManager;
+import GameEngine.Entity.OrthographicCameraController;
+import GameEngine.Entity.Screen.ScreenManager;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class GameMaster extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private EntityManager entityManager;
 	private World world;
+	private HUD hud; // Declare HUD instance
+	private Stage stage;// Add stage variable
 
 	// For Viewport and Camera
 	private OrthographicCameraController orthographicCameraController;
@@ -18,57 +24,83 @@ public class GameMaster extends ApplicationAdapter {
 
 	// Constant variable for enlarging objects
 	private static final float MAP_SCALE = 3.0f;
-	
+
 	@Override
 	public void create() {
 		// Debugger
-		
+
 		// Creating the World for the game
 		world = new World(new Vector2(0, -9.8f), true);
 		batch = new SpriteBatch();
-      
-        // Create Viewport and Camera
-        orthographicCameraController = new OrthographicCameraController(Gdx.graphics.getWidth() / 100f, Gdx.graphics.getHeight() / 100f, world);
-        entityManager = new EntityManager(world, orthographicCameraController);
-        orthographicCameraController.setEntityManager(entityManager);
-    	
-    	// Calculate camera boundaries and set them in OrthographicCameraController
-    	orthographicCameraController.setCameraBoundaries();
-        
-        // Initialize the ScreenManager
-        screenManager = new ScreenManager(entityManager, world, orthographicCameraController, batch);
-	}	
-	
+
+
+		// Create Viewport and Camera
+		orthographicCameraController = new OrthographicCameraController(Gdx.graphics.getWidth() / 100f, Gdx.graphics.getHeight() / 100f, world);
+		entityManager = new EntityManager(world, orthographicCameraController);
+		orthographicCameraController.setEntityManager(entityManager);
+
+		// Calculate camera boundaries and set them in OrthographicCameraController
+		orthographicCameraController.setCameraBoundaries();
+
+		hud = new HUD(); // Create HUD instance
+
+		stage = new Stage(new ScreenViewport());
+		Gdx.input.setInputProcessor(stage);
+		screenManager = new ScreenManager(entityManager, world, orthographicCameraController, batch, stage, hud);
+
+
+	}
+
 	@Override
 	public void render() {
-//		try {
-	      	float delta = Gdx.graphics.getDeltaTime();
-	      	
-	      	// The app will always call screenManager to render screens using drawCurrent() method
-      		screenManager.drawCurrent(delta);
-      		screenManager.checkGameStart(MAP_SCALE);
+		try {
+			float delta = Gdx.graphics.getDeltaTime();
 
-//		}
-//		catch(Exception e){
-//			System.out.println(e);
-//			Gdx.app.exit();
-//			
-//		}
-//		finally{
-//			
-//		}
+			// The app will always call screenManager to render screens using drawCurrent() method
+			screenManager.drawCurrent(delta);
+			screenManager.checkGameStart(MAP_SCALE);
+
+
+			hud.render();
+			stage.act();
+			stage.draw();
+
+
+
+
+
+
+
+		}
+		catch(Exception e){
+			System.out.println(e);
+			Gdx.app.exit();
+
+		}
+		finally{
+
+		}
 	}
 
 	@Override
 	public void resize(int width, int height) {
-    		orthographicCameraController.resize(width, height);
+		orthographicCameraController.resize(width, height);
+		hud.resize(width, height); // Resize the HUD
+
+		Stage stage = new Stage();
+		int viewportWidth = stage.getViewport().getScreenWidth();
+		int viewportHeight = stage.getViewport().getScreenHeight();
+		System.out.println("Viewport width: " + viewportWidth + ", height: " + viewportHeight);
+
+		stage.getViewport().update(width, height, true);
 	}
-	
+
 	@Override
-    	public void dispose() {
-			entityManager.diposeEntities(world);
-			screenManager.screenDispose();
-    		batch.dispose();
-			world.dispose();
-    	}
+	public void dispose() {
+		entityManager.diposeEntities(world);
+		screenManager.screenDispose();
+		batch.dispose();
+		world.dispose();
+		hud.dispose(); // Dispose the HUD
+	}
 }

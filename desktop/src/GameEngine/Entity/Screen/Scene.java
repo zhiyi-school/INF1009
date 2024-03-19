@@ -1,4 +1,4 @@
-package Screen;
+package GameEngine.Entity.Screen;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -8,8 +8,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 public abstract class Scene implements Screen{
 
 	private float buttonWidth;
-	private float screenWidth;
-	private float screenHeight;
+	protected float screenWidth;
+	protected float screenHeight;
 	
 	private SpriteBatch batch;
 	private ShapeRenderer shapeRenderer;
@@ -90,4 +90,6 @@ public abstract class Scene implements Screen{
 	public abstract void resume ();
 	public abstract void hide ();
 	public abstract void dispose ();
+
+	public abstract void setScreenManager(ScreenManager screenManagerInput);
 }
