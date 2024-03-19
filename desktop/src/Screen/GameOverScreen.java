@@ -1,4 +1,4 @@
-package GameEngine.Entity.Screen;
+package Screen;
 
 import java.util.Random;
 
@@ -11,9 +11,9 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Align;
 
-import GameEngine.Entity.EntityManager;
-import GameEngine.Entity.NonPlayableCharacter;
-import GameEngine.Entity.PlayableCharacter;
+import Entity.EntityManager;
+import Entity.NonPlayableCharacter;
+import Entity.PlayableCharacter;
 
 
 public class GameOverScreen extends Scene {
@@ -110,9 +110,6 @@ public class GameOverScreen extends Scene {
 	    	
 	    	NonPlayableCharacter test = new NonPlayableCharacter(screenManager.getWorld(), "letters_img/A.png", 20, 60, 200, 100, 10, false);
 			screenManager.getEntityManager().addNonPlayableCharacter(test);
-			
-			NonPlayableCharacter Door = new NonPlayableCharacter(screenManager.getWorld(), "DoorClosed.png", 10, 400, 200, 100, 10, false);
-			screenManager.getEntityManager().addNonPlayableCharacter(Door);
 			
 	    	screenManager.getEntityManager().setNum();
 	    	screenManager.setCurrentScreen("Game");

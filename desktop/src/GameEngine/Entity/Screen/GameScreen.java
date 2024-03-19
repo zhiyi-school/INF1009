@@ -71,7 +71,7 @@ public class GameScreen extends Scene {
 		gameTime += delta;
 
 		// Debug output
-		System.out.println("HUD visibility: " + hud.isVisible());
+//		System.out.println("HUD visibility: " + hud.isVisible());
 
 		pauseButton.render(shapeRenderer, batch, font);
 
@@ -87,7 +87,7 @@ public class GameScreen extends Scene {
 		font.draw(batch, "Time: " + (int) gameTime, 100, screenHeight - 20);
 		batch.end();
 
-		hud.render();
+		hud.render(screenManager.getEntityManager().getPCLives());
 
 		mouseX = Gdx.input.getX();
 		mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
@@ -104,9 +104,9 @@ public class GameScreen extends Scene {
 		}
 
 		// Debug output
-		System.out.println("Acting stage...");
+//		System.out.println("Acting stage...");
 		stage.act(delta);
-		System.out.println("Drawing stage...");
+//		System.out.println("Drawing stage...");
 		stage.draw();
 	}
 

@@ -1,4 +1,4 @@
-package GameEngine.Entity;
+package Entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,17 +10,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class EntityManager {
-
 	
 	private List<PlayableCharacter> pcList;
 	private List<NonPlayableCharacter> npcList;
 	private List<Entity> entityList;
 	
-	private PlayableCharacter Player1;
+	private PlayableCharacter Player1;	
 	private NonPlayableCharacter Enemy;	
 	private NonPlayableCharacter Item;	
-	private NonPlayableCharacter test;	
-	private NonPlayableCharacter Door;	
+	private NonPlayableCharacter test;
+	private NonPlayableCharacter Door;
 	private Map gameMap;
 
 	private PlayableCharacter removePC;
@@ -44,7 +43,7 @@ public class EntityManager {
     	entityList.add(gameMap);
     	
 		// Creating Entities. Add them to ArrayList
-		Player1 = new PlayableCharacter(world, "PlayableCharacter.png", 10, 50, 0.75f, 3, 5, false, true, 
+		Player1 = new PlayableCharacter(world, "PlayableCharacter.png", 10, 50, 0.75f, 1, 5, false, true, 
 				Keys.A, Keys.D, Keys.SPACE, Keys.S, "JumpSoundEffect.wav");
 		pcList.add(Player1);
 		
@@ -60,6 +59,7 @@ public class EntityManager {
 		
 		Door = new NonPlayableCharacter(world, "DoorClosed.png", 10, 400, 200, 100, 10, false);
 		npcList.add(Door);
+		
 		setCollision(world);
 		
 		// Create physics static bodies by iterating over all map objects
@@ -100,7 +100,6 @@ public class EntityManager {
 		
 		Door = new NonPlayableCharacter(world, "DoorClosed.png", 10, 400, 200, 100, 10, false);
 		npcList.add(Door);
-		
 	}
 	
 	// Dispose all entities
@@ -264,14 +263,6 @@ public class EntityManager {
 	}
 	public int getPCList() {
 		return pcList.size();
-	}
-	
-	public int getPCLives() {
-		if(getPC("PlayableCharacter") == null) {
-			return 0;
-		}else {
-			return getPC("PlayableCharacter").getLives();
-		}
 	}
 	
 	// Map

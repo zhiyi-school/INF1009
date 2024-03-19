@@ -1,4 +1,4 @@
-package GameEngine.Entity;
+package Entity;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -89,11 +89,11 @@ public class OrthographicCameraController {
     
     public void camera(SpriteBatch batch) {
 		// Update camera position to follow character and ensures it does not go out of map boundaries
-//    	System.out.println("camera");
-//    	System.out.println(entityManager.getPC("PlayableCharacter"));
-    	updateCameraPosition((entityManager.getPC("PlayableCharacter").getBody().getPosition().x * MAP_SCALE) - (entityManager.getPC("PlayableCharacter").getTexture().getWidth() / 110f), 
+		updateCameraPosition((entityManager.getPC("PlayableCharacter").getBody().getPosition().x * MAP_SCALE) - (entityManager.getPC("PlayableCharacter").getTexture().getWidth() / 110f), 
 				entityManager.getPC("PlayableCharacter").getBody().getPosition().y * MAP_SCALE);
+		
 		applyViewport();
+		
 		// Set the batch projection matrix to camera's combined matrix	
 		setProjection(batch);
 	}
