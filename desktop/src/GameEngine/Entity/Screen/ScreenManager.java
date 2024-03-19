@@ -43,7 +43,7 @@ public class ScreenManager {
         setWorld(world);
         setCamera(orthographicCameraController);
         
-        hud = new HUD(new Stage(new ScreenViewport()), entityManager.getPCLives()); // Create HUD instance
+        hud = new HUD(new Stage(new ScreenViewport()), 300, entityManager.getPCLives()); // Create HUD instance
     	stage = hud.getStage();
 
         screensList = new ArrayList<Scene>();
@@ -99,6 +99,7 @@ public class ScreenManager {
             // If it's the game screen, render the HUD
             if (isGameScreen) {
                 hud.render(entityManager.getPCLives());
+//                System.out.println(hud.getWorldTimer());
             }
         }
     }
@@ -164,6 +165,9 @@ public class ScreenManager {
     public World getWorld() {
         return world;
     }
+    public HUD getHUD() {
+    	return hud;
+    }
 
     // Access to screensList
     public void addScreen(Scene screen) {
@@ -195,6 +199,7 @@ public class ScreenManager {
         if (screen instanceof MainMenuScreen) {
             currentScreen = mainMenuScreen;
         } else if (screen instanceof GameScreen) {
+        	hud.setWorldTimer(300);
             currentScreen = gameScreen;
         } else if (screen instanceof GameOverScreen) {
             currentScreen = gameOverScreen;
