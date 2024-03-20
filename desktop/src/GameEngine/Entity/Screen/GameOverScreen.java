@@ -95,7 +95,6 @@ public class GameOverScreen extends Scene {
     	public void restartGamePC() {
 	    	PlayableCharacter Player = new PlayableCharacter(screenManager.getWorld(), "PlayableCharacter.png", 10, 50, 0.75f, 3, 5, false, true, Keys.A, Keys.D, Keys.W, Keys.S, "JumpSoundEffect.wav");
 	    	screenManager.getEntityManager().addPlayableCharacter(Player);
-	    	screenManager.getEntityManager().setNum();
 		screenManager.setCurrentScreen("Game");
 	}
 	
@@ -108,13 +107,18 @@ public class GameOverScreen extends Scene {
 	    	screenManager.getEntityManager().addNonPlayableCharacter(Enemy);
 	    	screenManager.getEntityManager().addNonPlayableCharacter(Item);
 	    	
-	    	NonPlayableCharacter test = new NonPlayableCharacter(screenManager.getWorld(), "letters_img/A.png", 20, 60, 200, 100, 10, false);
-			screenManager.getEntityManager().addNonPlayableCharacter(test);
+	    	NonPlayableCharacter test0 = new NonPlayableCharacter(screenManager.getWorld(), "letters_img/C.png", 40, 60, 200, 100, 10, false);
+			screenManager.getEntityManager().addNonPlayableCharacter(test0);
+			
+			NonPlayableCharacter test1 = new NonPlayableCharacter(screenManager.getWorld(), "letters_img/A.png", 60, 40, 200, 100, 10, false);
+			screenManager.getEntityManager().addNonPlayableCharacter(test1);
+			
+			NonPlayableCharacter test2 = new NonPlayableCharacter(screenManager.getWorld(), "letters_img/T.png", 60, 40, 200, 100, 10, false);
+			screenManager.getEntityManager().addNonPlayableCharacter(test2);
 			
 			NonPlayableCharacter Door = new NonPlayableCharacter(screenManager.getWorld(), "DoorClosed.png", 10, 400, 200, 100, 10, false);
 			screenManager.getEntityManager().addNonPlayableCharacter(Door);
 
-	    	screenManager.getEntityManager().setNum();
 	    	screenManager.setCurrentScreen("Game");
     	}
 
@@ -148,10 +152,8 @@ public class GameOverScreen extends Scene {
 	        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	
 	    	displayGameOver();
-	    	if (getGameOverText().contains("GAME OVER")) {
-	            startButton.render(shapeRenderer, batch, font);
-	            mainMenuButton.render(shapeRenderer, batch, font);
-	    	}
+            mainMenuButton.render(shapeRenderer, batch, font);
+            startButton.render(shapeRenderer, batch, font);
 	        exitButton.render(shapeRenderer,batch, font);
         
 	        batch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());

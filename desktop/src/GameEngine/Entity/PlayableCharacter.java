@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class PlayableCharacter extends Character{
 	private Sound soundEffect;
+	private Sound wordSound;
     private boolean attackCheck;
 	private int rightKey;
 	private int leftKey;
@@ -22,6 +23,7 @@ public class PlayableCharacter extends Character{
 	private float defaultY;
 	private ArrayList<String> words;
 	private String guess;
+	private String score;
 	
 	// Default Constructor
 	public PlayableCharacter(World world){
@@ -38,6 +40,8 @@ public class PlayableCharacter extends Character{
 		setJumpKey(jumpKey);
 		setDownKey(downKey);
 		setSoundEffect(soundEffect);
+		setGuess(null);
+		setScore("");
 		setDefaultX(getBody().getPosition().x);
 		setDefaultY(getBody().getPosition().y);
 		readFile();
@@ -94,14 +98,40 @@ public class PlayableCharacter extends Character{
 	public void setAttackCheck(boolean attackInput) {
 		attackCheck = attackInput;
 	}
-	private String getGuess() {
+	public String getGuess() {
 		return guess;
 	}
-	private void setGuess(String guessInput) {
+	public void setGuess(String guessInput) {
 		guess = guessInput;
 	}
 	public String getWord(int i) {
 		return words.get(i);
+	}
+	public int getWordSize() {
+		return words.size();	
+	}
+	public void setWordSound(String wordInput) {
+		wordSound = Gdx.audio.newSound(Gdx.files.internal("words/" + wordInput + ".mp3"));
+	}
+	public Sound getWordSound() {
+		return wordSound;
+	}
+	public void setScore(String scoreInput) {
+		if(score == null) {
+			score = scoreInput;
+		}else {
+			score += scoreInput;
+		}
+	}
+	public String getScore() {
+		return score;
+	}
+	public boolean checkWin() {
+		if(getScore().equals(getGuess())) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 	public void draw(SpriteBatch batch) {
@@ -133,7 +163,6 @@ public class PlayableCharacter extends Character{
 				moveRight();
 			}
 			if(Gdx.input.isKeyPressed (getJumpKey())) {
-				getSoundEffect().play(0.01f);
 				jump();
 			}
 			if(Gdx.input.isKeyPressed (getDownKey())) {
@@ -155,6 +184,7 @@ public class PlayableCharacter extends Character{
     public void jump() {
     	// Jump only if on the ground
     	if(getBody().getLinearVelocity().y == 0) {
+			getSoundEffect().play(0.01f);
     		getBody().applyLinearImpulse(new Vector2(0, getSpeed() * 17.5f), getBody().getWorldCenter(), true);
     	}
 //		getBody().setTransform(new Vector2(getBody().getPosition().x, getBody().getPosition().y + (getSpeed() * 2)), 0);

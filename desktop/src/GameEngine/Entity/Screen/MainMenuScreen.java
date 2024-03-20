@@ -43,7 +43,6 @@ public class MainMenuScreen extends Scene {
     
     	public void startGame() {
     		screenManager.getEntityManager().restartGame(screenManager.getWorld(), screenManager.getCamera());
-    		screenManager.getEntityManager().setNum();
 		screenManager.setCurrentScreen("Game");
     	}
     
