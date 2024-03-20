@@ -1,6 +1,7 @@
 package GameEngine.Entity.Screen;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import GameLayer.HUD;
 import com.badlogic.gdx.Gdx;
@@ -36,6 +37,7 @@ public class ScreenManager {
     private BitmapFont font;
     private Music backgroundMusic;
     private ArrayList<Scene> screensList;
+	private Random rand = new Random();
 
     // Create a constructor
     public ScreenManager(EntityManager entityManager, World world, OrthographicCameraController orthographicCameraController, SpriteBatch batch) {
@@ -86,6 +88,10 @@ public class ScreenManager {
         }
         // If currentScreen has been assigned with a screen, then show the screen
         else {
+        	Gdx.gl.glClearColor(0, 0, 0, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            ScreenUtils.clear(0, 0, 0.2f, 1);
+            
             currentScreen.show();
             currentScreen.render(delta, currentScreen.getBatch(), currentScreen.getShape(), currentScreen.getMapFont());
 
@@ -118,14 +124,10 @@ public class ScreenManager {
     // Checking for game state
     public void checkGameStart(float MAP_SCALE) {
         backgroundMusic.setLooping(true); // Set the music to loop
-        backgroundMusic.setVolume(0.1f);
+        backgroundMusic.setVolume(0.05f);
         backgroundMusic.play();
 
         if (getCurrentScreen() instanceof GameScreen) {
-            Gdx.gl.glClearColor(0, 0, 0, 1);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            ScreenUtils.clear(0, 0, 0.2f, 1);
-
             gameState(getCurrentScreen().getBatch(), world);
         }
 
@@ -189,7 +191,7 @@ public class ScreenManager {
             // There is an abstract method in Scene class called getScreen() that returns a String type
             if (screen.getScreen() == screenString) {
                 // If the screenString is in the screenList, assign it to currentScreen
-                currentScreen = screen;
+                switchTo(screen);
             }
         }
     }
@@ -199,9 +201,17 @@ public class ScreenManager {
         if (screen instanceof MainMenuScreen) {
             currentScreen = mainMenuScreen;
         } else if (screen instanceof GameScreen) {
+        	if(entityManager.getPC("PlayableCharacter").getGuess() == null) {
+        		String guessWord = entityManager.getPC("PlayableCharacter").getWord(rand.nextInt(entityManager.getPC("PlayableCharacter").getWordSize()));
+            	entityManager.getPC("PlayableCharacter").setGuess(guessWord);
+            	entityManager.getPC("PlayableCharacter").setWordSound(guessWord);
+        	}
+        	entityManager.getPC("PlayableCharacter").getWordSound().play(1f);
+        	
         	hud.setWorldTimer(300);
             currentScreen = gameScreen;
         } else if (screen instanceof GameOverScreen) {
+        	entityManager.getPC("PlayableCharacter").setGuess(null);
             currentScreen = gameOverScreen;
         } else if (screen instanceof InstructionsScreen) {
             currentScreen = instructionsScreen;
@@ -227,12 +237,15 @@ public class ScreenManager {
                 setCurrentScreen("GameOver");
                 update();
             }
+            if(entityManager.getPC("PlayableCharacter").checkWin()) {
+            	setCurrentScreen("GameOver");
+                update();
+            }
         }
     }
 
     public void update() {
-        entityManager.collisionEquip(world);
-        entityManager.collisionFight(world);
+        entityManager.entityCollision(world);
     }
 
     public void screenDispose() {

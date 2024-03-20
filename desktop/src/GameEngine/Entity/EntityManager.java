@@ -19,7 +19,9 @@ public class EntityManager {
 	private PlayableCharacter Player1;
 	private NonPlayableCharacter Enemy;	
 	private NonPlayableCharacter Item;	
-	private NonPlayableCharacter test;	
+	private NonPlayableCharacter test0;	
+	private NonPlayableCharacter test1;	
+	private NonPlayableCharacter test2;	
 	private NonPlayableCharacter Door;	
 	private Map gameMap;
 
@@ -55,8 +57,12 @@ public class EntityManager {
 		Item = new NonPlayableCharacter(world, "Weapon.png", rand.nextFloat(Gdx.graphics.getWidth()), rand.nextFloat(Gdx.graphics.getHeight()), 200, 100, 10, false);
 		npcList.add(Item);
 		
-		test = new NonPlayableCharacter(world, "letters_img/A.png", 20, 60, 200, 100, 10, false);
-		npcList.add(test);
+		test0 = new NonPlayableCharacter(world, "letters_img/A.png", 40, 40, 200, 100, 10, false);
+		npcList.add(test0);
+		test1 = new NonPlayableCharacter(world, "letters_img/B.png", 60, 40, 200, 100, 10, false);
+		npcList.add(test1);
+		test2 = new NonPlayableCharacter(world, "letters_img/T.png", 80, 40, 200, 100, 10, false);
+		npcList.add(test2);
 		
 		Door = new NonPlayableCharacter(world, "DoorClosed.png", 10, 400, 200, 100, 10, false);
 		npcList.add(Door);
@@ -95,8 +101,12 @@ public class EntityManager {
 		Item = new NonPlayableCharacter(world, "Weapon.png", 50, rand.nextFloat(Gdx.graphics.getHeight()), 200, 100, 10, false);
 		npcList.add(Item);
 		
-		test = new NonPlayableCharacter(world, "letters_img/A.png", 20, 60, 200, 100, 10, false);
-		npcList.add(test);
+		test0 = new NonPlayableCharacter(world, "letters_img/C.png", 40, 40, 200, 100, 10, false);
+		npcList.add(test0);
+		test1 = new NonPlayableCharacter(world, "letters_img/A.png", 60, 40, 200, 100, 10, false);
+		npcList.add(test1);
+		test2 = new NonPlayableCharacter(world, "letters_img/T.png", 80, 40, 200, 100, 10, false);
+		npcList.add(test2);
 		
 		Door = new NonPlayableCharacter(world, "DoorClosed.png", 10, 400, 200, 100, 10, false);
 		npcList.add(Door);
@@ -184,21 +194,40 @@ public class EntityManager {
 			npcList.remove(removeItem);
 		}
 	}
+	public void collisionScore(World world) {
+		if(getNum() != 0) {
+			for(PlayableCharacter pc: pcList) {
+				for(NonPlayableCharacter npc: npcList) {
+					if(((String) npc.getFix().getUserData()).contains("add")) {
+						removeNPC = getCollision().addScore(pc, npc);
+						count--;
+						break;
+					}
+				}
+			}
+			if(removeNPC != null) {
+				removeNPC.destroy();
+				removeNPC.dispose(world);
+				npcList.remove(removeNPC);
+			}
+		}
+	}
 	
 	// Check which Entity to dispose
 	public void collisionFight(World world) {
 		if(getNum() != 0) {
 			for(PlayableCharacter pc: pcList) {
 				for(NonPlayableCharacter npc: npcList) {
-					if(pc.getAttackCheck()) {
+					if(pc.getAttackCheck() && ((String) npc.getFix().getUserData()).contains("fight")) {
 						removeNPC = getCollision().kill(pc, npc);
 						count--;
 						break;
-					}else{
+					}else if(((String) pc.getFix().getUserData()).contains("fight")){
 						removePC = getCollision().die(pc, npc);
 						count--;
 						break;
 					}
+					
 				}
 			}
 			if(removeNPC != null) {
@@ -214,6 +243,14 @@ public class EntityManager {
 		}
 	}
 	
+	public void entityCollision(World world) {
+		removePC = null;
+		removeNPC = null;
+        collisionEquip(world);
+        collisionFight(world);
+        collisionScore(world);
+	}
+	
 	public void setNum() {
 		count++;
 	}
@@ -227,9 +264,11 @@ public class EntityManager {
 				count++;
 			}
 		}
-		for(NonPlayableCharacter item: npcList) {
-			if(((String) item.getFix().getUserData()).contains("equip")) {
+		for(NonPlayableCharacter npc: npcList) {
+			if(((String) npc.getFix().getUserData()).contains("equip")) {
 				pcList.get(0).setAttackCheck(true);
+				count++;
+			}else if(((String) npc.getFix().getUserData()).contains("add")) {
 				count++;
 			}
 		}
