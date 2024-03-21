@@ -1,8 +1,10 @@
-package Entity;
+package GameEngine.Entity;
 
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -84,6 +86,23 @@ public class Map extends Entity {
     public TiledMap getMap() {
         return map;
     }
+    
+    public boolean isValidSpawnPoint(float x, float y) {
+        // Replace "CorrectTileLayerName" with the actual name of your tile layer.
+        TiledMapTileLayer tileLayer = (TiledMapTileLayer) map.getLayers().get(1);
+        
+        if (tileLayer == null) {
+            System.err.println("Tile layer not found.");
+            return false; // Exit if the correct tile layer isn't found to prevent endless loop.
+        }
+
+        int tileX = (int) (x / getTileSize());
+        int tileY = (int) (y / getTileSize());
+
+        TiledMapTileLayer.Cell cell = tileLayer.getCell(tileX, tileY);
+        return cell == null;
+    }
+
     
     // Dispose
     public void dispose(World world) {

@@ -1,4 +1,4 @@
-package Screen;
+package GameEngine.Entity.Screen;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;

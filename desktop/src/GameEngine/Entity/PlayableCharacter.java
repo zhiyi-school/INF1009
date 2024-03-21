@@ -1,4 +1,9 @@
-package Entity;
+package GameEngine.Entity;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -15,6 +20,8 @@ public class PlayableCharacter extends Character{
 	private int downKey;
 	private float defaultX;
 	private float defaultY;
+	private ArrayList<String> words;
+	private String guess;
 	
 	// Default Constructor
 	public PlayableCharacter(World world){
@@ -24,6 +31,7 @@ public class PlayableCharacter extends Character{
 	// Parameterized Constructor
 	public PlayableCharacter(World world, String textureImage, float x, float y, float speed, int lives, float attack, boolean die, Boolean aiCheck, int leftKey, int rightKey, int jumpKey, int downKey, String soundEffect) {
 		super(world, textureImage, x, y, speed, lives, attack, die, aiCheck);
+		words = new ArrayList<String>();
 		setAttackCheck(false);
 		setLeftKey(leftKey);
 		setRightKey(rightKey);
@@ -32,6 +40,7 @@ public class PlayableCharacter extends Character{
 		setSoundEffect(soundEffect);
 		setDefaultX(getBody().getPosition().x);
 		setDefaultY(getBody().getPosition().y);
+		readFile();
 	}
 	
 	private void setDefaultX(float inputX) {
@@ -84,6 +93,15 @@ public class PlayableCharacter extends Character{
 	}
 	public void setAttackCheck(boolean attackInput) {
 		attackCheck = attackInput;
+	}
+	private String getGuess() {
+		return guess;
+	}
+	private void setGuess(String guessInput) {
+		guess = guessInput;
+	}
+	public String getWord(int i) {
+		return words.get(i);
 	}
 
 	public void draw(SpriteBatch batch) {
@@ -152,4 +170,18 @@ public class PlayableCharacter extends Character{
 //		getBody().setTransform(new Vector2(getBody().getPosition().x + (getSpeed() * 2), getBody().getPosition().y), 0);
         getBody().applyLinearImpulse(new Vector2(getSpeed() / 1.65f, 0), getBody().getWorldCenter(), true);
     }
+	
+	private void readFile() {
+		try {
+			File myObj = new File("words/words.txt");
+			Scanner myReader = new Scanner(myObj);
+			while (myReader.hasNextLine()) {
+				words.add(myReader.nextLine());
+			}
+			myReader.close();
+    	} catch (FileNotFoundException e) {
+    		System.out.println("An error occurred.");
+    		e.printStackTrace();
+	    }
+	}
 }

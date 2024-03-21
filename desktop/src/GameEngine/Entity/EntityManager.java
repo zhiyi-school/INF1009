@@ -1,4 +1,4 @@
-package Entity;
+package GameEngine.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,11 +15,12 @@ public class EntityManager {
 	private List<NonPlayableCharacter> npcList;
 	private List<Entity> entityList;
 	
-	private PlayableCharacter Player1;	
+	private PlayableCharacter Player1;
 	private NonPlayableCharacter Enemy;	
 	private NonPlayableCharacter Item;	
-	private NonPlayableCharacter test;
+	private NonPlayableCharacter test;	
 	private NonPlayableCharacter Door;
+	private NonPlayableCharacter Spike;
 	private Map gameMap;
 
 	private PlayableCharacter removePC;
@@ -34,7 +35,7 @@ public class EntityManager {
 	private static final float MAP_SCALE = 3.0f;
 	
 	public EntityManager(World world, OrthographicCameraController orthographicCameraController) {
-
+		
 		entityList = new ArrayList<Entity>();
 		pcList = new ArrayList<PlayableCharacter>();
 		npcList = new ArrayList<NonPlayableCharacter>();
@@ -43,7 +44,7 @@ public class EntityManager {
     	entityList.add(gameMap);
     	
 		// Creating Entities. Add them to ArrayList
-		Player1 = new PlayableCharacter(world, "PlayableCharacter.png", 10, 50, 0.75f, 1, 5, false, true, 
+		Player1 = new PlayableCharacter(world, "PlayableCharacter.png", 10, 50, 0.75f, 3, 5, false, true, 
 				Keys.A, Keys.D, Keys.SPACE, Keys.S, "JumpSoundEffect.wav");
 		pcList.add(Player1);
 		
@@ -60,6 +61,22 @@ public class EntityManager {
 		Door = new NonPlayableCharacter(world, "DoorClosed.png", 10, 400, 200, 100, 10, false);
 		npcList.add(Door);
 		
+		float worldWidth = orthographicCameraController.getMapFullWidth();
+		float worldHeight = orthographicCameraController.getMapFullHeight();
+		
+		// Handle random Spike spawns
+		boolean validSpawnPoint = false;
+		float spikeX = 0;
+		float spikeY = 0;
+
+		while (!validSpawnPoint) {
+			spikeX = rand.nextFloat() * worldWidth;
+			spikeY = rand.nextFloat() * worldHeight;
+		    validSpawnPoint = gameMap.isValidSpawnPoint(spikeX, spikeY);
+		}
+		
+		Spike = new NonPlayableCharacter(world, "Spike.png", spikeX, spikeY, 0, 100, 10, false);
+		npcList.add(Spike);
 		setCollision(world);
 		
 		// Create physics static bodies by iterating over all map objects
@@ -100,6 +117,23 @@ public class EntityManager {
 		
 		Door = new NonPlayableCharacter(world, "DoorClosed.png", 10, 400, 200, 100, 10, false);
 		npcList.add(Door);
+		
+		float worldWidth = orthographicCameraController.getMapFullWidth();
+		float worldHeight = orthographicCameraController.getMapFullHeight();
+		
+		// Handle random Spike spawns
+		boolean validSpawnPoint = false;
+		float spikeX = 0;
+		float spikeY = 0;
+
+		while (!validSpawnPoint) {
+			spikeX = rand.nextFloat() * worldWidth;
+		    spikeY = rand.nextFloat() * worldHeight;
+		    validSpawnPoint = gameMap.isValidSpawnPoint(spikeX, spikeY);
+		}
+		
+		Spike = new NonPlayableCharacter(world, "Spike.png", spikeX, spikeY, 0, 100, 10, false);
+		npcList.add(Spike);
 	}
 	
 	// Dispose all entities
@@ -263,6 +297,14 @@ public class EntityManager {
 	}
 	public int getPCList() {
 		return pcList.size();
+	}
+	
+	public int getPCLives() {
+		if(getPC("PlayableCharacter") == null) {
+			return 0;
+		}else {
+			return getPC("PlayableCharacter").getLives();
+		}
 	}
 	
 	// Map
