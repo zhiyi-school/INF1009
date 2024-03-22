@@ -128,7 +128,6 @@ public class PlayableCharacter extends Character{
 		return score;
 	}
 	public boolean checkWin(World world, List<PlayableCharacter> pcList) {
-		System.out.println((getScore()).equals(getGuess().substring(0, getScore().length())));
 		if(!(getScore()).equals(getGuess().substring(0, getScore().length()))) {
 			this.destroy();
 			this.dispose(world);

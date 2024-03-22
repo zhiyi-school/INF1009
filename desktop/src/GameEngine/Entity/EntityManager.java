@@ -144,8 +144,6 @@ public class EntityManager {
 	public void entityDraw(SpriteBatch batch) {
 		for(PlayableCharacter pc: pcList) {
 			pc.draw(batch);
-			System.out.println(pc.getGuess());
-			System.out.println(pc.getScore());
 		}
 		for(NonPlayableCharacter npc: npcList) {
 			npc.draw(batch);
