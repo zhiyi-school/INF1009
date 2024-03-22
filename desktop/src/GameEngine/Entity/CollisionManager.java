@@ -11,6 +11,8 @@ public class CollisionManager implements ContactListener{
 	public void beginContact(Contact contact) {
 		Fixture fixtureA = contact.getFixtureA();
 	    Fixture fixtureB = contact.getFixtureB();
+	    System.out.println(fixtureA.getUserData());
+	    System.out.println(fixtureB.getUserData());
 	    
 	    // Check for PC and Item collision
 	    if ("PlayableCharacter".equals(fixtureA.getUserData()) && "Weapon".equals(fixtureB.getUserData())) {
@@ -95,7 +97,7 @@ public class CollisionManager implements ContactListener{
 	public boolean equip(NonPlayableCharacter item, World world) {
 		if(((String) item.getFix().getUserData()).contains("equip")) {
 			item.getFix().setUserData("Weapon");
-			item.dispose(world);
+			item.dispose();
 		    item.destroy();
 			return true;
 		}

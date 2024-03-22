@@ -9,11 +9,17 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Align;
 
 import GameEngine.Entity.EntityManager;
 import GameEngine.Entity.NonPlayableCharacter;
 import GameEngine.Entity.PlayableCharacter;
+import GameLayer.batchSingleton;
+import GameLayer.fontSingleton;
+import GameLayer.randomSingleton;
+import GameLayer.shapeSingleton;
+import GameLayer.worldSingleton;
 
 
 public class GameOverScreen extends Scene {
@@ -29,12 +35,17 @@ public class GameOverScreen extends Scene {
 	private float buttonSpacing = 25; 
 	private float totalButtonWidth = 3 * buttonWidth + 2 * buttonSpacing; 
 	private float startX; 
-	private Random rand = new Random();
+	
+	private static Random rand = randomSingleton.getInstance();
+    private static World world = worldSingleton.getInstance();
+    private static SpriteBatch batch = batchSingleton.getInstance();
+    private static BitmapFont font = fontSingleton.getInstance();
+    private static ShapeRenderer shapeRenderer = shapeSingleton.getInstance();
     
     	private float mouseX, mouseY;
 	
-    	public GameOverScreen(SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font, float buttonWidth, float screenWidth, float screenHeight) {
-    		super(batch, shapeRenderer, font, buttonWidth, screenWidth, screenHeight);
+    	public GameOverScreen(float buttonWidth, float screenWidth, float screenHeight) {
+    		super(buttonWidth, screenWidth, screenHeight);
     		setStartX(getScreenWidth()/2);
     	}
     
@@ -93,30 +104,30 @@ public class GameOverScreen extends Scene {
     	}
 
     	public void restartGamePC() {
-	    	PlayableCharacter Player = new PlayableCharacter(screenManager.getWorld(), "PlayableCharacter.png", 10, 50, 0.75f, 3, 5, false, true, Keys.A, Keys.D, Keys.W, Keys.S, "JumpSoundEffect.wav");
+	    	PlayableCharacter Player = new PlayableCharacter("PlayableCharacter.png", 10, 50, 0.75f, 3, 5, false, true, Keys.A, Keys.D, Keys.W, Keys.S, "JumpSoundEffect.wav");
 	    	screenManager.getEntityManager().addPlayableCharacter(Player);
 		screenManager.setCurrentScreen("Game");
 	}
 	
     	public void restartGameNPC() {
-	    	NonPlayableCharacter Enemy = new NonPlayableCharacter(screenManager.getWorld(), "Enemy.png", rand.nextFloat(Gdx.graphics.getWidth()), 
+	    	NonPlayableCharacter Enemy = new NonPlayableCharacter("Enemy.png", rand.nextFloat(Gdx.graphics.getWidth()), 
 	    			rand.nextFloat(Gdx.graphics.getHeight()) + 10, 200, 100, 10, true);
 //	    	NonPlayableCharacter Item = new NonPlayableCharacter(screenManager.getWorld(), "Weapon.png", rand.nextFloat(Gdx.graphics.getWidth()), 
 //	    			rand.nextFloat(Gdx.graphics.getHeight()) + 10, 200, 100, 10, false);
-	    	NonPlayableCharacter Item = new NonPlayableCharacter(screenManager.getWorld(), "Weapon.png", 50, rand.nextFloat(Gdx.graphics.getHeight()), 200, 100, 10, false);
+	    	NonPlayableCharacter Item = new NonPlayableCharacter("Weapon.png", 50, rand.nextFloat(Gdx.graphics.getHeight()), 200, 100, 10, false);
 	    	screenManager.getEntityManager().addNonPlayableCharacter(Enemy);
 	    	screenManager.getEntityManager().addNonPlayableCharacter(Item);
 	    	
-	    	NonPlayableCharacter test0 = new NonPlayableCharacter(screenManager.getWorld(), "letters_img/C.png", 40, 60, 200, 100, 10, false);
+	    	NonPlayableCharacter test0 = new NonPlayableCharacter("letters_img/C.png", 40, 60, 200, 100, 10, false);
 			screenManager.getEntityManager().addNonPlayableCharacter(test0);
 			
-			NonPlayableCharacter test1 = new NonPlayableCharacter(screenManager.getWorld(), "letters_img/A.png", 60, 40, 200, 100, 10, false);
+			NonPlayableCharacter test1 = new NonPlayableCharacter("letters_img/A.png", 60, 40, 200, 100, 10, false);
 			screenManager.getEntityManager().addNonPlayableCharacter(test1);
 			
-			NonPlayableCharacter test2 = new NonPlayableCharacter(screenManager.getWorld(), "letters_img/T.png", 60, 40, 200, 100, 10, false);
+			NonPlayableCharacter test2 = new NonPlayableCharacter("letters_img/T.png", 60, 40, 200, 100, 10, false);
 			screenManager.getEntityManager().addNonPlayableCharacter(test2);
 			
-			NonPlayableCharacter Door = new NonPlayableCharacter(screenManager.getWorld(), "DoorClosed.png", 10, 400, 200, 100, 10, false);
+			NonPlayableCharacter Door = new NonPlayableCharacter("DoorClosed.png", 10, 400, 200, 100, 10, false);
 			screenManager.getEntityManager().addNonPlayableCharacter(Door);
 
 	    	screenManager.setCurrentScreen("Game");
@@ -147,14 +158,16 @@ public class GameOverScreen extends Scene {
 	    }
 		
 	@Override
-	public void render(float delta, SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font) {
+	public void render(float delta) {
 	        Gdx.gl.glClearColor(0, 1, 0, 1);
 	        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	
 	    	displayGameOver();
-            mainMenuButton.render(shapeRenderer, batch, font);
-            startButton.render(shapeRenderer, batch, font);
-	        exitButton.render(shapeRenderer,batch, font);
+	    	if(!getGameOverText().contains("WIN")) {
+	            startButton.render();
+	    	}
+            mainMenuButton.render();
+	        exitButton.render();
         
 	        batch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	        batch.begin();

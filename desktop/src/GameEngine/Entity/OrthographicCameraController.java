@@ -6,11 +6,15 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import GameLayer.batchSingleton;
+import GameLayer.worldSingleton;
+
 public class OrthographicCameraController {
     private OrthographicCamera camera;
     private Viewport viewport;
 	private EntityManager entityManager;
-	private World world;
+	private World world = worldSingleton.getInstance();
+    private SpriteBatch batch = batchSingleton.getInstance();
     private float cameraMinX, cameraMaxX, cameraMinY, cameraMaxY;
 	private static final float MAP_SCALE = 3.0f;
 	
@@ -20,12 +24,11 @@ public class OrthographicCameraController {
 	private float mapFullWidth;
 	private float mapFullHeight;
 
-    public OrthographicCameraController(float viewportWidth, float viewportHeight, World world) {
+    public OrthographicCameraController(float viewportWidth, float viewportHeight) {
         camera = new OrthographicCamera();
         viewport = new FitViewport(viewportWidth, viewportHeight, camera);
         camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
         camera.update();
-        setWorld(world);
     }
     
     // Method to update camera position with boundary checks
@@ -87,7 +90,7 @@ public class OrthographicCameraController {
         camera.update();
     }
     
-    public void camera(SpriteBatch batch) {
+    public void camera() {
 		// Update camera position to follow character and ensures it does not go out of map boundaries
 //    	System.out.println("camera");
 //    	System.out.println(entityManager.getPC("PlayableCharacter"));

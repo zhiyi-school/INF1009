@@ -5,8 +5,15 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.Align;
+
+import GameLayer.batchSingleton;
+import GameLayer.fontSingleton;
+import GameLayer.shapeSingleton;
+import GameLayer.worldSingleton;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 
 public class InstructionsScreen extends Scene {
 	
@@ -22,10 +29,15 @@ public class InstructionsScreen extends Scene {
 	private float totalButtonWidth = 3 * buttonWidth + 2 * buttonSpacing;
 	private float startX;
     
-    	private float mouseX, mouseY;
+	private float mouseX, mouseY;
+	
+    private static World world = worldSingleton.getInstance();
+    private static SpriteBatch batch = batchSingleton.getInstance();
+    private static BitmapFont font = fontSingleton.getInstance();
+    private static ShapeRenderer shapeRenderer = shapeSingleton.getInstance();
     
-    	public InstructionsScreen(SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font, float buttonWidth, float screenWidth, float screenHeight) {
-    		super(batch, shapeRenderer, font, buttonWidth, screenWidth, screenHeight);
+    	public InstructionsScreen( float buttonWidth, float screenWidth, float screenHeight) {
+    		super(buttonWidth, screenWidth, screenHeight);
     		setStartX(getScreenWidth()/2);
     	}
 
@@ -71,7 +83,7 @@ public class InstructionsScreen extends Scene {
     	}
 
     	public void startGame() {
-    		screenManager.getEntityManager().restartGame(screenManager.getWorld(), screenManager.getCamera());
+    		screenManager.getEntityManager().restartGame(screenManager.getCamera());
 		screenManager.setCurrentScreen("Game");
     	}
 
@@ -102,13 +114,13 @@ public class InstructionsScreen extends Scene {
 	}
 	
 	@Override
-	public void render(float delta, SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font) {
+	public void render(float delta) {
 	        Gdx.gl.glClearColor(0, 1, 0, 1);
 	        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	        
-	        startButton.render(shapeRenderer, batch, font);
-	        backButton.render(shapeRenderer, batch, font);
-	        exitButton.render(shapeRenderer, batch, font);
+	        startButton.render();
+	        backButton.render();
+	        exitButton.render();
 	        
 	        batch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	        batch.begin();

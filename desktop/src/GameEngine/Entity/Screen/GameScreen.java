@@ -6,11 +6,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.Input.Keys;
 
 import GameLayer.HUD; // Import HUD class
+import GameLayer.batchSingleton;
+import GameLayer.fontSingleton;
+import GameLayer.shapeSingleton;
+import GameLayer.worldSingleton;
 
 public class GameScreen extends Scene {
 	private final Stage stage;
@@ -25,8 +30,13 @@ public class GameScreen extends Scene {
 
 	private float mouseX, mouseY;
 
-	public GameScreen(Stage stage, SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font, float buttonWidth, float screenWidth, float screenHeight, HUD hud) {
-		super(batch, shapeRenderer, font, buttonWidth, screenWidth, screenHeight);
+    private static World world = worldSingleton.getInstance();
+    private static SpriteBatch batch = batchSingleton.getInstance();
+    private static BitmapFont font = fontSingleton.getInstance();
+    private static ShapeRenderer shapeRenderer = shapeSingleton.getInstance();
+
+	public GameScreen(Stage stage, float buttonWidth, float screenWidth, float screenHeight, HUD hud) {
+		super(buttonWidth, screenWidth, screenHeight);
 		this.stage = stage;
 		this.buttonWidth = buttonWidth;
 		this.screenWidth = screenWidth;
@@ -64,7 +74,7 @@ public class GameScreen extends Scene {
 
 
 	@Override
-	public void render(float delta, SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font) {
+	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 1, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -73,7 +83,7 @@ public class GameScreen extends Scene {
 		// Debug output
 //		System.out.println("HUD visibility: " + hud.isVisible());
 
-		pauseButton.render(shapeRenderer, batch, font);
+		pauseButton.render();
 
 		batch.begin();
 		font.setColor(Color.WHITE);

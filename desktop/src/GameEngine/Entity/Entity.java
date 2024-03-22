@@ -3,12 +3,16 @@ package GameEngine.Entity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+
+import GameLayer.batchSingleton;
+import GameLayer.worldSingleton;
 
 public abstract class Entity{
 	
@@ -21,23 +25,25 @@ public abstract class Entity{
 	
 	private Boolean aiCheck;
 	private String image;
+	
+    private World world = worldSingleton.getInstance();
 
-	protected abstract void dispose(World world);
+	protected abstract void dispose();
 	
 	// Default Constructor
-	public Entity(World world) {
+	public Entity() {
 		setImage("");
 		setTexture("");
 		setAICheck(true);
-		createBody(world, 0, 0);
+		createBody(0, 0);
 	}
 	
 	// Character Constructor
-	public Entity(World world, String textureImage, float posXInput, float posYInput, Boolean aiCheck) {
+	public Entity(String textureImage, float posXInput, float posYInput, Boolean aiCheck) {
 		setImage(textureImage);
 		setTexture(textureImage);
 		setAICheck(aiCheck);
-		createBody(world, posXInput, posYInput);
+		createBody(posXInput, posYInput);
 	}
 	
 	// Map Constructor
@@ -66,7 +72,7 @@ public abstract class Entity{
 	public Fixture getFix() {
 		return fixture;
 	}
-	public void createBody(World world, float posX, float posY) {
+	public void createBody(float posX, float posY) {
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyDef.BodyType.DynamicBody;
 		bodyDef.position.set(posX / 100f, posY / 100f);

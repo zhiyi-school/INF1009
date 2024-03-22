@@ -1,25 +1,31 @@
 package GameEngine.Entity;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+
+import GameLayer.batchSingleton;
+import GameLayer.worldSingleton;
 
 public class NonPlayableCharacter extends Character{
 	
     private float elapsedTime;
     private boolean isMovingRight;
+    private World world = worldSingleton.getInstance();
+    private SpriteBatch batch = batchSingleton.getInstance();
     
 	// Default Constructor
-	public NonPlayableCharacter(World world){
-		super(world, "", 0, 0, 1, 100, 2, false);
+	public NonPlayableCharacter(){
+		super("", 0, 0, 1, 100, 2, false);
 	}
 	
 	// Parameterized Constructor
-	public NonPlayableCharacter(World world, String textureImage, float x, float y, float speed, int lives, float attack, Boolean aiCheck) {
-		super(world, textureImage, x, y, speed, lives, attack, aiCheck);
+	public NonPlayableCharacter(String textureImage, float x, float y, float speed, int lives, float attack, Boolean aiCheck) {
+		super(textureImage, x, y, speed, lives, attack, aiCheck);
 	}
 	
 	// Dispose 
-	public void dispose(World world) {
+	public void dispose() {
 		getTexture().dispose();
 		getBody().destroyFixture(getFix());
 		world.destroyBody(getBody());
