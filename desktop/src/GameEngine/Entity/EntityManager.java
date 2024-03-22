@@ -144,6 +144,8 @@ public class EntityManager {
 	public void entityDraw(SpriteBatch batch) {
 		for(PlayableCharacter pc: pcList) {
 			pc.draw(batch);
+			System.out.println(pc.getGuess());
+			System.out.println(pc.getScore());
 		}
 		for(NonPlayableCharacter npc: npcList) {
 			npc.draw(batch);
@@ -301,7 +303,7 @@ public class EntityManager {
 		}
 		return null;
 	}
-	public int getPCList() {
+	public int getPCListSize() {
 		return pcList.size();
 	}
 	
@@ -311,6 +313,15 @@ public class EntityManager {
 		}else {
 			return getPC("PlayableCharacter").getLives();
 		}
+	}
+	public List<PlayableCharacter> getPCList() {
+		return pcList;
+	}
+	public List<NonPlayableCharacter> getNPCList() {
+		return npcList;
+	}
+	public List<Entity> getEntityList() {
+		return entityList;
 	}
 	
 	// Map

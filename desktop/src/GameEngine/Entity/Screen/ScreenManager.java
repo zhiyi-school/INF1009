@@ -211,7 +211,9 @@ public class ScreenManager {
         	hud.setWorldTimer(300);
             currentScreen = gameScreen;
         } else if (screen instanceof GameOverScreen) {
-        	entityManager.getPC("PlayableCharacter").setGuess(null);
+        	if(entityManager.getPC("PlayableCharacter") != null) {
+            	entityManager.getPC("PlayableCharacter").setGuess(null);
+        	}
             currentScreen = gameOverScreen;
         } else if (screen instanceof InstructionsScreen) {
             currentScreen = instructionsScreen;
@@ -231,14 +233,11 @@ public class ScreenManager {
 
             world.step(Gdx.graphics.getDeltaTime(), 6, 2);
 
-            if (entityManager.getPC("PlayableCharacter") != null && entityManager.getPCLives() > 0) {
+            if (entityManager.getPC("PlayableCharacter") != null && entityManager.getPCLives() > 0 
+            		&& !entityManager.getPC("PlayableCharacter").checkWin(world, entityManager.getPCList(), entityManager.getPC("PlayableCharacter"))) {
                 orthographicCameraController.camera(batch);
             } else {
                 setCurrentScreen("GameOver");
-                update();
-            }
-            if(entityManager.getPC("PlayableCharacter").checkWin()) {
-            	setCurrentScreen("GameOver");
                 update();
             }
         }

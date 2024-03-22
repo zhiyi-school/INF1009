@@ -3,6 +3,7 @@ package GameEngine.Entity;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import com.badlogic.gdx.Gdx;
@@ -126,10 +127,17 @@ public class PlayableCharacter extends Character{
 	public String getScore() {
 		return score;
 	}
-	public boolean checkWin() {
-		if(getScore().equals(getGuess())) {
+	public boolean checkWin(World world, List<PlayableCharacter> pcList, PlayableCharacter pc) {
+		System.out.println((getScore()).equals(getGuess().substring(0, getScore().length())));
+		if(!(getScore()).equals(getGuess().substring(0, getScore().length()))) {
+			pc.destroy();
+			pc.dispose(world);
+			pcList.remove(pc);
 			return true;
-		}else {
+		}else if(getScore().equals(getGuess())){
+			return true;
+		}
+		else {
 			return false;
 		}
 	}
