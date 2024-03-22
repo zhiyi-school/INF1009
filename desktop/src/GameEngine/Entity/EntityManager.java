@@ -61,22 +61,9 @@ public class EntityManager {
 		Door = new NonPlayableCharacter(world, "DoorClosed.png", 10, 400, 200, 100, 10, false);
 		npcList.add(Door);
 		
-		float worldWidth = orthographicCameraController.getMapFullWidth();
-		float worldHeight = orthographicCameraController.getMapFullHeight();
-		
-		// Handle random Spike spawns
-		boolean validSpawnPoint = false;
-		float spikeX = 0;
-		float spikeY = 0;
-
-		while (!validSpawnPoint) {
-			spikeX = rand.nextFloat() * worldWidth;
-			spikeY = rand.nextFloat() * worldHeight;
-		    validSpawnPoint = gameMap.isValidSpawnPoint(spikeX, spikeY);
-		}
-		
-		Spike = new NonPlayableCharacter(world, "Spike.png", spikeX, spikeY, 0, 100, 10, false);
+		Spike = new NonPlayableCharacter(world, "Spike.png", rand.nextFloat(Gdx.graphics.getWidth()), rand.nextFloat(Gdx.graphics.getHeight()), 0, 100, 10, false);
 		npcList.add(Spike);
+		
 		setCollision(world);
 		
 		// Create physics static bodies by iterating over all map objects
@@ -117,22 +104,8 @@ public class EntityManager {
 		
 		Door = new NonPlayableCharacter(world, "DoorClosed.png", 10, 400, 200, 100, 10, false);
 		npcList.add(Door);
-		
-		float worldWidth = orthographicCameraController.getMapFullWidth();
-		float worldHeight = orthographicCameraController.getMapFullHeight();
-		
-		// Handle random Spike spawns
-		boolean validSpawnPoint = false;
-		float spikeX = 0;
-		float spikeY = 0;
 
-		while (!validSpawnPoint) {
-			spikeX = rand.nextFloat() * worldWidth;
-		    spikeY = rand.nextFloat() * worldHeight;
-		    validSpawnPoint = gameMap.isValidSpawnPoint(spikeX, spikeY);
-		}
-		
-		Spike = new NonPlayableCharacter(world, "Spike.png", spikeX, spikeY, 0, 100, 10, false);
+		Spike = new NonPlayableCharacter(world, "Spike.png", rand.nextFloat(Gdx.graphics.getWidth()), rand.nextFloat(Gdx.graphics.getHeight()), 0, 100, 10, false);
 		npcList.add(Spike);
 	}
 	
