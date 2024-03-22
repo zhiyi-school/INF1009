@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 import GameLayer.batchSingleton;
+import GameLayer.orthographicCameraControllerSingleton;
 import GameLayer.worldSingleton;
 
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -28,16 +29,15 @@ public class Map extends Entity {
 	
 	private TiledMap map;
     private OrthogonalTiledMapRenderer maprenderer;
-    private OrthographicCameraController orthographicCameraController;
     
     private World world = worldSingleton.getInstance();
     private SpriteBatch batch = batchSingleton.getInstance();
+	private static OrthographicCameraController orthographicCameraController = orthographicCameraControllerSingleton.getInstance();
 
-    public Map(String mapPath, float mapscaleInput, OrthographicCameraController orthographicCameraController) {
+    public Map(String mapPath, float mapscaleInput) {
         super(mapPath);
         this.map = new TmxMapLoader().load(mapPath);
         this.maprenderer = new OrthogonalTiledMapRenderer(map, mapscaleInput / 100f);
-        this.orthographicCameraController = orthographicCameraController;
     }
     
     // Create physics static bodies by iterating over all map objects

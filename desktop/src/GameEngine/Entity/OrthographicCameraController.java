@@ -7,14 +7,12 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import GameLayer.batchSingleton;
+import GameLayer.entityManagerSingleton;
 import GameLayer.worldSingleton;
 
 public class OrthographicCameraController {
     private OrthographicCamera camera;
     private Viewport viewport;
-	private EntityManager entityManager;
-	private World world = worldSingleton.getInstance();
-    private SpriteBatch batch = batchSingleton.getInstance();
     private float cameraMinX, cameraMaxX, cameraMinY, cameraMaxY;
 	private static final float MAP_SCALE = 3.0f;
 	
@@ -23,6 +21,10 @@ public class OrthographicCameraController {
 	private float tileSize;
 	private float mapFullWidth;
 	private float mapFullHeight;
+
+	private static World world = worldSingleton.getInstance();
+    private static SpriteBatch batch = batchSingleton.getInstance();
+    private static EntityManager entityManager;
 
     public OrthographicCameraController(float viewportWidth, float viewportHeight) {
         camera = new OrthographicCamera();
@@ -54,12 +56,6 @@ public class OrthographicCameraController {
     }
     public EntityManager getEntityManager() {
     	return entityManager;
-    }
-    public void setWorld(World worldInput){
-    	world = worldInput;
-    }
-    public World getWorld() {
-    	return world;
     }
     
     // Constrain camera to map boundaries

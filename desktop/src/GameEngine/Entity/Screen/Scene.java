@@ -47,6 +47,4 @@ public abstract class Scene implements Screen{
 	public abstract void resume ();
 	public abstract void hide ();
 	public abstract void dispose ();
-
-	public abstract void setScreenManager(ScreenManager screenManagerInput);
 }

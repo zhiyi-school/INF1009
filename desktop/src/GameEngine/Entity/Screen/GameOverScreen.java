@@ -16,16 +16,15 @@ import GameEngine.Entity.EntityManager;
 import GameEngine.Entity.NonPlayableCharacter;
 import GameEngine.Entity.PlayableCharacter;
 import GameLayer.batchSingleton;
+import GameLayer.entityManagerSingleton;
 import GameLayer.fontSingleton;
 import GameLayer.randomSingleton;
+import GameLayer.screenManagerSingleton;
 import GameLayer.shapeSingleton;
 import GameLayer.worldSingleton;
 
 
 public class GameOverScreen extends Scene {
-	private ScreenManager screenManager;
-	private EntityManager entityManager;
-	
 	private String gameOverText;
 	private Button startButton;
 	private Button mainMenuButton;
@@ -41,12 +40,17 @@ public class GameOverScreen extends Scene {
     private static SpriteBatch batch = batchSingleton.getInstance();
     private static BitmapFont font = fontSingleton.getInstance();
     private static ShapeRenderer shapeRenderer = shapeSingleton.getInstance();
+    private static EntityManager entityManager = entityManagerSingleton.getInstance();
+    private static ScreenManager screenManager = screenManagerSingleton.getInstance();
     
     	private float mouseX, mouseY;
 	
     	public GameOverScreen(float buttonWidth, float screenWidth, float screenHeight) {
     		super(buttonWidth, screenWidth, screenHeight);
     		setStartX(getScreenWidth()/2);
+    	}
+    	public void setScreenManager(ScreenManager screenManagerInput) {
+    		screenManager = screenManagerInput;
     	}
     
 	public String getScreen() {
@@ -81,17 +85,9 @@ public class GameOverScreen extends Scene {
     	public void setStartX(float screenWidth) {
     		startX = (screenWidth - totalButtonWidth) / 2;
     	}
-    
-    	public void setEntityManager(EntityManager entityManagerInput) {
-    		entityManager = entityManagerInput;
-    	}
-    
-	public EntityManager getEntityManager() {
-    		return entityManager;
-    	}
 	
     	public void displayGameOver() {
-	    	if (screenManager.getEntityManager().getPC("PlayableCharacter") != null) {
+	    	if (entityManager.getPC("PlayableCharacter") != null) {
 	        	setGameOverText("WIN! \n THANKS FOR PLAYING");
 		}
 		else {
@@ -105,7 +101,7 @@ public class GameOverScreen extends Scene {
 
     	public void restartGamePC() {
 	    	PlayableCharacter Player = new PlayableCharacter("PlayableCharacter.png", 10, 50, 0.75f, 3, 5, false, true, Keys.A, Keys.D, Keys.W, Keys.S, "JumpSoundEffect.wav");
-	    	screenManager.getEntityManager().addPlayableCharacter(Player);
+	    	entityManager.addPlayableCharacter(Player);
 		screenManager.setCurrentScreen("Game");
 	}
 	
@@ -115,20 +111,20 @@ public class GameOverScreen extends Scene {
 //	    	NonPlayableCharacter Item = new NonPlayableCharacter(screenManager.getWorld(), "Weapon.png", rand.nextFloat(Gdx.graphics.getWidth()), 
 //	    			rand.nextFloat(Gdx.graphics.getHeight()) + 10, 200, 100, 10, false);
 	    	NonPlayableCharacter Item = new NonPlayableCharacter("Weapon.png", 50, rand.nextFloat(Gdx.graphics.getHeight()), 200, 100, 10, false);
-	    	screenManager.getEntityManager().addNonPlayableCharacter(Enemy);
-	    	screenManager.getEntityManager().addNonPlayableCharacter(Item);
+	    	entityManager.addNonPlayableCharacter(Enemy);
+	    	entityManager.addNonPlayableCharacter(Item);
 	    	
 	    	NonPlayableCharacter test0 = new NonPlayableCharacter("letters_img/C.png", 40, 60, 200, 100, 10, false);
-			screenManager.getEntityManager().addNonPlayableCharacter(test0);
+			entityManager.addNonPlayableCharacter(test0);
 			
 			NonPlayableCharacter test1 = new NonPlayableCharacter("letters_img/A.png", 60, 40, 200, 100, 10, false);
-			screenManager.getEntityManager().addNonPlayableCharacter(test1);
+			entityManager.addNonPlayableCharacter(test1);
 			
 			NonPlayableCharacter test2 = new NonPlayableCharacter("letters_img/T.png", 60, 40, 200, 100, 10, false);
-			screenManager.getEntityManager().addNonPlayableCharacter(test2);
+			entityManager.addNonPlayableCharacter(test2);
 			
 			NonPlayableCharacter Door = new NonPlayableCharacter("DoorClosed.png", 10, 400, 200, 100, 10, false);
-			screenManager.getEntityManager().addNonPlayableCharacter(Door);
+			entityManager.addNonPlayableCharacter(Door);
 
 	    	screenManager.setCurrentScreen("Game");
     	}
@@ -191,7 +187,7 @@ public class GameOverScreen extends Scene {
 		else if (startButton.hover(mouseX, mouseY)==true) {
 	        	startButton.setColour(Color.YELLOW);
 	        	if (Gdx.input.justTouched()){
-	        		if (screenManager.getEntityManager().getPC("PlayableCharacter") != null) {
+	        		if (entityManager.getPC("PlayableCharacter") != null) {
 	        			restartGameNPC();
 	        		}else {
 	        			restartGamePC();
@@ -210,10 +206,6 @@ public class GameOverScreen extends Scene {
 	        	exitButton.setColour(Color.RED);
 	        }
 	}
-		
-	public void setScreenManager(ScreenManager screenManagerInput) {
-    		screenManager = screenManagerInput;
-    	}
 	
 	@Override
 	public void resize(int width, int height) {

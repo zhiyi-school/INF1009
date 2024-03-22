@@ -11,8 +11,8 @@ public class CollisionManager implements ContactListener{
 	public void beginContact(Contact contact) {
 		Fixture fixtureA = contact.getFixtureA();
 	    Fixture fixtureB = contact.getFixtureB();
-	    System.out.println(fixtureA.getUserData());
-	    System.out.println(fixtureB.getUserData());
+//	    System.out.println(fixtureA.getUserData());
+//	    System.out.println(fixtureB.getUserData());
 	    
 	    // Check for PC and Item collision
 	    if ("PlayableCharacter".equals(fixtureA.getUserData()) && "Weapon".equals(fixtureB.getUserData())) {

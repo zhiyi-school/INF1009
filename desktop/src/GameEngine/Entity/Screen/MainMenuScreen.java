@@ -6,8 +6,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.Align;
 
+import GameEngine.Entity.EntityManager;
 import GameLayer.batchSingleton;
+import GameLayer.entityManagerSingleton;
 import GameLayer.fontSingleton;
+import GameLayer.screenManagerSingleton;
 import GameLayer.shapeSingleton;
 import GameLayer.worldSingleton;
 
@@ -17,8 +20,6 @@ import com.badlogic.gdx.physics.box2d.World;
 
 
 public class MainMenuScreen extends Scene {
-	private ScreenManager screenManager;
-	
     	private float buttonWidth; 
     	private float buttonSpacing = 25;
     	private float totalButtonWidth = 3 * buttonWidth + 2 * buttonSpacing; 
@@ -34,10 +35,16 @@ public class MainMenuScreen extends Scene {
         private static SpriteBatch batch = batchSingleton.getInstance();
         private static BitmapFont font = fontSingleton.getInstance();
         private static ShapeRenderer shapeRenderer = shapeSingleton.getInstance();
+        private static EntityManager entityManager = entityManagerSingleton.getInstance();
+        private static ScreenManager screenManager = screenManagerSingleton.getInstance();
         
     	public MainMenuScreen(float buttonWidth, float screenWidth, float screenHeight) {
     		super(buttonWidth, screenWidth, screenHeight);
     		setStartX(getScreenWidth()/2);
+            System.out.println("here" + screenManager);
+    	}
+    	public void setScreenManager(ScreenManager screenManagerInput) {
+    		screenManager = screenManagerInput;
     	}
     
     	public String getScreen() {
@@ -54,7 +61,7 @@ public class MainMenuScreen extends Scene {
     	}
     
     	public void startGame() {
-    		screenManager.getEntityManager().restartGame(screenManager.getCamera());
+    		entityManager.restartGame();
 		screenManager.setCurrentScreen("Game");
     	}
     
@@ -130,10 +137,6 @@ public class MainMenuScreen extends Scene {
 	        	exitButton.setColour(Color.RED);
 	        }
 	    }
-    
-    	public void setScreenManager(ScreenManager screenManagerInput) {
-    		screenManager = screenManagerInput;
-    	}
     
     	@Override
     	public void dispose() {

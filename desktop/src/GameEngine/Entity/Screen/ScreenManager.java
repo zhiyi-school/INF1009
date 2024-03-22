@@ -5,7 +5,9 @@ import java.util.Random;
 
 import GameLayer.HUD;
 import GameLayer.batchSingleton;
+import GameLayer.entityManagerSingleton;
 import GameLayer.fontSingleton;
+import GameLayer.orthographicCameraControllerSingleton;
 import GameLayer.randomSingleton;
 import GameLayer.shapeSingleton;
 import GameLayer.worldSingleton;
@@ -36,24 +38,22 @@ public class ScreenManager {
     private GameOverScreen gameOverScreen;
     private Scene currentScreen;
     
-    private EntityManager entityManager;
-    private OrthographicCameraController orthographicCameraController;
-    
     private static World world = worldSingleton.getInstance();
     private static SpriteBatch batch = batchSingleton.getInstance();
 	private static Random rand = randomSingleton.getInstance();
     private static BitmapFont font = fontSingleton.getInstance();
     private static ShapeRenderer shapeRenderer = shapeSingleton.getInstance();
+	private static EntityManager entityManager = entityManagerSingleton.getInstance();
+	private static OrthographicCameraController orthographicCameraController = orthographicCameraControllerSingleton.getInstance();
     
     private Music backgroundMusic;
     private ArrayList<Scene> screensList;
 
     // Create a constructor
-    public ScreenManager(EntityManager entityManager, OrthographicCameraController orthographicCameraController) {
-    	setEntityManager(entityManager);
-        setWorld(world);
-        setCamera(orthographicCameraController);
-        
+    public ScreenManager() {        
+		// Calculate camera boundaries and set them in OrthographicCameraController
+		orthographicCameraController.setCameraBoundaries();
+		
         hud = new HUD(new Stage(new ScreenViewport()), 300, entityManager.getPCLives()); // Create HUD instance
     	stage = hud.getStage();
 
@@ -149,30 +149,6 @@ public class ScreenManager {
         gameScreen.setScreenManager(screenManagerInput);
         pauseScreen.setScreenManager(screenManagerInput);
         gameOverScreen.setScreenManager(screenManagerInput);
-    }
-
-    public void setEntityManager(EntityManager entityManagerInput) {
-        entityManager = entityManagerInput;
-    }
-
-    public EntityManager getEntityManager() {
-        return entityManager;
-    }
-
-    public void setCamera(OrthographicCameraController orthographicCameraControllerInput) {
-        orthographicCameraController = orthographicCameraControllerInput;
-    }
-
-    public OrthographicCameraController getCamera() {
-        return orthographicCameraController;
-    }
-
-    public void setWorld(World worldInput) {
-        world = worldInput;
-    }
-
-    public World getWorld() {
-        return world;
     }
     public HUD getHUD() {
     	return hud;

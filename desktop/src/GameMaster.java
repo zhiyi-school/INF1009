@@ -3,14 +3,20 @@ import com.badlogic.gdx.Gdx;
 import GameEngine.Entity.EntityManager;
 import GameEngine.Entity.OrthographicCameraController;
 import GameEngine.Entity.Screen.ScreenManager;
+import GameLayer.entityManagerSingleton;
+import GameLayer.orthographicCameraControllerSingleton;
+import GameLayer.screenManagerSingleton;
+
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class GameMaster extends ApplicationAdapter {
 	private EntityManager entityManager;
-	private Stage stage;// Add stage variable
+	
+	// Add stage variable
+	private Stage stage;
 
 	// For Viewport and Camera
-	private OrthographicCameraController orthographicCameraController;
+	private static OrthographicCameraController orthographicCameraController;
 	private ScreenManager screenManager;
 
 	// Constant variable for enlarging objects
@@ -19,16 +25,12 @@ public class GameMaster extends ApplicationAdapter {
 	@Override
 	public void create() {
 		// Create Viewport and Camera
-		orthographicCameraController = new OrthographicCameraController(Gdx.graphics.getWidth() / 100f, Gdx.graphics.getHeight() / 100f);
-		entityManager = new EntityManager(orthographicCameraController);
+		orthographicCameraController = orthographicCameraControllerSingleton.getInstance();
+		entityManager = entityManagerSingleton.getInstance();
 		orthographicCameraController.setEntityManager(entityManager);
 
-		// Calculate camera boundaries and set them in OrthographicCameraController
-		orthographicCameraController.setCameraBoundaries();
-
 		Gdx.input.setInputProcessor(stage);
-		screenManager = new ScreenManager(entityManager, orthographicCameraController);
-
+		screenManager = screenManagerSingleton.getInstance();
 
 	}
 

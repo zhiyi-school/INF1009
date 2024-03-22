@@ -9,13 +9,16 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Align;
 
+import GameEngine.Entity.EntityManager;
 import GameLayer.batchSingleton;
+import GameLayer.entityManagerSingleton;
 import GameLayer.fontSingleton;
+import GameLayer.screenManagerSingleton;
 import GameLayer.worldSingleton;
 
 
 public class PauseScreen extends Scene {
-	private ScreenManager screenManager;
+    private ScreenManager screenManager;
 	private Scene gameScreen;
 	
 	private String pauseText;
@@ -33,6 +36,7 @@ public class PauseScreen extends Scene {
     private static World world = worldSingleton.getInstance();
     private static SpriteBatch batch = batchSingleton.getInstance();
     private static BitmapFont font = fontSingleton.getInstance();
+    private static EntityManager entityManager = entityManagerSingleton.getInstance();
     
     public PauseScreen(ScreenManager screenManager, Scene screen, float buttonWidth, float screenWidth, float screenHeight) {
     	super(buttonWidth, screenWidth, screenHeight);
@@ -44,6 +48,10 @@ public class PauseScreen extends Scene {
             // Handle the case where screen is not an instance of GameScreen
         }
     }
+    
+    public void setScreenManager(ScreenManager screenManagerInput) {
+		screenManager = screenManagerInput;
+	}
     
     	public String getScreen() {
 		String screen = "Pause";
@@ -87,7 +95,7 @@ public class PauseScreen extends Scene {
     	}
     
     	public void restartGame() {
-    		screenManager.getEntityManager().restartGame(screenManager.getCamera());
+    		entityManager.restartGame();
     		screenManager.switchTo(gameScreen);
     	}
 
@@ -165,10 +173,6 @@ public class PauseScreen extends Scene {
 	        	exitButton.setColour(Color.RED);
 	        }
 	}
-    
-    	public void setScreenManager(ScreenManager screenManagerInput) {
-    		screenManager = screenManagerInput;
-    	}
 
     	@Override
     	public void resize(int width, int height) {

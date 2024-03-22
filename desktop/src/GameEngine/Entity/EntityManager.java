@@ -9,6 +9,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 
+import GameLayer.orthographicCameraControllerSingleton;
 import GameLayer.randomSingleton;
 import GameLayer.worldSingleton;
 
@@ -35,17 +36,18 @@ public class EntityManager {
 	private int count = 0;
 	private static Random rand = randomSingleton.getInstance();
 	private static World world = worldSingleton.getInstance();
+	private static OrthographicCameraController orthographicCameraController = orthographicCameraControllerSingleton.getInstance();
 
 	// Constant variable for enlarging objects
 	private static final float MAP_SCALE = 3.0f;
 	
-	public EntityManager(OrthographicCameraController orthographicCameraController) {
+	public EntityManager() {
 
 		entityList = new ArrayList<Entity>();
 		pcList = new ArrayList<PlayableCharacter>();
 		npcList = new ArrayList<NonPlayableCharacter>();
 		
-		gameMap = new Map("gameMap2.tmx", MAP_SCALE, orthographicCameraController);
+		gameMap = new Map("gameMap2.tmx", MAP_SCALE);
     	entityList.add(gameMap);
     	
 		// Creating Entities. Add them to ArrayList
@@ -75,7 +77,7 @@ public class EntityManager {
 		getMap().mapObjects();	
 	}
 	
-	public void restartGame(OrthographicCameraController orthographicCameraController) {
+	public void restartGame() {
 		if(pcList.size() > 0) {
 			for(PlayableCharacter pc: pcList) {
 				pc.disposeSoundEffect();
