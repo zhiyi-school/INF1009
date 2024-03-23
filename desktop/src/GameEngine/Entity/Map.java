@@ -1,15 +1,19 @@
 package GameEngine.Entity;
 
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+
+import GameLayer.batchSingleton;
+import GameLayer.orthographicCameraControllerSingleton;
+import GameLayer.worldSingleton;
+
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -25,17 +29,19 @@ public class Map extends Entity {
 	
 	private TiledMap map;
     private OrthogonalTiledMapRenderer maprenderer;
-    private OrthographicCameraController orthographicCameraController;
+    
+    private World world = worldSingleton.getInstance();
+    private SpriteBatch batch = batchSingleton.getInstance();
+	private static OrthographicCameraController orthographicCameraController = orthographicCameraControllerSingleton.getInstance();
 
-    public Map(String mapPath, float mapscaleInput, OrthographicCameraController orthographicCameraController) {
+    public Map(String mapPath, float mapscaleInput) {
         super(mapPath);
         this.map = new TmxMapLoader().load(mapPath);
         this.maprenderer = new OrthogonalTiledMapRenderer(map, mapscaleInput / 100f);
-        this.orthographicCameraController = orthographicCameraController;
     }
     
     // Create physics static bodies by iterating over all map objects
-    public void mapObjects(World b2dworld) {
+    public void mapObjects() {
     	bodyDef = new BodyDef();
         shape = new PolygonShape();
         fixtureDef = new FixtureDef();
@@ -46,7 +52,7 @@ public class Map extends Entity {
             bodyDef.type = BodyType.StaticBody;
             bodyDef.position.set((rect.x + rect.width / 2) / 100f, (rect.y + rect.height / 2) / 100f);
 
-            body = b2dworld.createBody(bodyDef);
+            body = world.createBody(bodyDef);
 
             shape.setAsBox(rect.width / 200f, rect.height / 200f);
             fixtureDef.shape = shape;
@@ -87,25 +93,8 @@ public class Map extends Entity {
         return map;
     }
     
-    public boolean isValidSpawnPoint(float x, float y) {
-        // Replace "CorrectTileLayerName" with the actual name of your tile layer.
-        TiledMapTileLayer tileLayer = (TiledMapTileLayer) map.getLayers().get(1);
-        
-        if (tileLayer == null) {
-            System.err.println("Tile layer not found.");
-            return false; // Exit if the correct tile layer isn't found to prevent endless loop.
-        }
-
-        int tileX = (int) (x / getTileSize());
-        int tileY = (int) (y / getTileSize());
-
-        TiledMapTileLayer.Cell cell = tileLayer.getCell(tileX, tileY);
-        return cell == null;
-    }
-
-    
     // Dispose
-    public void dispose(World world) {
+    public void dispose() {
         map.dispose();
         maprenderer.dispose();
     }

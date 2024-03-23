@@ -5,13 +5,21 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.Align;
+
+import GameEngine.Entity.EntityManager;
+import GameLayer.batchSingleton;
+import GameLayer.entityManagerSingleton;
+import GameLayer.fontSingleton;
+import GameLayer.screenManagerSingleton;
+import GameLayer.shapeSingleton;
+import GameLayer.worldSingleton;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 
 
 public class MainMenuScreen extends Scene {
-	private ScreenManager screenManager;
-	
     	private float buttonWidth; 
     	private float buttonSpacing = 25;
     	private float totalButtonWidth = 3 * buttonWidth + 2 * buttonSpacing; 
@@ -22,10 +30,21 @@ public class MainMenuScreen extends Scene {
     	private Button exitButton;	
     
     	private float mouseX, mouseY;
-    
-    	public MainMenuScreen(SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font, float buttonWidth, float screenWidth, float screenHeight) {
-    		super(batch, shapeRenderer, font, buttonWidth, screenWidth, screenHeight);
+    	
+    	private static World world = worldSingleton.getInstance();
+        private static SpriteBatch batch = batchSingleton.getInstance();
+        private static BitmapFont font = fontSingleton.getInstance();
+        private static ShapeRenderer shapeRenderer = shapeSingleton.getInstance();
+        private static EntityManager entityManager = entityManagerSingleton.getInstance();
+        private static ScreenManager screenManager = screenManagerSingleton.getInstance();
+        
+    	public MainMenuScreen(float buttonWidth, float screenWidth, float screenHeight) {
+    		super(buttonWidth, screenWidth, screenHeight);
     		setStartX(getScreenWidth()/2);
+            System.out.println("here" + screenManager);
+    	}
+    	public void setScreenManager(ScreenManager screenManagerInput) {
+    		screenManager = screenManagerInput;
     	}
     
     	public String getScreen() {
@@ -42,8 +61,7 @@ public class MainMenuScreen extends Scene {
     	}
     
     	public void startGame() {
-    		screenManager.getEntityManager().restartGame(screenManager.getWorld(), screenManager.getCamera());
-    		screenManager.getEntityManager().setNum();
+    		entityManager.restartGame();
 		screenManager.setCurrentScreen("Game");
     	}
     
@@ -67,15 +85,15 @@ public class MainMenuScreen extends Scene {
 	    	exitButton.setColour(Color.RED);
     	}
 
-    	public void render(float delta, SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font) {
+    	public void render(float delta) {
 		// Clear screen and set to green background
 	        Gdx.gl.glClearColor(0, 1, 0, 1);
 	        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	
 		// Render the buttons onto the screen
-	        startButton.render(shapeRenderer,batch, font);
-	        instructionsButton.render(shapeRenderer,batch, font);
-	        exitButton.render(shapeRenderer, batch, font);
+	        startButton.render();
+	        instructionsButton.render();
+	        exitButton.render();
 	        
 	        batch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	        batch.begin();
@@ -119,10 +137,6 @@ public class MainMenuScreen extends Scene {
 	        	exitButton.setColour(Color.RED);
 	        }
 	    }
-    
-    	public void setScreenManager(ScreenManager screenManagerInput) {
-    		screenManager = screenManagerInput;
-    	}
     
     	@Override
     	public void dispose() {

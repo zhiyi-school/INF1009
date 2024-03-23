@@ -6,11 +6,19 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Align;
+
+import GameEngine.Entity.EntityManager;
+import GameLayer.batchSingleton;
+import GameLayer.entityManagerSingleton;
+import GameLayer.fontSingleton;
+import GameLayer.screenManagerSingleton;
+import GameLayer.worldSingleton;
 
 
 public class PauseScreen extends Scene {
-	private ScreenManager screenManager;
+    private ScreenManager screenManager;
 	private Scene gameScreen;
 	
 	private String pauseText;
@@ -23,10 +31,15 @@ public class PauseScreen extends Scene {
 	private float totalButtonWidth = 3 * buttonWidth + 2 * buttonSpacing; 
 	private float startX; 
 	
-    	private float mouseX, mouseY;
+	private float mouseX, mouseY;
+
+    private static World world = worldSingleton.getInstance();
+    private static SpriteBatch batch = batchSingleton.getInstance();
+    private static BitmapFont font = fontSingleton.getInstance();
+    private static EntityManager entityManager = entityManagerSingleton.getInstance();
     
-    public PauseScreen(ScreenManager screenManager, Scene screen, SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font, float buttonWidth, float screenWidth, float screenHeight) {
-    	super(batch, shapeRenderer, font, buttonWidth, screenWidth, screenHeight);
+    public PauseScreen(ScreenManager screenManager, Scene screen, float buttonWidth, float screenWidth, float screenHeight) {
+    	super(buttonWidth, screenWidth, screenHeight);
     	setStartX(getScreenWidth()/2);
         this.screenManager = screenManager;
         if (screen instanceof GameScreen) {
@@ -35,6 +48,10 @@ public class PauseScreen extends Scene {
             // Handle the case where screen is not an instance of GameScreen
         }
     }
+    
+    public void setScreenManager(ScreenManager screenManagerInput) {
+		screenManager = screenManagerInput;
+	}
     
     	public String getScreen() {
 		String screen = "Pause";
@@ -78,7 +95,7 @@ public class PauseScreen extends Scene {
     	}
     
     	public void restartGame() {
-    		screenManager.getEntityManager().restartGame(screenManager.getWorld(), screenManager.getCamera());
+    		entityManager.restartGame();
     		screenManager.switchTo(gameScreen);
     	}
 
@@ -110,13 +127,13 @@ public class PauseScreen extends Scene {
 	    }
 
     	@Override
-    	public void render(float delta, SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font) {
+    	public void render(float delta) {
 	        Gdx.gl.glClearColor(0, 1, 0, 1);
 	        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	        
-	        resumeButton.render(shapeRenderer,batch, font);
-	        restartButton.render(shapeRenderer,batch, font);
-	        exitButton.render(shapeRenderer,batch, font);
+	        resumeButton.render();
+	        restartButton.render();
+	        exitButton.render();
 	        
 	        batch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	        batch.begin();
@@ -156,10 +173,6 @@ public class PauseScreen extends Scene {
 	        	exitButton.setColour(Color.RED);
 	        }
 	}
-    
-    	public void setScreenManager(ScreenManager screenManagerInput) {
-    		screenManager = screenManagerInput;
-    	}
 
     	@Override
     	public void resize(int width, int height) {

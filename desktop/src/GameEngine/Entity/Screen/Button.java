@@ -4,6 +4,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Align;
+
+import GameLayer.batchSingleton;
+import GameLayer.fontSingleton;
+import GameLayer.shapeSingleton;
+
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -12,6 +17,10 @@ public class Button {
 	 private Rectangle bounds;
 	 private String text;
 	 private Color color;
+	 
+	 private static BitmapFont font = fontSingleton.getInstance();
+	 private static SpriteBatch batch = batchSingleton.getInstance();
+	    private static ShapeRenderer shapeRenderer = shapeSingleton.getInstance();
 	 
 	 public Button(float x, float y, float width, float height) {
 		 this.bounds = new Rectangle(x, y, width, height);
@@ -29,7 +38,7 @@ public class Button {
 		 return bounds.contains(touchX, touchY);
 	 }
 	
-	 public void render(ShapeRenderer shapeRenderer, SpriteBatch batch, BitmapFont font) {
+	 public void render() {
 		 // Draw the button rectangle
 		 shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 		 shapeRenderer.setColor(color);

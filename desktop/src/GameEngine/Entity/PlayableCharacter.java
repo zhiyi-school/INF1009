@@ -3,6 +3,7 @@ package GameEngine.Entity;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import com.badlogic.gdx.Gdx;
@@ -11,8 +12,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
+import GameLayer.batchSingleton;
+import GameLayer.worldSingleton;
+
 public class PlayableCharacter extends Character{
 	private Sound soundEffect;
+	private Sound wordSound;
     private boolean attackCheck;
 	private int rightKey;
 	private int leftKey;
@@ -22,15 +27,19 @@ public class PlayableCharacter extends Character{
 	private float defaultY;
 	private ArrayList<String> words;
 	private String guess;
-	
+	private String score;
+
+    private World world = worldSingleton.getInstance();
+    private SpriteBatch batch = batchSingleton.getInstance();
+    
 	// Default Constructor
-	public PlayableCharacter(World world){
-		super(world, "", 0, 0, 0, 100, 1, false, true);
+	public PlayableCharacter(){
+		super("", 0, 0, 0, 100, 1, false, true);
 	}
 	
 	// Parameterized Constructor
-	public PlayableCharacter(World world, String textureImage, float x, float y, float speed, int lives, float attack, boolean die, Boolean aiCheck, int leftKey, int rightKey, int jumpKey, int downKey, String soundEffect) {
-		super(world, textureImage, x, y, speed, lives, attack, die, aiCheck);
+	public PlayableCharacter(String textureImage, float x, float y, float speed, int lives, float attack, boolean die, Boolean aiCheck, int leftKey, int rightKey, int jumpKey, int downKey, String soundEffect) {
+		super(textureImage, x, y, speed, lives, attack, die, aiCheck);
 		words = new ArrayList<String>();
 		setAttackCheck(false);
 		setLeftKey(leftKey);
@@ -38,6 +47,8 @@ public class PlayableCharacter extends Character{
 		setJumpKey(jumpKey);
 		setDownKey(downKey);
 		setSoundEffect(soundEffect);
+		setGuess(null);
+		setScore("");
 		setDefaultX(getBody().getPosition().x);
 		setDefaultY(getBody().getPosition().y);
 		readFile();
@@ -94,24 +105,55 @@ public class PlayableCharacter extends Character{
 	public void setAttackCheck(boolean attackInput) {
 		attackCheck = attackInput;
 	}
-	private String getGuess() {
+	public String getGuess() {
 		return guess;
 	}
-	private void setGuess(String guessInput) {
+	public void setGuess(String guessInput) {
 		guess = guessInput;
 	}
 	public String getWord(int i) {
 		return words.get(i);
 	}
+	public int getWordSize() {
+		return words.size();	
+	}
+	public void setWordSound(String wordInput) {
+		wordSound = Gdx.audio.newSound(Gdx.files.internal("words/" + wordInput + ".mp3"));
+	}
+	public Sound getWordSound() {
+		return wordSound;
+	}
+	public void setScore(String scoreInput) {
+		if(score == null) {
+			score = scoreInput;
+		}else {
+			score += scoreInput;
+		}
+	}
+	public String getScore() {
+		return score;
+	}
+	public boolean checkWin(List<PlayableCharacter> pcList) {
+		if(!(getScore()).equals(getGuess().substring(0, getScore().length()))) {
+			this.destroy();
+			this.dispose();
+			pcList.remove(this);
+			return true;
+		}else if(getScore().equals(getGuess())){
+			return true;
+		}else {
+			return false;
+		}
+	}
 
-	public void draw(SpriteBatch batch) {
+	public void draw() {
 		batch.begin();
 		batch.draw(getTexture(), ((getBody().getPosition().x) * 3f) - (getTexture().getWidth() / 80f), (getBody().getPosition().y * 3f)  - (getTexture().getHeight() / 110f), getTexture().getWidth() / 50f, getTexture().getHeight() / 50f);
 		batch.end();
 	}
 	
 	// Dispose 
-	public void dispose(World world) {
+	public void dispose() {
 		getTexture().dispose();
 		getBody().destroyFixture(getFix());
 		world.destroyBody(getBody());
@@ -133,7 +175,6 @@ public class PlayableCharacter extends Character{
 				moveRight();
 			}
 			if(Gdx.input.isKeyPressed (getJumpKey())) {
-				getSoundEffect().play(0.01f);
 				jump();
 			}
 			if(Gdx.input.isKeyPressed (getDownKey())) {
@@ -155,6 +196,7 @@ public class PlayableCharacter extends Character{
     public void jump() {
     	// Jump only if on the ground
     	if(getBody().getLinearVelocity().y == 0) {
+			getSoundEffect().play(0.01f);
     		getBody().applyLinearImpulse(new Vector2(0, getSpeed() * 17.5f), getBody().getWorldCenter(), true);
     	}
 //		getBody().setTransform(new Vector2(getBody().getPosition().x, getBody().getPosition().y + (getSpeed() * 2)), 0);

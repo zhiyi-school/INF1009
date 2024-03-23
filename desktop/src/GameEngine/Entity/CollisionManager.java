@@ -11,6 +11,8 @@ public class CollisionManager implements ContactListener{
 	public void beginContact(Contact contact) {
 		Fixture fixtureA = contact.getFixtureA();
 	    Fixture fixtureB = contact.getFixtureB();
+//	    System.out.println(fixtureA.getUserData());
+//	    System.out.println(fixtureB.getUserData());
 	    
 	    // Check for PC and Item collision
 	    if ("PlayableCharacter".equals(fixtureA.getUserData()) && "Weapon".equals(fixtureB.getUserData())) {
@@ -25,10 +27,18 @@ public class CollisionManager implements ContactListener{
 	       	fixtureA.setUserData("PlayableCharacter_fight");
 	       	fixtureB.setUserData("Enemy_fight");
 	        
-	   }else if("Enemy".equals(fixtureA.getUserData()) && "PlayableCharacter".equals(fixtureB.getUserData())) {
-		   	fixtureA.setUserData("Enemy_fight");
+	    }else if("Enemy".equals(fixtureA.getUserData()) && "PlayableCharacter".equals(fixtureB.getUserData())) {
+	    	fixtureA.setUserData("Enemy_fight");
 		   	fixtureB.setUserData("PlayableCharacter_fight");
-	   }
+	    }
+	    
+	    if("PlayableCharacter".equals(fixtureA.getUserData()) && ((String) fixtureB.getUserData()).contains("letters_img")) {
+	    	String userData = ((String) fixtureB.getUserData()).substring(12) + "_add";
+	    	fixtureB.setUserData(userData);
+	    }else if("PlayableCharacter".equals(fixtureB.getUserData()) && ((String) fixtureA.getUserData()).contains("letters_img")) {
+	    	String userData = ((String) fixtureA.getUserData()).substring(12) + "_add";
+	    	fixtureA.setUserData(userData);
+	    }
 	}
 
 	@Override
@@ -76,11 +86,19 @@ public class CollisionManager implements ContactListener{
 		return null;
 	}
 	
+	public NonPlayableCharacter addScore(PlayableCharacter pc, NonPlayableCharacter chars) {
+		if(((String) chars.getFix().getUserData()).contains("_add")) {
+			pc.setScore(((String) chars.getFix().getUserData()).substring(0, 1));
+			return chars;
+		}
+		return null;
+	}
+	
 	// Item equipped, remove from screen
 	public boolean equip(NonPlayableCharacter item, World world) {
 		if(((String) item.getFix().getUserData()).contains("equip")) {
 			item.getFix().setUserData("Weapon");
-			item.dispose(world);
+			item.dispose();
 		    item.destroy();
 			return true;
 		}
