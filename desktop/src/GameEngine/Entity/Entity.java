@@ -22,8 +22,7 @@ public abstract class Entity implements Cloneable{
 	private FixtureDef fixtureDef;
 	private Fixture fixture;
 	private Texture texture;
-	
-	protected Boolean aiCheck;
+	private Boolean aiCheck;
 	private String image;
 	
     private World world = worldSingleton.getInstance();

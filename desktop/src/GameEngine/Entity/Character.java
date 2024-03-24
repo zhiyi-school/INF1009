@@ -12,10 +12,10 @@ import GameLayer.worldSingleton;
 public abstract class Character extends Entity implements iMoveable{
 	
 	private String image;
-	protected float speed;
-	protected float attack;
+	private float speed;
+	private float attack;
 	private boolean die;
-	protected int lives;
+	private int lives;
     private static World world = worldSingleton.getInstance();
     private static SpriteBatch batch = batchSingleton.getInstance();
 	

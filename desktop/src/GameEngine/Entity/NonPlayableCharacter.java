@@ -6,7 +6,6 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import GameLayer.batchSingleton;
 import GameLayer.worldSingleton;
-
 public class NonPlayableCharacter extends Character implements Cloneable{
 	
     private float elapsedTime;
@@ -61,7 +60,7 @@ public class NonPlayableCharacter extends Character implements Cloneable{
 			getBody().setTransform(new Vector2(mapFullWidth / 3f, getBody().getPosition().y), 0);
 		}
     }
-	
+  
 	// Enables NPC to clone using the prototype in Entity class
 	@Override
     public NonPlayableCharacter clone() {

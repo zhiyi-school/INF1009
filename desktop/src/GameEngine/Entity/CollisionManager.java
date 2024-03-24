@@ -22,7 +22,6 @@ public class CollisionManager implements ContactListener{
 	    String userDataA = (String) fixtureA.getUserData();
 	    String userDataB = (String) fixtureB.getUserData();
 	    //System.out.println(userDataA + ", " + userDataB);
-	    
 	    // Check for PC and Item collision
 	    if ("PlayableCharacter".equals(fixtureA.getUserData()) && "Weapon".equals(fixtureB.getUserData())) {
 	    	fixtureB.setUserData("equip");
@@ -108,7 +107,7 @@ public class CollisionManager implements ContactListener{
 		}
 		return null;
 	}
-	
+  
 	public NonPlayableCharacter addScore(PlayableCharacter pc, NonPlayableCharacter chars) {
 		if(((String) chars.getFix().getUserData()).contains("_add")) {
 			pc.setScore(((String) chars.getFix().getUserData()).substring(0, 1));

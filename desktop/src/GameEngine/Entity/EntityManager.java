@@ -38,7 +38,6 @@ public class EntityManager {
 	private int count = 0;
 	private int spikeWidth;
 	private int spikeHeight;
-	
 	private static Random rand = randomSingleton.getInstance();
 	private static World world = worldSingleton.getInstance();
 	private static OrthographicCameraController orthographicCameraController = orthographicCameraControllerSingleton.getInstance();
@@ -218,6 +217,7 @@ public class EntityManager {
 	// Box2d Collision
 	public void setCollision() {
 		contactListener = new CollisionManager(this);
+		contactListener = new CollisionManager();
 		world.setContactListener(contactListener);
 	}
 	public CollisionManager getCollision() {

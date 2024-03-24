@@ -189,6 +189,7 @@ public class PlayableCharacter extends Character{
 			if(getBody().getPosition().x >= (mapFullWidth / 3f)) {
 				getBody().setTransform(new Vector2(mapFullWidth / 3f, getBody().getPosition().y), 0);
 			}
+			
 		}
 	}
 	
