@@ -121,7 +121,7 @@ public class EntityManager {
 		Door = new NonPlayableCharacter("DoorClosed.png", 10, 400, 200, 100, 10, false);
 		npcList.add(Door);
 		
-		spawnSpikes(5); // Set number of spike clones
+		spawnSpikes(3); // Set number of spike clones
 	}
 	
 	// Clones and spawns multiple spikes within map
@@ -217,7 +217,7 @@ public class EntityManager {
 	
 	// Box2d Collision
 	public void setCollision() {
-		contactListener = new CollisionManager();
+		contactListener = new CollisionManager(this);
 		world.setContactListener(contactListener);
 	}
 	public CollisionManager getCollision() {
