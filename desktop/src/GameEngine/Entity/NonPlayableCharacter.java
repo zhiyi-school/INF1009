@@ -6,8 +6,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import GameLayer.batchSingleton;
 import GameLayer.worldSingleton;
-
-public class NonPlayableCharacter extends Character{
+public class NonPlayableCharacter extends Character implements Cloneable{
 	
     private float elapsedTime;
     private boolean isMovingRight;
@@ -60,5 +59,15 @@ public class NonPlayableCharacter extends Character{
 		if(getBody().getPosition().x >= (mapFullWidth / 3f)) {
 			getBody().setTransform(new Vector2(mapFullWidth / 3f, getBody().getPosition().y), 0);
 		}
+    }
+  
+	// Enables NPC to clone using the prototype in Entity class
+	@Override
+    public NonPlayableCharacter clone() {
+        try {
+            return (NonPlayableCharacter) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException("This class does not implement Cloneable");
+        }
     }
 }

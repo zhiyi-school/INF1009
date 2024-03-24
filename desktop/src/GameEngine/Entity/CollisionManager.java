@@ -6,6 +6,11 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class CollisionManager implements ContactListener{
+	private EntityManager entityManager;
+	
+	public CollisionManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 	
 	@Override
 	public void beginContact(Contact contact) {
@@ -14,6 +19,9 @@ public class CollisionManager implements ContactListener{
 //	    System.out.println(fixtureA.getUserData());
 //	    System.out.println(fixtureB.getUserData());
 	    
+	    String userDataA = (String) fixtureA.getUserData();
+	    String userDataB = (String) fixtureB.getUserData();
+	    //System.out.println(userDataA + ", " + userDataB);
 	    // Check for PC and Item collision
 	    if ("PlayableCharacter".equals(fixtureA.getUserData()) && "Weapon".equals(fixtureB.getUserData())) {
 	    	fixtureB.setUserData("equip");
@@ -39,6 +47,20 @@ public class CollisionManager implements ContactListener{
 	    	String userData = ((String) fixtureA.getUserData()).substring(12) + "_add";
 	    	fixtureA.setUserData(userData);
 	    }
+	    
+	    // Check for PC and Spike collision
+	    if (("PlayableCharacter".equals(userDataA) && "Spike".equals(userDataB)) ||
+	            ("Spike".equals(userDataA) && "PlayableCharacter".equals(userDataB))) {
+	            System.out.println("PC and spike contact!");
+	            for (PlayableCharacter pc : entityManager.getPCList()) {
+	                pc.setLives(pc.getLives() - 1);
+	                //pc.setDefaultPos();
+	                if (pc.getLives() <= 0) {
+	                    
+	                }
+	                System.out.println("PC dies to spike!");
+	            }
+	        }
 	}
 
 	@Override
@@ -85,6 +107,7 @@ public class CollisionManager implements ContactListener{
 		}
 		return null;
 	}
+  
 	public NonPlayableCharacter addScore(PlayableCharacter pc, NonPlayableCharacter chars) {
 		if(((String) chars.getFix().getUserData()).contains("_add")) {
 			pc.setScore(((String) chars.getFix().getUserData()).substring(0, 1));

@@ -165,6 +165,7 @@ public class PlayableCharacter extends Character{
 	public void setDefaultPos() {
 		getBody().setTransform(new Vector2(getDefaultX(), getDefaultY()), 0);
 	}
+	
 	// Movement controls
 	public void moveUserControlled(float mapFullWidth) {
 		if(!getDie()) {

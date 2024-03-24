@@ -14,7 +14,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import GameLayer.batchSingleton;
 import GameLayer.worldSingleton;
 
-public abstract class Entity{
+public abstract class Entity implements Cloneable{
 	
 	private BodyDef bodyDef;
 	private Body body;
@@ -22,7 +22,6 @@ public abstract class Entity{
 	private FixtureDef fixtureDef;
 	private Fixture fixture;
 	private Texture texture;
-	
 	private Boolean aiCheck;
 	private String image;
 	
@@ -109,5 +108,16 @@ public abstract class Entity{
 	public void render() {
 		
 	}
+	
+	public void setPosition(float x, float y) {
+	    if (this.body != null) {
+	        this.body.setTransform(x, y, this.body.getAngle());
+	    }
+	}
 
+	// Clone prototype allows child classes to be cloned
+	@Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

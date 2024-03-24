@@ -6,6 +6,7 @@ import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -25,7 +26,8 @@ public class EntityManager {
 	private NonPlayableCharacter test0;	
 	private NonPlayableCharacter test1;	
 	private NonPlayableCharacter test2;	
-	private NonPlayableCharacter Door;	
+	private NonPlayableCharacter Door;
+	private NonPlayableCharacter Spike;
 	private Map gameMap;
 
 	private PlayableCharacter removePC;
@@ -34,6 +36,8 @@ public class EntityManager {
 
 	private CollisionManager contactListener;
 	private int count = 0;
+	private int spikeWidth;
+	private int spikeHeight;
 	private static Random rand = randomSingleton.getInstance();
 	private static World world = worldSingleton.getInstance();
 	private static OrthographicCameraController orthographicCameraController = orthographicCameraControllerSingleton.getInstance();
@@ -116,6 +120,36 @@ public class EntityManager {
 		Door = new NonPlayableCharacter("DoorClosed.png", 10, 400, 200, 100, 10, false);
 		npcList.add(Door);
 		
+		spawnSpikes(3); // Set number of spike clones
+	}
+	
+	// Clones and spawns multiple spikes within map
+	public void spawnSpikes(int numberOfSpikes) {
+		for (int i = 0; i < numberOfSpikes; i++) {
+			// Get entire map dimensions
+		    int totalMapWidth = gameMap.getMapTileWidth() * gameMap.getTileSize();
+	        int totalMapHeight = gameMap.getMapTileHeight() * gameMap.getTileSize();
+	        
+	        //System.out.println("Map max coords: " + totalMapWidth + ", " + totalMapHeight);
+
+		    // Adjust spawn range to keep spike within map
+		    float maxX = totalMapWidth - spikeWidth;
+		    float maxY = totalMapHeight - spikeHeight;
+
+		    // Ensure values are not negative
+		    maxX = Math.max(maxX, 0);
+		    maxY = Math.max(maxY, 0);
+
+		    // Calculate and set spike to spawn at random positions
+		    float spawnX = rand.nextFloat() * maxX;
+		    float spawnY = rand.nextFloat() * maxY;
+		    
+		    Spike = new NonPlayableCharacter("Spike.png", spawnX, spawnY, 0, 100, 10, false);
+		    
+		    System.out.println("Spike coords: " + spawnX + ", " + spawnY);
+
+		    npcList.add(Spike);
+		}
 	}
 	
 	// Dispose all entities
@@ -182,6 +216,7 @@ public class EntityManager {
 	
 	// Box2d Collision
 	public void setCollision() {
+		contactListener = new CollisionManager(this);
 		contactListener = new CollisionManager();
 		world.setContactListener(contactListener);
 	}
