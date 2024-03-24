@@ -3,6 +3,7 @@ package GameEngine.Entity;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import com.badlogic.gdx.Gdx;
@@ -10,6 +11,9 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+
+import GameLayer.batchSingleton;
+import GameLayer.worldSingleton;
 
 public class PlayableCharacter extends Character{
 	private Sound soundEffect;
@@ -24,15 +28,18 @@ public class PlayableCharacter extends Character{
 	private ArrayList<String> words;
 	private String guess;
 	private String score;
-	
+
+    private World world = worldSingleton.getInstance();
+    private SpriteBatch batch = batchSingleton.getInstance();
+    
 	// Default Constructor
-	public PlayableCharacter(World world){
-		super(world, "", 0, 0, 0, 100, 1, false, true);
+	public PlayableCharacter(){
+		super("", 0, 0, 0, 100, 1, false, true);
 	}
 	
 	// Parameterized Constructor
-	public PlayableCharacter(World world, String textureImage, float x, float y, float speed, int lives, float attack, boolean die, Boolean aiCheck, int leftKey, int rightKey, int jumpKey, int downKey, String soundEffect) {
-		super(world, textureImage, x, y, speed, lives, attack, die, aiCheck);
+	public PlayableCharacter(String textureImage, float x, float y, float speed, int lives, float attack, boolean die, Boolean aiCheck, int leftKey, int rightKey, int jumpKey, int downKey, String soundEffect) {
+		super(textureImage, x, y, speed, lives, attack, die, aiCheck);
 		words = new ArrayList<String>();
 		setAttackCheck(false);
 		setLeftKey(leftKey);
@@ -126,22 +133,27 @@ public class PlayableCharacter extends Character{
 	public String getScore() {
 		return score;
 	}
-	public boolean checkWin() {
-		if(getScore().equals(getGuess())) {
+	public boolean checkWin(List<PlayableCharacter> pcList) {
+		if(!(getScore()).equals(getGuess().substring(0, getScore().length()))) {
+			this.destroy();
+			this.dispose();
+			pcList.remove(this);
+			return true;
+		}else if(getScore().equals(getGuess())){
 			return true;
 		}else {
 			return false;
 		}
 	}
 
-	public void draw(SpriteBatch batch) {
+	public void draw() {
 		batch.begin();
 		batch.draw(getTexture(), ((getBody().getPosition().x) * 3f) - (getTexture().getWidth() / 80f), (getBody().getPosition().y * 3f)  - (getTexture().getHeight() / 110f), getTexture().getWidth() / 50f, getTexture().getHeight() / 50f);
 		batch.end();
 	}
 	
 	// Dispose 
-	public void dispose(World world) {
+	public void dispose() {
 		getTexture().dispose();
 		getBody().destroyFixture(getFix());
 		world.destroyBody(getBody());
@@ -151,8 +163,10 @@ public class PlayableCharacter extends Character{
 	}
 	
 	public void setDefaultPos() {
+		getBody().setLinearVelocity(new Vector2(0, 0));
 		getBody().setTransform(new Vector2(getDefaultX(), getDefaultY()), 0);
 	}
+	
 	// Movement controls
 	public void moveUserControlled(float mapFullWidth) {
 		if(!getDie()) {

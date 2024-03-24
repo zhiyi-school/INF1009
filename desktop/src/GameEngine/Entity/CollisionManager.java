@@ -5,6 +5,8 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 
+import GameLayer.entityManagerSingleton;
+
 public class CollisionManager implements ContactListener{
 	
 	@Override
@@ -37,6 +39,14 @@ public class CollisionManager implements ContactListener{
 	    	String userData = ((String) fixtureA.getUserData()).substring(12) + "_add";
 	    	fixtureA.setUserData(userData);
 	    }
+	    
+	    // Check for PC and Spike collision
+	    if (("PlayableCharacter".equals(fixtureA.getUserData()) && "Spike".equals(fixtureB.getUserData()))) {
+		   	fixtureB.setUserData("Spike_contact");
+        }else if("Spike".equals(fixtureA.getUserData()) && "PlayableCharacter".equals(fixtureB.getUserData())) {
+		   	fixtureA.setUserData("Spike_contact");
+        	
+        }
 	}
 
 	@Override
@@ -58,14 +68,14 @@ public class CollisionManager implements ContactListener{
 	
 	// NPC kills PlayableCharacter
 	public PlayableCharacter die(PlayableCharacter pc, NonPlayableCharacter npc) {		
-		if(pc.getLives() == 1 && ((String) pc.getFix().getUserData()).contains("fight") && ((String) npc.getFix().getUserData()).contains("fight")) {
-		    npc.getFix().setUserData("Enemy");
-			pc.getFix().setUserData("PlayableCharacter");
+		if(pc.getLives() == 1 && (((String) pc.getFix().getUserData()).contains("fight") && ((String) npc.getFix().getUserData()).contains("fight") || ((String) npc.getFix().getUserData()).contains("contact"))) {
+			npc.getFix().setUserData(npc.getDefaultUserData());
+			pc.getFix().setUserData(pc.getDefaultUserData());
 			pc.setLives(pc.getLives() - 1);
 			return pc;
-		}else if(((String) pc.getFix().getUserData()).contains("fight") && ((String) npc.getFix().getUserData()).contains("fight")){
-			npc.getFix().setUserData("Enemy");
-			pc.getFix().setUserData("PlayableCharacter");
+		}else if((((String) pc.getFix().getUserData()).contains("fight") && ((String) npc.getFix().getUserData()).contains("fight")) || ((String) npc.getFix().getUserData()).contains("contact")){
+			npc.getFix().setUserData(npc.getDefaultUserData());
+			pc.getFix().setUserData(pc.getDefaultUserData());
 			pc.setLives(pc.getLives() - 1);
 			pc.setDefaultPos();
 			return null;
@@ -76,13 +86,14 @@ public class CollisionManager implements ContactListener{
 	// PlayableCharacter kills NPC
 	public NonPlayableCharacter kill(PlayableCharacter pc, NonPlayableCharacter npc) {
 		if(((String) pc.getFix().getUserData()).contains("fight") && ((String) npc.getFix().getUserData()).contains("fight")) {
-			pc.getFix().setUserData("PlayableCharacter");
+			pc.getFix().setUserData(pc.getDefaultUserData());
 			pc.setAttackCheck(false);
-			npc.getFix().setUserData("Enemy");
+			npc.getFix().setUserData(npc.getDefaultUserData());
 			return npc;
 		}
 		return null;
 	}
+  
 	public NonPlayableCharacter addScore(PlayableCharacter pc, NonPlayableCharacter chars) {
 		if(((String) chars.getFix().getUserData()).contains("_add")) {
 			pc.setScore(((String) chars.getFix().getUserData()).substring(0, 1));
@@ -94,8 +105,8 @@ public class CollisionManager implements ContactListener{
 	// Item equipped, remove from screen
 	public boolean equip(NonPlayableCharacter item, World world) {
 		if(((String) item.getFix().getUserData()).contains("equip")) {
-			item.getFix().setUserData("Weapon");
-			item.dispose(world);
+			item.getFix().setUserData(item.getDefaultUserData());
+			item.dispose();
 		    item.destroy();
 			return true;
 		}

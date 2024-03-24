@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
+import GameLayer.batchSingleton;
+import GameLayer.worldSingleton;
+
 public abstract class Character extends Entity implements iMoveable{
 	
 	private String image;
@@ -13,10 +16,13 @@ public abstract class Character extends Entity implements iMoveable{
 	private float attack;
 	private boolean die;
 	private int lives;
+	private String defaultName;
+    private static World world = worldSingleton.getInstance();
+    private static SpriteBatch batch = batchSingleton.getInstance();
 	
 	// Default Constructor
-	public Character(World world) {
-		super(world, "", 0, 0, false);
+	public Character() {
+		super("", 0, 0, false);
 		setImage("");
 		setTexture(image);
 		setSpeed(1);
@@ -26,8 +32,8 @@ public abstract class Character extends Entity implements iMoveable{
 	}
 	
 	// Parameterized Constructor
-	public Character(World world, String textureImage, float posXInput, float posYInput, String image, float speed, float attack, boolean die, int lives, Boolean aiCheck) {
-		super(world, textureImage, posXInput, posYInput, aiCheck);
+	public Character(String textureImage, float posXInput, float posYInput, String image, float speed, float attack, boolean die, int lives, Boolean aiCheck) {
+		super(textureImage, posXInput, posYInput, aiCheck);
 		setImage(image);
 		setSpeed(speed);
 		setAttack(attack);
@@ -36,16 +42,16 @@ public abstract class Character extends Entity implements iMoveable{
 	}
 	
 	// NonPlayableCharacter
-	public Character(World world, String textureImage, float x, float y, float speed, int lives, float attack, Boolean aiCheck) {
-		super(world, textureImage, x, y, aiCheck);
+	public Character(String textureImage, float x, float y, float speed, int lives, float attack, Boolean aiCheck) {
+		super(textureImage, x, y, aiCheck);
 		setSpeed(speed);
 		setLives(lives);
 		setAttack(attack);
 	}
 	
 	// PlayableCharacter
-	public Character(World world, String textureImage, float x, float y, float speed, int lives, float attack, boolean die, Boolean aiCheck) {
-		super(world, textureImage, x, y, aiCheck);
+	public Character(String textureImage, float x, float y, float speed, int lives, float attack, boolean die, Boolean aiCheck) {
+		super(textureImage, x, y, aiCheck);
 		setSpeed(speed);
 		setLives(lives);
 		setAttack(attack);
@@ -86,8 +92,14 @@ public abstract class Character extends Entity implements iMoveable{
 	public void setLives(int livesInput) {
 		lives = livesInput;
 	}
+//	public String getDefaultName() {
+//		return defaultName;
+//	}
+//	public void setDefaultName(String defaultNameInput) {
+//		defaultName = defaultNameInput;
+//	}
 	
-	public void draw(SpriteBatch batch) {
+	public void draw() {
 		batch.begin();
 		batch.draw(getTexture(), ((getBody().getPosition().x) * 3f) - (getTexture().getWidth() / 110f), (getBody().getPosition().y * 3f)  - (getTexture().getHeight() / 110f), getTexture().getWidth() / 60f, getTexture().getHeight() / 60f);
 		batch.end();

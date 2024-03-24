@@ -6,12 +6,16 @@ import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 
+import GameLayer.orthographicCameraControllerSingleton;
+import GameLayer.randomSingleton;
+import GameLayer.worldSingleton;
+
 public class EntityManager {
 
-	
 	private List<PlayableCharacter> pcList;
 	private List<NonPlayableCharacter> npcList;
 	private List<Entity> entityList;
@@ -22,7 +26,8 @@ public class EntityManager {
 	private NonPlayableCharacter test0;	
 	private NonPlayableCharacter test1;	
 	private NonPlayableCharacter test2;	
-	private NonPlayableCharacter Door;	
+	private NonPlayableCharacter Door;
+	private NonPlayableCharacter Spike;
 	private Map gameMap;
 
 	private PlayableCharacter removePC;
@@ -31,53 +36,57 @@ public class EntityManager {
 
 	private CollisionManager contactListener;
 	private int count = 0;
-	private Random rand = new Random();
+	private int spikeWidth;
+	private int spikeHeight;
+	private static Random rand = randomSingleton.getInstance();
+	private static World world = worldSingleton.getInstance();
+	private static OrthographicCameraController orthographicCameraController = orthographicCameraControllerSingleton.getInstance();
 
 	// Constant variable for enlarging objects
 	private static final float MAP_SCALE = 3.0f;
 	
-	public EntityManager(World world, OrthographicCameraController orthographicCameraController) {
+	public EntityManager() {
 
 		entityList = new ArrayList<Entity>();
 		pcList = new ArrayList<PlayableCharacter>();
 		npcList = new ArrayList<NonPlayableCharacter>();
 		
-		gameMap = new Map("gameMap2.tmx", MAP_SCALE, orthographicCameraController);
+		gameMap = new Map("gameMap2.tmx", MAP_SCALE);
     	entityList.add(gameMap);
     	
 		// Creating Entities. Add them to ArrayList
-		Player1 = new PlayableCharacter(world, "PlayableCharacter.png", 10, 50, 0.75f, 3, 5, false, true, 
-				Keys.A, Keys.D, Keys.SPACE, Keys.S, "JumpSoundEffect.wav");
-		pcList.add(Player1);
-		
-		Enemy = new NonPlayableCharacter(world, "Enemy.png", rand.nextFloat(Gdx.graphics.getWidth()), rand.nextFloat(Gdx.graphics.getHeight()) + 10, 200, 100, 10, true);
-		npcList.add(Enemy);
-		
-//		Item = new NonPlayableCharacter(world, "Weapon.png",  rand.nextFloat(Gdx.graphics.getWidth()), rand.nextFloat(Gdx.graphics.getHeight()) + 10, 200, 100, 10, false);
-		Item = new NonPlayableCharacter(world, "Weapon.png", rand.nextFloat(Gdx.graphics.getWidth()), rand.nextFloat(Gdx.graphics.getHeight()), 200, 100, 10, false);
-		npcList.add(Item);
-		
-		test0 = new NonPlayableCharacter(world, "letters_img/A.png", 40, 40, 200, 100, 10, false);
-		npcList.add(test0);
-		test1 = new NonPlayableCharacter(world, "letters_img/B.png", 60, 40, 200, 100, 10, false);
-		npcList.add(test1);
-		test2 = new NonPlayableCharacter(world, "letters_img/T.png", 80, 40, 200, 100, 10, false);
-		npcList.add(test2);
-		
-		Door = new NonPlayableCharacter(world, "DoorClosed.png", 10, 400, 200, 100, 10, false);
-		npcList.add(Door);
-		setCollision(world);
+//		Player1 = new PlayableCharacter(world, "PlayableCharacter.png", 10, 50, 0.75f, 3, 5, false, true, 
+//				Keys.A, Keys.D, Keys.SPACE, Keys.S, "JumpSoundEffect.wav");
+//		pcList.add(Player1);
+//		
+//		Enemy = new NonPlayableCharacter(world, "Enemy.png", rand.nextFloat(Gdx.graphics.getWidth()), rand.nextFloat(Gdx.graphics.getHeight()) + 10, 200, 100, 10, true);
+//		npcList.add(Enemy);
+//		
+////		Item = new NonPlayableCharacter(world, "Weapon.png",  rand.nextFloat(Gdx.graphics.getWidth()), rand.nextFloat(Gdx.graphics.getHeight()) + 10, 200, 100, 10, false);
+//		Item = new NonPlayableCharacter(world, "Weapon.png", rand.nextFloat(Gdx.graphics.getWidth()), rand.nextFloat(Gdx.graphics.getHeight()), 200, 100, 10, false);
+//		npcList.add(Item);
+//		
+//		test0 = new NonPlayableCharacter(world, "letters_img/A.png", 40, 40, 200, 100, 10, false);
+//		npcList.add(test0);
+//		test1 = new NonPlayableCharacter(world, "letters_img/C.png", 60, 40, 200, 100, 10, false);
+//		npcList.add(test1);
+//		test2 = new NonPlayableCharacter(world, "letters_img/T.png", 80, 40, 200, 100, 10, false);
+//		npcList.add(test2);
+//		
+//		Door = new NonPlayableCharacter(world, "DoorClosed.png", 10, 400, 200, 100, 10, false);
+//		npcList.add(Door);
+		setCollision();
 		
 		// Create physics static bodies by iterating over all map objects
-		getMap().mapObjects(world);	
+		getMap().mapObjects();	
 	}
 	
-	public void restartGame(World world, OrthographicCameraController orthographicCameraController) {
+	public void restartGame() {
 		if(pcList.size() > 0) {
 			for(PlayableCharacter pc: pcList) {
 				pc.disposeSoundEffect();
 				pc.destroy();
-				pc.dispose(world);
+				pc.dispose();
 			}
 			pcList.clear();
 		}
@@ -85,68 +94,115 @@ public class EntityManager {
 			for(NonPlayableCharacter npc: npcList) {
 				if(npc.getFix() != null) {
 					npc.destroy();
-					npc.dispose(world);
+					npc.dispose();
 				}
 			}
 			npcList.clear();
 		}
 		
-		Player1 = new PlayableCharacter(world, "PlayableCharacter.png", 10, 50, 0.75f, 3, 5, false, true, Keys.A, Keys.D, Keys.W, Keys.S, "JumpSoundEffect.wav");
+		Player1 = new PlayableCharacter("PlayableCharacter.png", 10, 50, 0.75f, 3, 5, false, true, Keys.A, Keys.D, Keys.W, Keys.S, "JumpSoundEffect.wav");
 		pcList.add(Player1);
 		
-		Enemy = new NonPlayableCharacter(world, "Enemy.png", rand.nextFloat(100) + 250, rand.nextFloat(Gdx.graphics.getHeight()/10) + 10, 200, 100, 10, true);
-		npcList.add(Enemy);
+//		Enemy = new NonPlayableCharacter("Enemy.png", rand.nextFloat(100) + 250, rand.nextFloat(Gdx.graphics.getHeight()/10) + 10, 200, 100, 10, true);
+//		npcList.add(Enemy);
 		
 //		Item = new NonPlayableCharacter(world, "Weapon.png", rand.nextFloat(Gdx.graphics.getWidth()), rand.nextFloat(Gdx.graphics.getHeight()) + 10, 200, 100, 10, false);
-		Item = new NonPlayableCharacter(world, "Weapon.png", 50, rand.nextFloat(Gdx.graphics.getHeight()), 200, 100, 10, false);
+		Item = new NonPlayableCharacter("Weapon.png", 50, rand.nextFloat(Gdx.graphics.getHeight()), 200, 100, 10, false);
 		npcList.add(Item);
 		
-		test0 = new NonPlayableCharacter(world, "letters_img/C.png", 40, 40, 200, 100, 10, false);
+		test0 = new NonPlayableCharacter("letters_img/C.png", 40, 40, 200, 100, 10, false);
 		npcList.add(test0);
-		test1 = new NonPlayableCharacter(world, "letters_img/A.png", 60, 40, 200, 100, 10, false);
+		test1 = new NonPlayableCharacter("letters_img/A.png", 60, 40, 200, 100, 10, false);
 		npcList.add(test1);
-		test2 = new NonPlayableCharacter(world, "letters_img/T.png", 80, 40, 200, 100, 10, false);
+		test2 = new NonPlayableCharacter("letters_img/T.png", 80, 40, 200, 100, 10, false);
 		npcList.add(test2);
 		
-		Door = new NonPlayableCharacter(world, "DoorClosed.png", 10, 400, 200, 100, 10, false);
+		Door = new NonPlayableCharacter("DoorClosed.png", 10, 400, 200, 100, 10, false);
 		npcList.add(Door);
 		
+		spawnEnemies(2); // Set number of Enemy clones
+		spawnSpikes(3); // Set number of Spike clones
+	}
+	
+	// Clones and spawns multiple spikes within map
+	public void spawnSpikes(int numberOfSpikes) {
+		// Get entire map dimensions
+	    int totalMapWidth = gameMap.getMapTileWidth() * gameMap.getTileSize();
+        int totalMapHeight = gameMap.getMapTileHeight() * gameMap.getTileSize();
+        
+        // Spike spawn range
+        float minX = 150;
+        float maxX = 400;
+        
+		for (int i = 0; i < numberOfSpikes; i++) {
+			//Ensure values are within map and not negative
+			maxX = Math.min(maxX, totalMapWidth - spikeWidth);
+			minX = Math.max(minX, 0);
+
+		    // Calculate and set spike to spawn at random positions
+		    float spawnX = rand.nextFloat() * (maxX - minX) + minX;
+		    float spawnY = rand.nextFloat() * (totalMapHeight - spikeHeight);
+		    
+		    spawnY = Math.max(spawnY, 0);
+		    
+		    Spike = new NonPlayableCharacter("Spike.png", spawnX, spawnY, 0, 100, 10, false);
+
+		    npcList.add(Spike);
+		}
+	}
+	
+	public void spawnEnemies(int numberOfEnemies) {
+		for (int i = 0; i < numberOfEnemies; i++) {
+			// Enemy spawn range
+			float minX = 220;
+	        float maxX = 350;
+	        float minY = 90; 
+	        float maxY = 465;
+			
+			// Calculate a random position within the defined zone
+	        float spawnX = rand.nextFloat() * (maxX - minX) + minX;
+	        float spawnY = rand.nextFloat() * (maxY - minY) + minY;
+			
+			Enemy = new NonPlayableCharacter("Enemy.png", spawnX, spawnY, 200, 100, 10, true);
+			
+			npcList.add(Enemy);
+		}
 	}
 	
 	// Dispose all entities
-	public void diposeEntities(World world) {
+	public void diposeEntities() {
 		if(pcList.size() > 0) {
 			for(PlayableCharacter pc: pcList) {
 				pc.destroy();
-				pc.dispose(world);
+				pc.dispose();
 			}
 		}
 		if(npcList.size() > 0) {
 			for(NonPlayableCharacter npc: npcList) {
 				if(npc.getFix() != null) {
 					npc.destroy();
-					npc.dispose(world);
+					npc.dispose();
 				}
 			}
 		}
 		if(entityList.size() > 0) {
 			for(Entity entity: entityList) {
 				if (entity instanceof Map) {
-	        		((Map) entity).dispose(world);
+	        		((Map) entity).dispose();
 	    		}else {
-	    			entity.dispose(world);
+	    			entity.dispose();
 	    		}
 			}
 		}
 	}
 	
 	// Drawing all entities
-	public void entityDraw(SpriteBatch batch) {
+	public void entityDraw() {
 		for(PlayableCharacter pc: pcList) {
-			pc.draw(batch);
+			pc.draw();
 		}
 		for(NonPlayableCharacter npc: npcList) {
-			npc.draw(batch);
+			npc.draw();
 		}
 		for(Entity entity: entityList) {
 			entity.render();
@@ -176,14 +232,14 @@ public class EntityManager {
 	}
 	
 	// Box2d Collision
-	public void setCollision(World world) {
+	public void setCollision() {
 		contactListener = new CollisionManager();
 		world.setContactListener(contactListener);
 	}
 	public CollisionManager getCollision() {
 		return contactListener;
 	}
-	public void collisionEquip(World world) {
+	public void collisionEquip() {
 		if(getNum() != 0) {
 			for(NonPlayableCharacter item: npcList) {
 				if(getCollision().equip(item, world)) {
@@ -194,7 +250,7 @@ public class EntityManager {
 			npcList.remove(removeItem);
 		}
 	}
-	public void collisionScore(World world) {
+	public void collisionScore() {
 		if(getNum() != 0) {
 			for(PlayableCharacter pc: pcList) {
 				for(NonPlayableCharacter npc: npcList) {
@@ -207,14 +263,14 @@ public class EntityManager {
 			}
 			if(removeNPC != null) {
 				removeNPC.destroy();
-				removeNPC.dispose(world);
+				removeNPC.dispose();
 				npcList.remove(removeNPC);
 			}
 		}
 	}
 	
 	// Check which Entity to dispose
-	public void collisionFight(World world) {
+	public void collisionFight() {
 		if(getNum() != 0) {
 			for(PlayableCharacter pc: pcList) {
 				for(NonPlayableCharacter npc: npcList) {
@@ -222,33 +278,32 @@ public class EntityManager {
 						removeNPC = getCollision().kill(pc, npc);
 						count--;
 						break;
-					}else if(((String) pc.getFix().getUserData()).contains("fight")){
+					}else if(((String) pc.getFix().getUserData()).contains("fight") || ((String) npc.getFix().getUserData()).contains("contact")){
 						removePC = getCollision().die(pc, npc);
 						count--;
 						break;
 					}
-					
 				}
 			}
 			if(removeNPC != null) {
 				removeNPC.destroy();
-				removeNPC.dispose(world);
+				removeNPC.dispose();
 				npcList.remove(removeNPC);
 			}
 			if(removePC != null) {
 				removePC.destroy();
-				removePC.dispose(world);
+				removePC.dispose();
 				pcList.remove(removePC);
 			}
 		}
 	}
 	
-	public void entityCollision(World world) {
+	public void entityCollision() {
 		removePC = null;
 		removeNPC = null;
-        collisionEquip(world);
-        collisionFight(world);
-        collisionScore(world);
+        collisionEquip();
+        collisionFight();
+        collisionScore();
 	}
 	
 	public void setNum() {
@@ -260,7 +315,7 @@ public class EntityManager {
 	
 	public void count() {		
 		for(NonPlayableCharacter npc: npcList) {
-			if(((String) npc.getFix().getUserData()).contains("fight")) {
+			if(((String) npc.getFix().getUserData()).contains("fight") || ((String) npc.getFix().getUserData()).contains("contact") ) {
 				count++;
 			}
 		}
@@ -301,7 +356,7 @@ public class EntityManager {
 		}
 		return null;
 	}
-	public int getPCList() {
+	public int getPCListSize() {
 		return pcList.size();
 	}
 	
@@ -312,13 +367,22 @@ public class EntityManager {
 			return getPC("PlayableCharacter").getLives();
 		}
 	}
+	public List<PlayableCharacter> getPCList() {
+		return pcList;
+	}
+	public List<NonPlayableCharacter> getNPCList() {
+		return npcList;
+	}
+	public List<Entity> getEntityList() {
+		return entityList;
+	}
 	
 	// Map
 	public Map getMap() {
 		return gameMap;
 	}
-	public void createMap(World world) {
-		getMap().mapObjects(world);
+	public void createMap() {
+		getMap().mapObjects();
 	}
 }
 	
