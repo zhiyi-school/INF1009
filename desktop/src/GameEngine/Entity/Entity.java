@@ -24,6 +24,7 @@ public abstract class Entity implements Cloneable{
 	private Texture texture;
 	private Boolean aiCheck;
 	private String image;
+	private String defaultName;
 	
     private World world = worldSingleton.getInstance();
 
@@ -35,6 +36,7 @@ public abstract class Entity implements Cloneable{
 		setTexture("");
 		setAICheck(true);
 		createBody(0, 0);
+		setDefaultUserData((String) getFix().getUserData());
 	}
 	
 	// Character Constructor
@@ -43,6 +45,7 @@ public abstract class Entity implements Cloneable{
 		setTexture(textureImage);
 		setAICheck(aiCheck);
 		createBody(posXInput, posYInput);
+		setDefaultUserData((String) getFix().getUserData());
 	}
 	
 	// Map Constructor
@@ -102,7 +105,12 @@ public abstract class Entity implements Cloneable{
 	public void setAICheck(boolean aiInput) {
 		aiCheck = aiInput;
 	}
-	
+	public String getDefaultUserData() {
+		return defaultName;
+	}
+	public void setDefaultUserData(String defaultNameInput) {
+		defaultName = defaultNameInput;
+	}
 
 	// Map and Orthographic Camera
 	public void render() {

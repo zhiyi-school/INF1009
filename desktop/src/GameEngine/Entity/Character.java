@@ -16,6 +16,7 @@ public abstract class Character extends Entity implements iMoveable{
 	private float attack;
 	private boolean die;
 	private int lives;
+	private String defaultName;
     private static World world = worldSingleton.getInstance();
     private static SpriteBatch batch = batchSingleton.getInstance();
 	
@@ -91,6 +92,12 @@ public abstract class Character extends Entity implements iMoveable{
 	public void setLives(int livesInput) {
 		lives = livesInput;
 	}
+//	public String getDefaultName() {
+//		return defaultName;
+//	}
+//	public void setDefaultName(String defaultNameInput) {
+//		defaultName = defaultNameInput;
+//	}
 	
 	public void draw() {
 		batch.begin();

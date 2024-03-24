@@ -145,8 +145,6 @@ public class EntityManager {
 		    float spawnY = rand.nextFloat() * maxY;
 		    
 		    Spike = new NonPlayableCharacter("Spike.png", spawnX, spawnY, 0, 100, 10, false);
-		    
-		    System.out.println("Spike coords: " + spawnX + ", " + spawnY);
 
 		    npcList.add(Spike);
 		}
@@ -216,7 +214,6 @@ public class EntityManager {
 	
 	// Box2d Collision
 	public void setCollision() {
-		contactListener = new CollisionManager(this);
 		contactListener = new CollisionManager();
 		world.setContactListener(contactListener);
 	}
@@ -262,12 +259,11 @@ public class EntityManager {
 						removeNPC = getCollision().kill(pc, npc);
 						count--;
 						break;
-					}else if(((String) pc.getFix().getUserData()).contains("fight")){
+					}else if(((String) pc.getFix().getUserData()).contains("fight") || ((String) npc.getFix().getUserData()).contains("contact")){
 						removePC = getCollision().die(pc, npc);
 						count--;
 						break;
 					}
-					
 				}
 			}
 			if(removeNPC != null) {
@@ -300,7 +296,7 @@ public class EntityManager {
 	
 	public void count() {		
 		for(NonPlayableCharacter npc: npcList) {
-			if(((String) npc.getFix().getUserData()).contains("fight")) {
+			if(((String) npc.getFix().getUserData()).contains("fight") || ((String) npc.getFix().getUserData()).contains("contact") ) {
 				count++;
 			}
 		}

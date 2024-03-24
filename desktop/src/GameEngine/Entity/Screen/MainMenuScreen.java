@@ -41,7 +41,6 @@ public class MainMenuScreen extends Scene {
     	public MainMenuScreen(float buttonWidth, float screenWidth, float screenHeight) {
     		super(buttonWidth, screenWidth, screenHeight);
     		setStartX(getScreenWidth()/2);
-            System.out.println("here" + screenManager);
     	}
     	public void setScreenManager(ScreenManager screenManagerInput) {
     		screenManager = screenManagerInput;
