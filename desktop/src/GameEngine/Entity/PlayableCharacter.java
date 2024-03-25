@@ -163,6 +163,7 @@ public class PlayableCharacter extends Character{
 	}
 	
 	public void setDefaultPos() {
+		getBody().setLinearVelocity(new Vector2(0, 0));
 		getBody().setTransform(new Vector2(getDefaultX(), getDefaultY()), 0);
 	}
 	
