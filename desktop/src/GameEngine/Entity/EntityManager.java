@@ -6,11 +6,8 @@ import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 
-import GameLayer.orthographicCameraControllerSingleton;
 import GameLayer.randomSingleton;
 import GameLayer.worldSingleton;
 
@@ -40,7 +37,6 @@ public class EntityManager {
 	private int spikeHeight;
 	private static Random rand = randomSingleton.getInstance();
 	private static World world = worldSingleton.getInstance();
-	private static OrthographicCameraController orthographicCameraController = orthographicCameraControllerSingleton.getInstance();
 
 	// Constant variable for enlarging objects
 	private static final float MAP_SCALE = 3.0f;
@@ -53,28 +49,6 @@ public class EntityManager {
 		
 		gameMap = new Map("gameMap2.tmx", MAP_SCALE);
     	entityList.add(gameMap);
-    	
-		// Creating Entities. Add them to ArrayList
-//		Player1 = new PlayableCharacter(world, "PlayableCharacter.png", 10, 50, 0.75f, 3, 5, false, true, 
-//				Keys.A, Keys.D, Keys.SPACE, Keys.S, "JumpSoundEffect.wav");
-//		pcList.add(Player1);
-//		
-//		Enemy = new NonPlayableCharacter(world, "Enemy.png", rand.nextFloat(Gdx.graphics.getWidth()), rand.nextFloat(Gdx.graphics.getHeight()) + 10, 200, 100, 10, true);
-//		npcList.add(Enemy);
-//		
-////		Item = new NonPlayableCharacter(world, "Weapon.png",  rand.nextFloat(Gdx.graphics.getWidth()), rand.nextFloat(Gdx.graphics.getHeight()) + 10, 200, 100, 10, false);
-//		Item = new NonPlayableCharacter(world, "Weapon.png", rand.nextFloat(Gdx.graphics.getWidth()), rand.nextFloat(Gdx.graphics.getHeight()), 200, 100, 10, false);
-//		npcList.add(Item);
-//		
-//		test0 = new NonPlayableCharacter(world, "letters_img/A.png", 40, 40, 200, 100, 10, false);
-//		npcList.add(test0);
-//		test1 = new NonPlayableCharacter(world, "letters_img/C.png", 60, 40, 200, 100, 10, false);
-//		npcList.add(test1);
-//		test2 = new NonPlayableCharacter(world, "letters_img/T.png", 80, 40, 200, 100, 10, false);
-//		npcList.add(test2);
-//		
-//		Door = new NonPlayableCharacter(world, "DoorClosed.png", 10, 400, 200, 100, 10, false);
-//		npcList.add(Door);
 		setCollision();
 		
 		// Create physics static bodies by iterating over all map objects
@@ -100,13 +74,9 @@ public class EntityManager {
 			npcList.clear();
 		}
 		
-		Player1 = new PlayableCharacter("PlayableCharacter.png", 10, 50, 0.75f, 3, 5, false, true, Keys.A, Keys.D, Keys.W, Keys.S, "JumpSoundEffect.wav");
+		Player1 = new PlayableCharacter("PlayableCharacter.png", 10, 50, 0.75f, 3, 5, false, true, Keys.A, Keys.D, Keys.W, "JumpSoundEffect.wav");
 		pcList.add(Player1);
 		
-//		Enemy = new NonPlayableCharacter("Enemy.png", rand.nextFloat(100) + 250, rand.nextFloat(Gdx.graphics.getHeight()/10) + 10, 200, 100, 10, true);
-//		npcList.add(Enemy);
-		
-//		Item = new NonPlayableCharacter(world, "Weapon.png", rand.nextFloat(Gdx.graphics.getWidth()), rand.nextFloat(Gdx.graphics.getHeight()) + 10, 200, 100, 10, false);
 		Item = new NonPlayableCharacter("Weapon.png", 50, rand.nextFloat(Gdx.graphics.getHeight()), 200, 100, 10, false);
 		npcList.add(Item);
 		
@@ -278,7 +248,7 @@ public class EntityManager {
 						removeNPC = getCollision().kill(pc, npc);
 						count--;
 						break;
-					}else if(((String) pc.getFix().getUserData()).contains("fight") || ((String) npc.getFix().getUserData()).contains("contact")){
+					}else if(((String) npc.getFix().getUserData()).contains("fight") || ((String) npc.getFix().getUserData()).contains("contact")){
 						removePC = getCollision().die(pc, npc);
 						count--;
 						break;
@@ -313,17 +283,12 @@ public class EntityManager {
 		return count;
 	}
 	
-	public void count() {		
+	public void count() {
 		for(NonPlayableCharacter npc: npcList) {
-			if(((String) npc.getFix().getUserData()).contains("fight") || ((String) npc.getFix().getUserData()).contains("contact") ) {
-				count++;
-			}
-		}
-		for(NonPlayableCharacter npc: npcList) {
-			if(((String) npc.getFix().getUserData()).contains("equip")) {
+			if(((String) npc.getFix().getUserData()).equals("equip")) {
 				pcList.get(0).setAttackCheck(true);
-				count++;
-			}else if(((String) npc.getFix().getUserData()).contains("add")) {
+			}
+			if(!((String) npc.getFix().getUserData()).equals(npc.getDefaultUserData())) {
 				count++;
 			}
 		}
@@ -365,6 +330,13 @@ public class EntityManager {
 			return 0;
 		}else {
 			return getPC("PlayableCharacter").getLives();
+		}
+	}
+	public String getPCGuess() {
+		if(getPC("PlayableCharacter") == null) {
+			return null;
+		}else {
+			return getPC("PlayableCharacter").getScore();
 		}
 	}
 	public List<PlayableCharacter> getPCList() {

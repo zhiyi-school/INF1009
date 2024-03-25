@@ -2,13 +2,10 @@ package GameEngine.Entity;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import GameLayer.batchSingleton;
-import GameLayer.entityManagerSingleton;
-import GameLayer.worldSingleton;
 
 public class OrthographicCameraController {
     private OrthographicCamera camera;
@@ -21,8 +18,7 @@ public class OrthographicCameraController {
 	private float tileSize;
 	private float mapFullWidth;
 	private float mapFullHeight;
-
-	private static World world = worldSingleton.getInstance();
+	
     private static SpriteBatch batch = batchSingleton.getInstance();
     private static EntityManager entityManager;
 
@@ -88,8 +84,6 @@ public class OrthographicCameraController {
     
     public void camera() {
 		// Update camera position to follow character and ensures it does not go out of map boundaries
-//    	System.out.println("camera");
-//    	System.out.println(entityManager.getPC("PlayableCharacter"));
     	updateCameraPosition((entityManager.getPC("PlayableCharacter").getBody().getPosition().x * MAP_SCALE) - (entityManager.getPC("PlayableCharacter").getTexture().getWidth() / 110f), 
 				entityManager.getPC("PlayableCharacter").getBody().getPosition().y * MAP_SCALE);
 		applyViewport();
