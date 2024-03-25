@@ -5,8 +5,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Align;
 
@@ -14,19 +12,17 @@ import GameEngine.Entity.EntityManager;
 
 import com.badlogic.gdx.Input.Keys;
 
-import GameLayer.HUD; // Import HUD class
+import GameLayer.HUD;
 import GameLayer.batchSingleton;
 import GameLayer.entityManagerSingleton;
 import GameLayer.fontSingleton;
 import GameLayer.screenManagerSingleton;
-import GameLayer.shapeSingleton;
-import GameLayer.worldSingleton;
 
 public class GameScreen extends Scene {
 	private final Stage stage;
 	private String gameText;
 	private Button pauseButton;
-	private HUD hud; // Add HUD instance
+	private HUD hud;
 
 	private float buttonWidth;
 	private float buttonHeight = 60;
@@ -34,10 +30,8 @@ public class GameScreen extends Scene {
 
 	private float mouseX, mouseY;
 
-    private static World world = worldSingleton.getInstance();
     private static SpriteBatch batch = batchSingleton.getInstance();
     private static BitmapFont font = fontSingleton.getInstance();
-    private static ShapeRenderer shapeRenderer = shapeSingleton.getInstance();
     private static EntityManager entityManager = entityManagerSingleton.getInstance();
     private static ScreenManager screenManager = screenManagerSingleton.getInstance();
 
@@ -85,9 +79,6 @@ public class GameScreen extends Scene {
 
 		gameTime += delta;
 
-		// Debug output
-//		System.out.println("HUD visibility: " + hud.isVisible());
-
 		pauseButton.render();
 
 		batch.begin();
@@ -102,7 +93,7 @@ public class GameScreen extends Scene {
 		font.draw(batch, "Time: " + (int) gameTime, 100, screenHeight - 20);
 		batch.end();
 
-		hud.render(entityManager.getPCLives());
+		hud.render(entityManager.getPCLives(), entityManager.getPCGuess());
 
 		mouseX = Gdx.input.getX();
 		mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
@@ -118,10 +109,7 @@ public class GameScreen extends Scene {
 			pauseButton.setColour(Color.RED);
 		}
 
-		// Debug output
-//		System.out.println("Acting stage...");
 		stage.act(delta);
-//		System.out.println("Drawing stage...");
 		stage.draw();
 	}
 

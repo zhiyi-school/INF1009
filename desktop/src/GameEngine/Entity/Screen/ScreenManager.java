@@ -111,26 +111,20 @@ public class ScreenManager {
 
             // If it's the game screen, render the HUD
             if (isGameScreen) {
-                hud.render(entityManager.getPCLives());
-//                System.out.println(hud.getWorldTimer());
+                hud.render(entityManager.getPCLives(), entityManager.getPCGuess());
             }
         }
     }
     
     public void resize(int width, int height) {
     	orthographicCameraController.resize(width, height);
-		hud.resize(width, height); // Resize the HUD
-
-//		int viewportWidth = stage.getViewport().getScreenWidth();
-//		int viewportHeight = stage.getViewport().getScreenHeight();
-//		System.out.println("Viewport width: " + viewportWidth + ", height: " + viewportHeight);
-
+		hud.resize(width, height); 		// Resize the HUD
 		hud.getStage().getViewport().update(width, height, true);
     }
     
     // Checking for game state
     public void checkGameStart(float MAP_SCALE) {
-        backgroundMusic.setLooping(true); // Set the music to loop
+        backgroundMusic.setLooping(true); 	// Set the music to loop
         backgroundMusic.setVolume(0.05f);
         backgroundMusic.play();
 
@@ -138,7 +132,7 @@ public class ScreenManager {
             gameState();
         }
 
-		hud.render(entityManager.getPCLives());
+		hud.render(entityManager.getPCLives(), entityManager.getPCGuess());
 		stage.act();
 		stage.draw();
     }

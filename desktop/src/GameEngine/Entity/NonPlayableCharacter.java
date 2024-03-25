@@ -1,17 +1,14 @@
 package GameEngine.Entity;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
-import GameLayer.batchSingleton;
 import GameLayer.worldSingleton;
 public class NonPlayableCharacter extends Character implements Cloneable{
 	
     private float elapsedTime;
     private boolean isMovingRight;
     private World world = worldSingleton.getInstance();
-    private SpriteBatch batch = batchSingleton.getInstance();
     
 	// Default Constructor
 	public NonPlayableCharacter(){

@@ -20,7 +20,7 @@ public class Button {
 	 
 	 private static BitmapFont font = fontSingleton.getInstance();
 	 private static SpriteBatch batch = batchSingleton.getInstance();
-	    private static ShapeRenderer shapeRenderer = shapeSingleton.getInstance();
+	 private static ShapeRenderer shapeRenderer = shapeSingleton.getInstance();
 	 
 	 public Button(float x, float y, float width, float height) {
 		 this.bounds = new Rectangle(x, y, width, height);
@@ -32,7 +32,7 @@ public class Button {
 	 
 	 public void setText(String text) {
 		this.text = text != null ? text : ""; // Ensure text is not null
-	}
+	 }
 	 
 	 public boolean hover(float touchX, float touchY) {
 		 return bounds.contains(touchX, touchY);
