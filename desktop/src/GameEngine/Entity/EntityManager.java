@@ -103,8 +103,8 @@ public class EntityManager {
 		Player1 = new PlayableCharacter("PlayableCharacter.png", 10, 50, 0.75f, 3, 5, false, true, Keys.A, Keys.D, Keys.W, Keys.S, "JumpSoundEffect.wav");
 		pcList.add(Player1);
 		
-		Enemy = new NonPlayableCharacter("Enemy.png", rand.nextFloat(100) + 250, rand.nextFloat(Gdx.graphics.getHeight()/10) + 10, 200, 100, 10, true);
-		npcList.add(Enemy);
+//		Enemy = new NonPlayableCharacter("Enemy.png", rand.nextFloat(100) + 250, rand.nextFloat(Gdx.graphics.getHeight()/10) + 10, 200, 100, 10, true);
+//		npcList.add(Enemy);
 		
 //		Item = new NonPlayableCharacter(world, "Weapon.png", rand.nextFloat(Gdx.graphics.getWidth()), rand.nextFloat(Gdx.graphics.getHeight()) + 10, 200, 100, 10, false);
 		Item = new NonPlayableCharacter("Weapon.png", 50, rand.nextFloat(Gdx.graphics.getHeight()), 200, 100, 10, false);
@@ -120,33 +120,52 @@ public class EntityManager {
 		Door = new NonPlayableCharacter("DoorClosed.png", 10, 400, 200, 100, 10, false);
 		npcList.add(Door);
 		
-		spawnSpikes(3); // Set number of spike clones
+		spawnEnemies(2); // Set number of Enemy clones
+		spawnSpikes(3); // Set number of Spike clones
 	}
 	
 	// Clones and spawns multiple spikes within map
 	public void spawnSpikes(int numberOfSpikes) {
+		// Get entire map dimensions
+	    int totalMapWidth = gameMap.getMapTileWidth() * gameMap.getTileSize();
+        int totalMapHeight = gameMap.getMapTileHeight() * gameMap.getTileSize();
+        
+        // Spike spawn range
+        float minX = 150;
+        float maxX = 400;
+        
 		for (int i = 0; i < numberOfSpikes; i++) {
-			// Get entire map dimensions
-		    int totalMapWidth = gameMap.getMapTileWidth() * gameMap.getTileSize();
-	        int totalMapHeight = gameMap.getMapTileHeight() * gameMap.getTileSize();
-	        
-	        //System.out.println("Map max coords: " + totalMapWidth + ", " + totalMapHeight);
-
-		    // Adjust spawn range to keep spike within map
-		    float maxX = totalMapWidth - spikeWidth;
-		    float maxY = totalMapHeight - spikeHeight;
-
-		    // Ensure values are not negative
-		    maxX = Math.max(maxX, 0);
-		    maxY = Math.max(maxY, 0);
+			//Ensure values are within map and not negative
+			maxX = Math.min(maxX, totalMapWidth - spikeWidth);
+			minX = Math.max(minX, 0);
 
 		    // Calculate and set spike to spawn at random positions
-		    float spawnX = rand.nextFloat() * maxX;
-		    float spawnY = rand.nextFloat() * maxY;
+		    float spawnX = rand.nextFloat() * (maxX - minX) + minX;
+		    float spawnY = rand.nextFloat() * (totalMapHeight - spikeHeight);
+		    
+		    spawnY = Math.max(spawnY, 0);
 		    
 		    Spike = new NonPlayableCharacter("Spike.png", spawnX, spawnY, 0, 100, 10, false);
 
 		    npcList.add(Spike);
+		}
+	}
+	
+	public void spawnEnemies(int numberOfEnemies) {
+		for (int i = 0; i < numberOfEnemies; i++) {
+			// Enemy spawn range
+			float minX = 220;
+	        float maxX = 350;
+	        float minY = 90; 
+	        float maxY = 465;
+			
+			// Calculate a random position within the defined zone
+	        float spawnX = rand.nextFloat() * (maxX - minX) + minX;
+	        float spawnY = rand.nextFloat() * (maxY - minY) + minY;
+			
+			Enemy = new NonPlayableCharacter("Enemy.png", spawnX, spawnY, 200, 100, 10, true);
+			
+			npcList.add(Enemy);
 		}
 	}
 	
