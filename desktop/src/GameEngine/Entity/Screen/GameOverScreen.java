@@ -78,12 +78,12 @@ public class GameOverScreen extends Scene {
         	setGameOverText("WIN! \n THANKS FOR PLAYING");
     	}
 		else {
-		    	setGameOverText("GAME OVER!");
+	    	setGameOverText("GAME OVER!");
 		}
 	}
     
 	public void resumeGame() {
-	screenManager.setCurrentScreen("Main");
+		screenManager.setCurrentScreen("Main");
 	}
 
 	public void restartGamePC() {

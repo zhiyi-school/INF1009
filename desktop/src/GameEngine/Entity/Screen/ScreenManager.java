@@ -178,13 +178,7 @@ public class ScreenManager {
         if (screen instanceof MainMenuScreen) {
             currentScreen = mainMenuScreen;
         } else if (screen instanceof GameScreen) {
-        	if(entityManager.getPC("PlayableCharacter").getGuess() == null) {
-        		String guessWord = entityManager.getPC("PlayableCharacter").getWord(rand.nextInt(entityManager.getPC("PlayableCharacter").getWordSize()));
-            	entityManager.getPC("PlayableCharacter").setGuess(guessWord);
-            	entityManager.getPC("PlayableCharacter").setWordSound(guessWord);
-        	}
         	entityManager.getPC("PlayableCharacter").getWordSound().play(1f);
-        	
         	hud.setWorldTimer(300);
             currentScreen = gameScreen;
         } else if (screen instanceof GameOverScreen) {
