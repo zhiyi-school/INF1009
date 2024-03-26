@@ -54,7 +54,7 @@ public class MainMenuScreen extends Scene {
 
 	public void startGame() {
 		entityManager.restartGame();
-	screenManager.setCurrentScreen("Game");
+		screenManager.setCurrentScreen("Game");
 	}
     
     	@Override

@@ -90,6 +90,13 @@ public class Map extends Entity {
         return map;
     }
     
+    public int getMapWidth() {
+    	return getMapTileWidth() * getTileSize();
+    }
+    public int getMapHeight() {
+    	return getMapTileHeight() * getTileSize();
+    }
+    
     // Dispose
     public void dispose() {
         map.dispose();

@@ -8,6 +8,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.physics.box2d.World;
 
+import GameLayer.languageFactory;
+import GameLayer.orthographicCameraControllerSingleton;
 import GameLayer.randomSingleton;
 import GameLayer.worldSingleton;
 
@@ -16,15 +18,14 @@ public class EntityManager {
 	private List<PlayableCharacter> pcList;
 	private List<NonPlayableCharacter> npcList;
 	private List<Entity> entityList;
+	private ArrayList<String> spawnLetters;
 	
 	private PlayableCharacter Player1;
 	private NonPlayableCharacter Enemy;	
-	private NonPlayableCharacter Item;	
-	private NonPlayableCharacter test0;	
-	private NonPlayableCharacter test1;	
-	private NonPlayableCharacter test2;	
+	private NonPlayableCharacter Item;
 	private NonPlayableCharacter Door;
 	private NonPlayableCharacter Spike;
+	private NonPlayableCharacter letter;
 	private Map gameMap;
 
 	private PlayableCharacter removePC;
@@ -32,9 +33,12 @@ public class EntityManager {
 	private NonPlayableCharacter removeItem;
 
 	private CollisionManager contactListener;
+	private languageFactory lang;
 	private int count = 0;
 	private int spikeWidth;
 	private int spikeHeight;
+	private String eachLetter;
+	private String randWord;
 	private static Random rand = randomSingleton.getInstance();
 	private static World world = worldSingleton.getInstance();
 
@@ -46,6 +50,7 @@ public class EntityManager {
 		entityList = new ArrayList<Entity>();
 		pcList = new ArrayList<PlayableCharacter>();
 		npcList = new ArrayList<NonPlayableCharacter>();
+		lang = new languageFactory();
 		
 		gameMap = new Map("gameMap2.tmx", MAP_SCALE);
     	entityList.add(gameMap);
@@ -80,38 +85,55 @@ public class EntityManager {
 		Item = new NonPlayableCharacter("Weapon.png", 50, rand.nextFloat(Gdx.graphics.getHeight()), 200, 100, 10, false);
 		npcList.add(Item);
 		
-		test0 = new NonPlayableCharacter("letters_img/C.png", 40, 40, 200, 100, 10, false);
-		npcList.add(test0);
-		test1 = new NonPlayableCharacter("letters_img/A.png", 60, 40, 200, 100, 10, false);
-		npcList.add(test1);
-		test2 = new NonPlayableCharacter("letters_img/T.png", 80, 40, 200, 100, 10, false);
-		npcList.add(test2);
-		
 		Door = new NonPlayableCharacter("DoorClosed.png", 10, 400, 200, 100, 10, false);
 		npcList.add(Door);
 		
 		spawnEnemies(2); // Set number of Enemy clones
 		spawnSpikes(3); // Set number of Spike clones
+		
+		// Generate a random word
+		randWord = getPC("PlayableCharacter").getWord(rand.nextInt(getPC("PlayableCharacter").getWordSize()));
+    	getPC("PlayableCharacter").setGuess(randWord);
+    	getPC("PlayableCharacter").setWordSound(randWord);
+		spawnLetters = lang.spawnLetters(randWord);
+		
+		// Create an object for each Letter
+		for(int x=0;x<spawnLetters.size();x++){
+			eachLetter = spawnLetters.get(x);
+			
+			// Spike spawn range
+	        float minX = 150;
+	        float maxX = 400;
+	        
+			//Ensure values are within map and not negative
+			maxX = Math.min(maxX, gameMap.getMapWidth() - spikeWidth);
+			minX = Math.max(minX, 0);
+
+		    // Calculate and set spike to spawn at random positions
+		    float spawnX = rand.nextFloat() * (maxX - minX) + minX;
+		    float spawnY = rand.nextFloat() * (gameMap.getMapHeight() - spikeHeight);
+		    
+		    spawnY = Math.max(spawnY, 0);
+			
+			letter = new NonPlayableCharacter(eachLetter, spawnX, spawnY, 200, 100, 10, false);
+			npcList.add(letter);
+		}
 	}
 	
 	// Clones and spawns multiple spikes within map
-	public void spawnSpikes(int numberOfSpikes) {
-		// Get entire map dimensions
-	    int totalMapWidth = gameMap.getMapTileWidth() * gameMap.getTileSize();
-        int totalMapHeight = gameMap.getMapTileHeight() * gameMap.getTileSize();
-        
+	public void spawnSpikes(int numberOfSpikes) {        
         // Spike spawn range
         float minX = 150;
         float maxX = 400;
         
 		for (int i = 0; i < numberOfSpikes; i++) {
 			//Ensure values are within map and not negative
-			maxX = Math.min(maxX, totalMapWidth - spikeWidth);
+			maxX = Math.min(maxX, gameMap.getMapWidth() - spikeWidth);
 			minX = Math.max(minX, 0);
 
 		    // Calculate and set spike to spawn at random positions
 		    float spawnX = rand.nextFloat() * (maxX - minX) + minX;
-		    float spawnY = rand.nextFloat() * (totalMapHeight - spikeHeight);
+		    float spawnY = rand.nextFloat() * (gameMap.getMapHeight() - spikeHeight);
 		    
 		    spawnY = Math.max(spawnY, 0);
 		    
