@@ -22,7 +22,6 @@ public class PlayableCharacter extends Character{
 	private int rightKey;
 	private int leftKey;
 	private int jumpKey;
-	private int downKey;
 	private float defaultX;
 	private float defaultY;
 	private ArrayList<String> words;

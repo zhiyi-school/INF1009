@@ -195,6 +195,11 @@ public class ScreenManager {
 
     public void gameState() {
         // Update Box2d Objects outside of World Simulation
+    	if(entityManager.getPC("PlayableCharacter").checkWin(entityManager.getPCList())) {
+    		setCurrentScreen("GameOver");
+            update();
+    	}
+    	
     	entityManager.count();
         if (entityManager.getNum() > 0) {
             update();
@@ -204,8 +209,7 @@ public class ScreenManager {
 
             world.step(Gdx.graphics.getDeltaTime(), 6, 2);
 
-            if (entityManager.getPC("PlayableCharacter") != null && entityManager.getPCLives() > 0 
-            		&& !entityManager.getPC("PlayableCharacter").checkWin(entityManager.getPCList())) {
+            if (entityManager.getPC("PlayableCharacter") != null && entityManager.getPCLives() > 0) {
                 orthographicCameraController.camera();
             } else {
                 setCurrentScreen("GameOver");
