@@ -19,7 +19,7 @@ public class Language {
 	}
 	
 	private int numOfwords;
-	private String selectedWord;
+	private String selectedWord,eachLetter;
 
 	// Create a list of words
 	private ArrayList<String> wordList = new ArrayList<String>();
@@ -28,10 +28,13 @@ public class Language {
 	private ArrayList<String> letterList = new ArrayList<String>();
 	
 	// Create a list of image names, e.g 'A.png' file
-	private ArrayList<String> imageFileList = new ArrayList<String>();
+	private ArrayList<String> allImageList = new ArrayList<String>();
 	
 	// This HashMap takes the 'A' as key and the image file name 'A.png'
 	private HashMap<String, String> letterToImage = new HashMap<String, String>();
+	
+	// This ArrayList is to return user
+	private ArrayList<String> imageList = new ArrayList<String>();
 
 	public void loadLetters()
 	{
@@ -50,7 +53,7 @@ public class Language {
                 if (file.extension().equalsIgnoreCase("png")) {
                     // Add the file name to the ArrayList
                 	letterList.add(file.nameWithoutExtension());
-                	imageFileList.add("letters_img/"+file.name());
+                	allImageList.add("letters_img/"+file.name());
                 }
             }
 
@@ -87,9 +90,9 @@ public class Language {
 	{
 		return letterList;
 	}
-	public ArrayList<String> getImageFileList()
+	public ArrayList<String> getallImageList()
 	{
-		return imageFileList;
+		return allImageList;
 	}
 	
 	public HashMap<String, String> getLetterToImage()
@@ -109,7 +112,7 @@ public class Language {
 	{
 		for(int x=0;x<letterList.size();x++)
 		{
-			letterToImage.put(letterList.get(x), imageFileList.get(x));
+			letterToImage.put(letterList.get(x), allImageList.get(x));
 		}
 	}
 	
@@ -130,5 +133,48 @@ public class Language {
 		selectedWord = wordList.get(randIndex);
 		return selectedWord;
 	}
-	
+	public ArrayList<String> spawnLetters(String randWord)
+	{
+		ArrayList<String> correctLetterList = new ArrayList<String>();
+		ArrayList<String> wrongLetterList = new ArrayList<String>();
+		String imgFilePath;
+		
+		
+		// For each letter in the word, put the image file path into an ArrayList
+		for(int x=0;x<randWord.length();x++)
+		{
+			eachLetter = randWord.substring(x, x + 1);
+			imgFilePath = imageFilePath(eachLetter);
+			correctLetterList.add(imgFilePath);
+		}
+		imageList.addAll(correctLetterList);
+		
+		// For each letter not in the word, put the image into wrong letter ArrayList
+		for(int x=0;x<allImageList.size();x++)
+		{
+			imgFilePath = allImageList.get(x);
+			if(correctLetterList.contains(imgFilePath)==false)
+			{
+				wrongLetterList.add(imgFilePath);
+			}
+			else
+			{
+				continue;
+			}
+			
+		}
+		// create instance of Random class
+		Random rand = new Random();
+		int randIndex;
+		
+		// Random pick any 5 letters from wrong letter list to confuse player
+		for(int x=0;x<5;x++)
+		{
+			String selectedLetter;
+			randIndex=rand.nextInt(wrongLetterList.size()+1);
+			selectedLetter = wrongLetterList.get(randIndex);
+			imageList.add(selectedLetter);
+		}
+		return imageList;
+	}
 }
