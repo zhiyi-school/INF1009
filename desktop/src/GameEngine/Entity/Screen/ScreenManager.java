@@ -195,21 +195,21 @@ public class ScreenManager {
 
     public void gameState() {
         // Update Box2d Objects outside of World Simulation
-    	if(entityManager.getPC("PlayableCharacter").checkWin(entityManager.getPCList())) {
-    		setCurrentScreen("GameOver");
-            update();
-    	}
-    	
     	entityManager.count();
         if (entityManager.getNum() > 0) {
-            update();
+        	while(entityManager.getNum() != 0) {
+        		update();
+        	}
         } else {
+        	if(entityManager.getPC("PlayableCharacter").checkWin(entityManager.getPCList())) {
+        		entityManager.winGame();
+        	}
             entityManager.entityDraw();
             entityManager.movement(orthographicCameraController.getMapFullWidth());
 
             world.step(Gdx.graphics.getDeltaTime(), 6, 2);
-
-            if (entityManager.getPC("PlayableCharacter") != null && entityManager.getPCLives() > 0) {
+            
+            if (entityManager.getPC("PlayableCharacter") != null && entityManager.getPCLives() > 0 && hud.getWorldTimer() > 0) {
                 orthographicCameraController.camera();
             } else {
                 setCurrentScreen("GameOver");
@@ -219,7 +219,7 @@ public class ScreenManager {
     }
 
     public void update() {
-        entityManager.entityCollision();
+        entityManager.entityCollision(this);
     }
 
     public void screenDispose() {

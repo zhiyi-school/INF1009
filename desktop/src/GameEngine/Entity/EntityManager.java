@@ -46,6 +46,10 @@ public class EntityManager {
 	// Constant variable for enlarging objects
 	private static final float MAP_SCALE = 3.0f;
 	
+	private NonPlayableCharacter test0;	
+	private NonPlayableCharacter test1;	
+	private NonPlayableCharacter test2;
+	
 	public EntityManager() {
 
 		entityList = new ArrayList<Entity>();
@@ -68,7 +72,7 @@ public class EntityManager {
 				pc.destroy();
 				pc.dispose();
 			}
-			pcList.clear();
+			pcList.removeAll(pcList);
 		}
 		if(npcList.size() > 0) {
 			for(NonPlayableCharacter npc: npcList) {
@@ -77,7 +81,7 @@ public class EntityManager {
 					npc.dispose();
 				}
 			}
-			npcList.clear();
+			npcList.removeAll(npcList);
 		}
 		
 		Player1 = new PlayableCharacter("PlayableCharacter.png", 10, 50, 0.75f, 3, 5, false, true, Keys.A, Keys.D, Keys.W, "JumpSoundEffect.wav");
@@ -291,12 +295,36 @@ public class EntityManager {
 		}
 	}
 	
-	public void entityCollision() {
+	public void collisionEndGame(ScreenManager screenManager) {
+		for(NonPlayableCharacter npc: npcList) {
+			if(((String) npc.getFix().getUserData()).contains("endGame")) {
+				screenManager.setCurrentScreen("GameOver");
+				count--;
+			}
+		}
+	}
+	
+	public void entityCollision(ScreenManager screenManager) {
 		removePC = null;
 		removeNPC = null;
         collisionEquip();
         collisionFight();
         collisionScore();
+        collisionEndGame(screenManager);
+	}
+	
+	public void winGame() {
+		for(NonPlayableCharacter npc: npcList) {
+			if(((String) npc.getFix().getUserData()).contains("Closed")) {
+				npc.setTexture("DoorOpened.png");
+				npc.setImage("DoorOpened.png");
+
+		        int filename = npc.getImage().lastIndexOf('.');
+		        String strippedFilename = npc.getImage().substring(0, filename);
+		        npc.getFix().setUserData(strippedFilename);
+		        npc.setDefaultUserData(strippedFilename);
+			}
+		}
 	}
 	
 	public void setNum() {
