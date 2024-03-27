@@ -43,8 +43,14 @@ public class CollisionManager implements ContactListener{
 		   	fixtureB.setUserData("Spike_contact");
         }else if("Spike".equals(fixtureA.getUserData()) && "PlayableCharacter".equals(fixtureB.getUserData())) {
 		   	fixtureA.setUserData("Spike_contact");
-        	
         }
+	    
+	    // Check for PC and Door collision
+	    if("PlayableCharacter".equals(fixtureA.getUserData()) && ((String) fixtureB.getUserData()).contains("Opened")) {
+	    	fixtureB.setUserData("endGame");
+	    }else if("PlayableCharacter".equals(fixtureB.getUserData()) && ((String) fixtureA.getUserData()).contains("Opened")) {
+	    	fixtureA.setUserData("endGame");
+	    }
 	}
 
 	@Override
@@ -109,5 +115,9 @@ public class CollisionManager implements ContactListener{
 			return true;
 		}
 		return false;
+	}
+	
+	public void win() {
+		
 	}
 }
