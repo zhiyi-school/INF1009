@@ -161,7 +161,7 @@ public class PlayableCharacter extends Character{
 	}
 	
 	// Movement controls
-	public void moveUserControlled(float mapFullWidth) {
+	public void movement(float mapFullWidth) {
 		if(!getDie()) {
 			if(Gdx.input.isKeyPressed (getLeftKey())) {
 				moveLeft();
@@ -180,7 +180,6 @@ public class PlayableCharacter extends Character{
 			if(getBody().getPosition().x >= (mapFullWidth / 3f)) {
 				getBody().setTransform(new Vector2(mapFullWidth / 3f, getBody().getPosition().y), 0);
 			}
-			
 		}
 	}
 	

@@ -32,8 +32,8 @@ public class NonPlayableCharacter extends Character implements Cloneable{
 		getTexture().dispose();
 	}
 	
-	// AI movement
-	public void moveAIControlled(float delta, float mapFullWidth) {
+	// AI movement	
+	public void movement(float delta, float mapFullWidth) {
 		elapsedTime += delta;
 
         // Toggle direction every 10 seconds
@@ -58,7 +58,7 @@ public class NonPlayableCharacter extends Character implements Cloneable{
 		if(getBody().getPosition().x >= (mapFullWidth / 3f)) {
 			getBody().setTransform(new Vector2(mapFullWidth / 3f, getBody().getPosition().y), 0);
 		}
-    }
+	}
   
 	// Enables NPC to clone using the prototype in Entity class
 	@Override

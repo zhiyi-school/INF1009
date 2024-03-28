@@ -197,16 +197,14 @@ public class EntityManager {
 	private void pcMovement(float mapFullWidth){
 		for(PlayableCharacter pc: pcList) {
 			if(pc.getAICheck()) {
-				pc.moveUserControlled(mapFullWidth);
-			}else {
-				pc.moveAIControlled(Gdx.graphics.getDeltaTime(), mapFullWidth);
+				pc.movement(mapFullWidth);
 			}
 		}
 	}
 	private void npcMovement(float mapFullWidth){
 		for(NonPlayableCharacter npc: npcList) {
 			if(npc.getAICheck()) {
-				npc.moveAIControlled(Gdx.graphics.getDeltaTime(), mapFullWidth);				
+				npc.movement(Gdx.graphics.getDeltaTime(), mapFullWidth);				
 			}
 		}
 	}
