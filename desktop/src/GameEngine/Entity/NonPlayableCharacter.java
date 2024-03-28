@@ -8,6 +8,8 @@ public class NonPlayableCharacter extends Character implements Cloneable{
 	
     private float elapsedTime;
     private boolean isMovingRight;
+    
+	// Calling Singleton Classes
     private World world = worldSingleton.getInstance();
     
 	// Default Constructor

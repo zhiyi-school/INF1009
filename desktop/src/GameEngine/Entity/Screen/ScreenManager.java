@@ -1,14 +1,11 @@
 package GameEngine.Entity.Screen;
 
 import java.util.ArrayList;
-import java.util.Random;
-
 import GameLayer.HUD;
 import GameLayer.batchSingleton;
 import GameLayer.entityManagerSingleton;
 import GameLayer.fontSingleton;
 import GameLayer.orthographicCameraControllerSingleton;
-import GameLayer.randomSingleton;
 import GameLayer.shapeSingleton;
 import GameLayer.worldSingleton;
 
@@ -37,7 +34,8 @@ public class ScreenManager {
     private GameScreen gameScreen;
     private GameOverScreen gameOverScreen;
     private Scene currentScreen;
-    
+
+	// Calling Singleton Classes
     private static World world = worldSingleton.getInstance();
     private static SpriteBatch batch = batchSingleton.getInstance();
     private static BitmapFont font = fontSingleton.getInstance();
@@ -191,7 +189,8 @@ public class ScreenManager {
             currentScreen = pauseScreen;
         }
     }
-
+    
+    // Method to run Game
     public void gameState() {
         // Update Box2d Objects outside of World Simulation
     	entityManager.count();
@@ -208,6 +207,7 @@ public class ScreenManager {
 
             world.step(Gdx.graphics.getDeltaTime(), 6, 2);
             
+            // Conditions for game to be live
             if (entityManager.getPC("PlayableCharacter") != null && entityManager.getPCLives() > 0 && hud.getWorldTimer() > 0) {
                 orthographicCameraController.camera();
             } else {

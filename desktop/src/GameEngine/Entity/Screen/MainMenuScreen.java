@@ -25,7 +25,8 @@ public class MainMenuScreen extends Scene {
 	private Button exitButton;	
 
 	private float mouseX, mouseY;
-	
+
+	// Calling Singleton Classes
     private static SpriteBatch batch = batchSingleton.getInstance();
     private static BitmapFont font = fontSingleton.getInstance();
     private static EntityManager entityManager = entityManagerSingleton.getInstance();

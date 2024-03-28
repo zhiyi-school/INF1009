@@ -28,6 +28,7 @@ public class PlayableCharacter extends Character{
 	private String guess;
 	private String score;
 
+	// Calling Singleton Classes
     private World world = worldSingleton.getInstance();
     private SpriteBatch batch = batchSingleton.getInstance();
     
