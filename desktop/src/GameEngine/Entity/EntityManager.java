@@ -93,6 +93,13 @@ public class EntityManager {
 		Door = new NonPlayableCharacter("DoorClosed.png", 10, 400, 200, 100, 10, false);
 		npcList.add(Door);
 		
+		test0 = new NonPlayableCharacter("letters_img/A.png", 60, 40, 200, 100, 10, false);
+		npcList.add(test0);
+		test1 = new NonPlayableCharacter("letters_img/C.png", 40, 40, 200, 100, 10, false);
+		npcList.add(test1);
+		test2 = new NonPlayableCharacter("letters_img/T.png", 80, 40, 200, 100, 10, false);
+		npcList.add(test2);
+		
 		spawnEnemies(2); // Set number of Enemy clones
 		spawnSpikes(3); // Set number of Spike clones
 		
@@ -101,6 +108,7 @@ public class EntityManager {
     	getPC("PlayableCharacter").setGuess(randWord);
     	getPC("PlayableCharacter").setWordSound(randWord);
 		spawnLetters = lang.spawnLetters(randWord);
+		System.out.println(randWord);
 		
 		// Create an object for each Letter
 		for(int x=0;x<spawnLetters.size();x++){

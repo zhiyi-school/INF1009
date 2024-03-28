@@ -126,7 +126,21 @@ public class PlayableCharacter extends Character{
 		return score;
 	}
 	public boolean checkWin(List<PlayableCharacter> pcList) {
-		if(!(getScore()).equals(getGuess().substring(0, getScore().length()))) {
+//		if(!(getScore()).equals(getGuess().substring(0, getScore().length()))) {
+//			this.destroy();
+//			this.dispose();
+//			pcList.remove(this);
+//			return true;
+//		}else if(!(getScore()).equals(getGuess().substring(0, getScore().length()))){
+//			setLives(getLives() - 1);
+//			return false;
+//		}
+//		else if(getScore().equals(getGuess())){
+//			return true;
+//		}else {
+//			return false;
+//		}
+		if(getLives() == 0) {
 			this.destroy();
 			this.dispose();
 			pcList.remove(this);
