@@ -95,11 +95,7 @@ public abstract class Character extends Entity implements iMoveable{
 		batch.draw(getTexture(), ((getBody().getPosition().x) * 3f) - (getTexture().getWidth() / 110f), (getBody().getPosition().y * 3f)  - (getTexture().getHeight() / 110f), getTexture().getWidth() / 60f, getTexture().getHeight() / 60f);
 		batch.end();
 	}
-	
-	public void moveAIControlled(float delta, float mapFullWidth){
-		
-	}
-	public void moveUserControlled(Sound soundEffect, float mapFullWidth) {
+	public void movement() {
 		
 	}
 	
