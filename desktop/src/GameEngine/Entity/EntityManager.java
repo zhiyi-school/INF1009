@@ -90,7 +90,8 @@ public class EntityManager {
 		Item = new NonPlayableCharacter("Weapon.png", 50, rand.nextFloat(Gdx.graphics.getHeight()), 200, 100, 10, false);
 		npcList.add(Item);
 		
-		Door = new NonPlayableCharacter("DoorClosed.png", 10, 400, 200, 100, 10, false);
+//		Door = new NonPlayableCharacter("DoorClosed.png", 10, 400, 200, 100, 10, false);
+		Door = new NonPlayableCharacter("DoorClosed.png", 100, 40, 200, 100, 10, false);
 		npcList.add(Door);
 		
 		test0 = new NonPlayableCharacter("letters_img/A.png", 60, 40, 200, 100, 10, false);
