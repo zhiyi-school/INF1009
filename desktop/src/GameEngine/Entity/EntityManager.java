@@ -26,6 +26,7 @@ public class EntityManager {
 	private NonPlayableCharacter Item;
 	private NonPlayableCharacter Door;
 	private NonPlayableCharacter spikePrototype;
+
 	private NonPlayableCharacter letter;
 	private Map gameMap;
 
@@ -105,6 +106,7 @@ public class EntityManager {
 		
 		spawnEnemies(2); // Set number of Enemy clones
 		spawnSpikes(2); // Set number of Spike clones
+
 		
 		// Generate a random word
 		randWord = getPC("PlayableCharacter").getWord(rand.nextInt(getPC("PlayableCharacter").getWordSize()));
@@ -152,10 +154,11 @@ public class EntityManager {
 		    float spawnY = rand.nextFloat() * (gameMap.getMapHeight() - spikeHeight);
 		    
 		    spawnY = Math.max(spawnY, 0);
-		    
+
 		    NonPlayableCharacter Spike = spikePrototype.clone();
 		    Spike.setPosition(spawnX, spawnY);
 		    System.out.println("Spike coords: " + spawnX + ", " + spawnY);
+
 		    npcList.add(Spike);
 		}
 	}
@@ -171,10 +174,11 @@ public class EntityManager {
 			// Calculate a random position within the defined zone
 	        float spawnX = rand.nextFloat() * (maxX - minX) + minX;
 	        float spawnY = rand.nextFloat() * (maxY - minY) + minY;
-			
+
 			NonPlayableCharacter Enemy = enemyPrototype.clone();
 			Enemy.setPosition(spawnX, spawnY);
 			System.out.println("Enemy coords: " + spawnX + ", " + spawnY);
+
 			npcList.add(Enemy);
 		}
 	}

@@ -40,7 +40,6 @@ public class ScreenManager {
     
     private static World world = worldSingleton.getInstance();
     private static SpriteBatch batch = batchSingleton.getInstance();
-	private static Random rand = randomSingleton.getInstance();
     private static BitmapFont font = fontSingleton.getInstance();
     private static ShapeRenderer shapeRenderer = shapeSingleton.getInstance();
 	private static EntityManager entityManager = entityManagerSingleton.getInstance();
@@ -212,7 +211,7 @@ public class ScreenManager {
             if (entityManager.getPC("PlayableCharacter") != null && entityManager.getPCLives() > 0 && hud.getWorldTimer() > 0) {
                 orthographicCameraController.camera();
             } else {
-                setCurrentScreen("GameOver");
+            	setCurrentScreen("GameOver");
                 update();
             }
         }

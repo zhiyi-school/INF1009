@@ -74,7 +74,8 @@ public class GameOverScreen extends Scene {
 	}
 	
 	public void displayGameOver() {
-    	if (entityManager.getPC("PlayableCharacter") != null) {
+
+    	if (entityManager.getPC("PlayableCharacter") != null && screenManager.getHUD().getWorldTimer() > 0) {
         	setGameOverText("WIN! \n THANKS FOR PLAYING");
     	}
 		else {
