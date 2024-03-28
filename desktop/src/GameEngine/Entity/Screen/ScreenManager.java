@@ -201,7 +201,7 @@ public class ScreenManager {
         		update();
         	}
         } else {
-        	if(entityManager.getPC("PlayableCharacter").checkWin(entityManager.getPCList())) {
+        	if(entityManager.getPC("PlayableCharacter") != null && entityManager.getPC("PlayableCharacter").checkWin(entityManager.getPCList())) {
         		entityManager.winGame();
         	}
             entityManager.entityDraw();
