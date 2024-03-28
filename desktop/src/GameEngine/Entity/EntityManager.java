@@ -10,7 +10,6 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import GameEngine.Entity.Screen.ScreenManager;
 import GameLayer.languageFactory;
-import GameLayer.orthographicCameraControllerSingleton;
 import GameLayer.randomSingleton;
 import GameLayer.worldSingleton;
 
@@ -26,8 +25,6 @@ public class EntityManager {
 	private NonPlayableCharacter Item;
 	private NonPlayableCharacter Door;
 	private NonPlayableCharacter spikePrototype;
-
-	private NonPlayableCharacter letter;
 	private Map gameMap;
 
 	private PlayableCharacter removePC;
@@ -39,17 +36,14 @@ public class EntityManager {
 	private int count = 0;
 	private int spikeWidth;
 	private int spikeHeight;
-	private String eachLetter;
 	private String randWord;
+	
+	// Calling Singleton Classes
 	private static Random rand = randomSingleton.getInstance();
 	private static World world = worldSingleton.getInstance();
 
 	// Constant variable for enlarging objects
 	private static final float MAP_SCALE = 3.0f;
-	
-	private NonPlayableCharacter test0;	
-	private NonPlayableCharacter test1;	
-	private NonPlayableCharacter test2;
 	
 	public EntityManager() {
 
@@ -88,18 +82,11 @@ public class EntityManager {
 		Player1 = new PlayableCharacter("PlayableCharacter.png", 10, 50, 0.75f, 3, 5, false, true, Keys.A, Keys.D, Keys.W, "JumpSoundEffect.wav");
 		pcList.add(Player1);
 		
-		Item = new NonPlayableCharacter("Weapon.png", 50, rand.nextFloat(Gdx.graphics.getHeight()), 200, 100, 10, false);
+		Item = new NonPlayableCharacter("Weapon.png", 50, 50, 200, 100, 10, false);
 		npcList.add(Item);
 		
 		Door = new NonPlayableCharacter("DoorClosed.png", 10, 400, 200, 100, 10, false);
 		npcList.add(Door);
-		
-		test0 = new NonPlayableCharacter("letters_img/A.png", 60, 40, 200, 100, 10, false);
-		npcList.add(test0);
-		test1 = new NonPlayableCharacter("letters_img/C.png", 40, 40, 200, 100, 10, false);
-		npcList.add(test1);
-		test2 = new NonPlayableCharacter("letters_img/T.png", 80, 40, 200, 100, 10, false);
-		npcList.add(test2);
 		
 		spikePrototype = new NonPlayableCharacter("Spike.png", 0, 0, 0, 100, 10, false);
 	    enemyPrototype = new NonPlayableCharacter("Enemy.png", 0, 0, 200, 100, 10, true);
@@ -112,30 +99,9 @@ public class EntityManager {
 		randWord = getPC("PlayableCharacter").getWord(rand.nextInt(getPC("PlayableCharacter").getWordSize()));
     	getPC("PlayableCharacter").setGuess(randWord);
     	getPC("PlayableCharacter").setWordSound(randWord);
-		spawnLetters = lang.spawnLetters(randWord);
-		System.out.println(randWord);
+		spawnLetters = lang.generateLetters(randWord);
+		npcList.addAll(lang.spawnLetters(spawnLetters, gameMap.getMapWidth(), gameMap.getMapHeight(), Item.getTexture().getWidth(), Item.getTexture().getHeight()));
 		
-		// Create an object for each Letter
-		for(int x=0;x<spawnLetters.size();x++){
-			eachLetter = spawnLetters.get(x);
-			
-			// Spike spawn range
-	        float minX = 150;
-	        float maxX = 400;
-	        
-			//Ensure values are within map and not negative
-			maxX = Math.min(maxX, gameMap.getMapWidth() - spikeWidth);
-			minX = Math.max(minX, 0);
-
-		    // Calculate and set spike to spawn at random positions
-		    float spawnX = rand.nextFloat() * (maxX - minX) + minX;
-		    float spawnY = rand.nextFloat() * (gameMap.getMapHeight() - spikeHeight);
-		    
-		    spawnY = Math.max(spawnY, 0);
-			
-			letter = new NonPlayableCharacter(eachLetter, spawnX, spawnY, 200, 100, 10, false);
-			npcList.add(letter);
-		}
 	}
 	
 	// Clones and spawns multiple spikes within map
@@ -143,6 +109,9 @@ public class EntityManager {
         // Spike spawn range
         float minX = 150;
         float maxX = 400;
+        spikeWidth = spikePrototype.getTexture().getWidth();
+        spikeHeight = spikePrototype.getTexture().getHeight();
+        
         
 		for (int i = 0; i < numberOfSpikes; i++) {
 			//Ensure values are within map and not negative
@@ -157,12 +126,12 @@ public class EntityManager {
 
 		    NonPlayableCharacter Spike = spikePrototype.clone();
 		    Spike.setPosition(spawnX, spawnY);
-		    System.out.println("Spike coords: " + spawnX + ", " + spawnY);
 
 		    npcList.add(Spike);
 		}
 	}
 	
+	// Clones and spawns multiple enemies within map
 	public void spawnEnemies(int numberOfEnemies) {
 		for (int i = 0; i < numberOfEnemies; i++) {
 			// Enemy spawn range
@@ -177,7 +146,6 @@ public class EntityManager {
 
 			NonPlayableCharacter Enemy = enemyPrototype.clone();
 			Enemy.setPosition(spawnX, spawnY);
-			System.out.println("Enemy coords: " + spawnX + ", " + spawnY);
 
 			npcList.add(Enemy);
 		}
@@ -199,6 +167,8 @@ public class EntityManager {
 				}
 			}
 		}
+		spikePrototype.dispose();
+		enemyPrototype.dispose();
 		if(entityList.size() > 0) {
 			for(Entity entity: entityList) {
 				if (entity instanceof Map) {
@@ -253,6 +223,7 @@ public class EntityManager {
 	public CollisionManager getCollision() {
 		return contactListener;
 	}
+	
 	public void collisionEquip() {
 		if(getNum() != 0) {
 			for(NonPlayableCharacter item: npcList) {
@@ -320,7 +291,8 @@ public class EntityManager {
 			}
 		}
 	}
-	
+
+	// Collision Methods
 	public void entityCollision(ScreenManager screenManager) {
 		removePC = null;
 		removeNPC = null;

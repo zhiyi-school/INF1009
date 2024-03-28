@@ -7,7 +7,11 @@ import java.util.Random;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
+import GameEngine.Entity.NonPlayableCharacter;
+
 public class languageFactory {
+	
+	// Calling Singleton Classes
 	private static Random rand = randomSingleton.getInstance();
 	
 	// Whenever this class is called, it will do the following methods
@@ -132,7 +136,9 @@ public class languageFactory {
 		selectedWord = wordList.get(randIndex);
 		return selectedWord;
 	}
-	public ArrayList<String> spawnLetters(String randWord)
+	
+	// Generating list of letters 
+	public ArrayList<String> generateLetters(String randWord)
 	{
 		ArrayList<String> correctLetterList = new ArrayList<String>();
 		ArrayList<String> wrongLetterList = new ArrayList<String>();
@@ -166,7 +172,7 @@ public class languageFactory {
 		int randIndex;
 		
 		// Random pick any 5 letters from wrong letter list to confuse player
-		for(int x=0;x<5;x++)
+		for(int x=0;x<3;x++)
 		{
 			String selectedLetter;
 			randIndex=rand.nextInt(wrongLetterList.size());
@@ -174,5 +180,32 @@ public class languageFactory {
 			imageList.add(selectedLetter);
 		}
 		return imageList;
+	}
+	
+	// Creating Objects For Each Letter to be Spawned
+	public ArrayList<NonPlayableCharacter> spawnLetters(ArrayList<String> letters, int mapWidth, int mapHeight, float letterWidth, float letterHeight){
+		ArrayList<NonPlayableCharacter> letterList = new ArrayList<NonPlayableCharacter>();
+		// Create an object for each Letter
+		for(int x=0;x<letters.size();x++){
+			eachLetter = letters.get(x);
+			
+			// Spike spawn range
+	        float minX = 150;
+	        float maxX = 400;
+	        
+			//Ensure values are within map and not negative
+			maxX = Math.min(maxX, mapWidth - letterWidth);
+			minX = Math.max(minX, 0);
+
+		    // Calculate and set spike to spawn at random positions
+		    float spawnX = rand.nextFloat() * (maxX - minX) + minX;
+		    float spawnY = rand.nextFloat() * (mapHeight - letterHeight);
+		    
+		    spawnY = Math.max(spawnY, 0);
+			
+		    NonPlayableCharacter letter = new NonPlayableCharacter(eachLetter, spawnX, spawnY, 200, 100, 10, false);
+			letterList.add(letter);
+		}
+		return letterList;
 	}
 }

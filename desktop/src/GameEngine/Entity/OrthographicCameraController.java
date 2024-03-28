@@ -18,7 +18,8 @@ public class OrthographicCameraController {
 	private float tileSize;
 	private float mapFullWidth;
 	private float mapFullHeight;
-	
+
+	// Calling Singleton Classes
     private static SpriteBatch batch = batchSingleton.getInstance();
     private static EntityManager entityManager;
 

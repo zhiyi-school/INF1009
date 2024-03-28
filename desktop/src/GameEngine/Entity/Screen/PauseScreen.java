@@ -29,6 +29,7 @@ public class PauseScreen extends Scene {
 	
 	private float mouseX, mouseY;
 
+	// Calling Singleton Classes
     private static SpriteBatch batch = batchSingleton.getInstance();
     private static BitmapFont font = fontSingleton.getInstance();
     private static EntityManager entityManager = entityManagerSingleton.getInstance();

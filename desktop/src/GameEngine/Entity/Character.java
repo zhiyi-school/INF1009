@@ -13,6 +13,8 @@ public abstract class Character extends Entity implements iMoveable{
 	private float attack;
 	private boolean die;
 	private int lives;
+	
+	// Calling Singleton Classes
     private static SpriteBatch batch = batchSingleton.getInstance();
 	
 	// Default Constructor

@@ -23,7 +23,8 @@ public abstract class Entity implements Cloneable{
 	private Boolean aiCheck;
 	private String image;
 	private String defaultName;
-	
+
+	// Calling Singleton Classes
     private World world = worldSingleton.getInstance();
 
 	protected abstract void dispose();

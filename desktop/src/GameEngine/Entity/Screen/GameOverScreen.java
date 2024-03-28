@@ -24,7 +24,8 @@ public class GameOverScreen extends Scene {
 	private float buttonSpacing = 25; 
 	private float totalButtonWidth = 3 * buttonWidth + 2 * buttonSpacing; 
 	private float startX; 
-	
+
+	// Calling Singleton Classes
     private static SpriteBatch batch = batchSingleton.getInstance();
     private static BitmapFont font = fontSingleton.getInstance();
     private static EntityManager entityManager = entityManagerSingleton.getInstance();

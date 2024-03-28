@@ -18,6 +18,7 @@ public class Button {
 	 private String text;
 	 private Color color;
 	 
+	// Calling Singleton Classes
 	 private static BitmapFont font = fontSingleton.getInstance();
 	 private static SpriteBatch batch = batchSingleton.getInstance();
 	 private static ShapeRenderer shapeRenderer = shapeSingleton.getInstance();
