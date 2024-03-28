@@ -4,10 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
-
 import GameLayer.batchSingleton;
-import GameLayer.worldSingleton;
 
 public abstract class Character extends Entity implements iMoveable{
 	
@@ -16,7 +13,6 @@ public abstract class Character extends Entity implements iMoveable{
 	private float attack;
 	private boolean die;
 	private int lives;
-    private static World world = worldSingleton.getInstance();
     private static SpriteBatch batch = batchSingleton.getInstance();
 	
 	// Default Constructor

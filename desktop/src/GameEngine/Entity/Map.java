@@ -1,7 +1,6 @@
 package GameEngine.Entity;
 
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -10,7 +9,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
-import GameLayer.batchSingleton;
 import GameLayer.orthographicCameraControllerSingleton;
 import GameLayer.worldSingleton;
 
@@ -31,7 +29,6 @@ public class Map extends Entity {
     private OrthogonalTiledMapRenderer maprenderer;
     
     private World world = worldSingleton.getInstance();
-    private SpriteBatch batch = batchSingleton.getInstance();
 	private static OrthographicCameraController orthographicCameraController = orthographicCameraControllerSingleton.getInstance();
 
     public Map(String mapPath, float mapscaleInput) {
@@ -91,6 +88,13 @@ public class Map extends Entity {
 
     public TiledMap getMap() {
         return map;
+    }
+    
+    public int getMapWidth() {
+    	return getMapTileWidth() * getTileSize();
+    }
+    public int getMapHeight() {
+    	return getMapTileHeight() * getTileSize();
     }
     
     // Dispose

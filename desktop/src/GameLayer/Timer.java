@@ -1,8 +1,5 @@
 package GameLayer;
 
-
-import GameEngine.Entity.Screen.ScreenManager;
-
 public class Timer {
     private float timeRemaining;
     private boolean isRunning;

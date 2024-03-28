@@ -111,26 +111,20 @@ public class ScreenManager {
 
             // If it's the game screen, render the HUD
             if (isGameScreen) {
-                hud.render(entityManager.getPCLives());
-//                System.out.println(hud.getWorldTimer());
+                hud.render(entityManager.getPCLives(), entityManager.getPCGuess());
             }
         }
     }
     
     public void resize(int width, int height) {
     	orthographicCameraController.resize(width, height);
-		hud.resize(width, height); // Resize the HUD
-
-//		int viewportWidth = stage.getViewport().getScreenWidth();
-//		int viewportHeight = stage.getViewport().getScreenHeight();
-//		System.out.println("Viewport width: " + viewportWidth + ", height: " + viewportHeight);
-
+		hud.resize(width, height); 		// Resize the HUD
 		hud.getStage().getViewport().update(width, height, true);
     }
     
     // Checking for game state
     public void checkGameStart(float MAP_SCALE) {
-        backgroundMusic.setLooping(true); // Set the music to loop
+        backgroundMusic.setLooping(true); 	// Set the music to loop
         backgroundMusic.setVolume(0.05f);
         backgroundMusic.play();
 
@@ -138,7 +132,7 @@ public class ScreenManager {
             gameState();
         }
 
-		hud.render(entityManager.getPCLives());
+		hud.render(entityManager.getPCLives(), entityManager.getPCGuess());
 		stage.act();
 		stage.draw();
     }
@@ -184,13 +178,7 @@ public class ScreenManager {
         if (screen instanceof MainMenuScreen) {
             currentScreen = mainMenuScreen;
         } else if (screen instanceof GameScreen) {
-        	if(entityManager.getPC("PlayableCharacter").getGuess() == null) {
-        		String guessWord = entityManager.getPC("PlayableCharacter").getWord(rand.nextInt(entityManager.getPC("PlayableCharacter").getWordSize()));
-            	entityManager.getPC("PlayableCharacter").setGuess(guessWord);
-            	entityManager.getPC("PlayableCharacter").setWordSound(guessWord);
-        	}
         	entityManager.getPC("PlayableCharacter").getWordSound().play(1f);
-        	
         	hud.setWorldTimer(300);
             currentScreen = gameScreen;
         } else if (screen instanceof GameOverScreen) {
@@ -209,15 +197,19 @@ public class ScreenManager {
         // Update Box2d Objects outside of World Simulation
     	entityManager.count();
         if (entityManager.getNum() > 0) {
-            update();
+        	while(entityManager.getNum() != 0) {
+        		update();
+        	}
         } else {
+        	if(entityManager.getPC("PlayableCharacter") != null && entityManager.getPC("PlayableCharacter").checkWin(entityManager.getPCList())) {
+        		entityManager.winGame();
+        	}
             entityManager.entityDraw();
             entityManager.movement(orthographicCameraController.getMapFullWidth());
 
             world.step(Gdx.graphics.getDeltaTime(), 6, 2);
-
-            if (entityManager.getPC("PlayableCharacter") != null && entityManager.getPCLives() > 0 
-            		&& !entityManager.getPC("PlayableCharacter").checkWin(entityManager.getPCList())) {
+            
+            if (entityManager.getPC("PlayableCharacter") != null && entityManager.getPCLives() > 0 && hud.getWorldTimer() > 0) {
                 orthographicCameraController.camera();
             } else {
                 setCurrentScreen("GameOver");
@@ -227,7 +219,7 @@ public class ScreenManager {
     }
 
     public void update() {
-        entityManager.entityCollision();
+        entityManager.entityCollision(this);
     }
 
     public void screenDispose() {

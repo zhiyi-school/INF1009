@@ -22,7 +22,6 @@ public class PlayableCharacter extends Character{
 	private int rightKey;
 	private int leftKey;
 	private int jumpKey;
-	private int downKey;
 	private float defaultX;
 	private float defaultY;
 	private ArrayList<String> words;
@@ -38,14 +37,13 @@ public class PlayableCharacter extends Character{
 	}
 	
 	// Parameterized Constructor
-	public PlayableCharacter(String textureImage, float x, float y, float speed, int lives, float attack, boolean die, Boolean aiCheck, int leftKey, int rightKey, int jumpKey, int downKey, String soundEffect) {
+	public PlayableCharacter(String textureImage, float x, float y, float speed, int lives, float attack, boolean die, Boolean aiCheck, int leftKey, int rightKey, int jumpKey, String soundEffect) {
 		super(textureImage, x, y, speed, lives, attack, die, aiCheck);
 		words = new ArrayList<String>();
 		setAttackCheck(false);
 		setLeftKey(leftKey);
 		setRightKey(rightKey);
 		setJumpKey(jumpKey);
-		setDownKey(downKey);
 		setSoundEffect(soundEffect);
 		setGuess(null);
 		setScore("");
@@ -83,12 +81,6 @@ public class PlayableCharacter extends Character{
 	}
 	public void setJumpKey(int jumpKeyInput) {
 		jumpKey = jumpKeyInput;
-	}
-	public int getDownKey() {
-		return downKey;
-	}
-	public void setDownKey(int downKeyInput) {
-		downKey = downKeyInput;
 	}
 	public void disposeSoundEffect() {
 		soundEffect.dispose();
@@ -134,7 +126,21 @@ public class PlayableCharacter extends Character{
 		return score;
 	}
 	public boolean checkWin(List<PlayableCharacter> pcList) {
-		if(!(getScore()).equals(getGuess().substring(0, getScore().length()))) {
+//		if(!(getScore()).equals(getGuess().substring(0, getScore().length()))) {
+//			this.destroy();
+//			this.dispose();
+//			pcList.remove(this);
+//			return true;
+//		}else if(!(getScore()).equals(getGuess().substring(0, getScore().length()))){
+//			setLives(getLives() - 1);
+//			return false;
+//		}
+//		else if(getScore().equals(getGuess())){
+//			return true;
+//		}else {
+//			return false;
+//		}
+		if(getLives() == 0) {
 			this.destroy();
 			this.dispose();
 			pcList.remove(this);
@@ -163,6 +169,7 @@ public class PlayableCharacter extends Character{
 	}
 	
 	public void setDefaultPos() {
+		getBody().setLinearVelocity(new Vector2(0, 0));
 		getBody().setTransform(new Vector2(getDefaultX(), getDefaultY()), 0);
 	}
 	
@@ -177,9 +184,6 @@ public class PlayableCharacter extends Character{
 			}
 			if(Gdx.input.isKeyPressed (getJumpKey())) {
 				jump();
-			}
-			if(Gdx.input.isKeyPressed (getDownKey())) {
-				moveDown();
 			}
 			
 			// Checking if the Player is at Map Boundaries
@@ -200,17 +204,11 @@ public class PlayableCharacter extends Character{
 			getSoundEffect().play(0.01f);
     		getBody().applyLinearImpulse(new Vector2(0, getSpeed() * 17.5f), getBody().getWorldCenter(), true);
     	}
-//		getBody().setTransform(new Vector2(getBody().getPosition().x, getBody().getPosition().y + (getSpeed() * 2)), 0);
-    }	
-    public void moveDown() {
-//		getBody().setTransform(new Vector2(getBody().getPosition().x, getBody().getPosition().y - (getSpeed() * 2)), 0);
     }
 	protected void moveLeft() {
-//		getBody().setTransform(new Vector2(getBody().getPosition().x - (getSpeed() * 2), getBody().getPosition().y), 0);
         getBody().applyLinearImpulse(new Vector2(-getSpeed() / 1.65f, 0), getBody().getWorldCenter(), true);
     }
 	protected void moveRight() {
-//		getBody().setTransform(new Vector2(getBody().getPosition().x + (getSpeed() * 2), getBody().getPosition().y), 0);
         getBody().applyLinearImpulse(new Vector2(getSpeed() / 1.65f, 0), getBody().getWorldCenter(), true);
     }
 	

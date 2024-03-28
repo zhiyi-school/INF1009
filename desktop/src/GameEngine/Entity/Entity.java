@@ -3,7 +3,6 @@ package GameEngine.Entity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -11,7 +10,6 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-import GameLayer.batchSingleton;
 import GameLayer.worldSingleton;
 
 public abstract class Entity implements Cloneable{
@@ -24,6 +22,7 @@ public abstract class Entity implements Cloneable{
 	private Texture texture;
 	private Boolean aiCheck;
 	private String image;
+	private String defaultName;
 	
     private World world = worldSingleton.getInstance();
 
@@ -35,6 +34,7 @@ public abstract class Entity implements Cloneable{
 		setTexture("");
 		setAICheck(true);
 		createBody(0, 0);
+		setDefaultUserData((String) getFix().getUserData());
 	}
 	
 	// Character Constructor
@@ -43,6 +43,7 @@ public abstract class Entity implements Cloneable{
 		setTexture(textureImage);
 		setAICheck(aiCheck);
 		createBody(posXInput, posYInput);
+		setDefaultUserData((String) getFix().getUserData());
 	}
 	
 	// Map Constructor
@@ -88,7 +89,7 @@ public abstract class Entity implements Cloneable{
         fixtureDef.friction = 2f; 	// Set friction to affect sliding
 
         fixture = body.createFixture(fixtureDef);
-        // Set the user data for the fixture to the character instance
+        // Set the user data for thdwe fixture to the character instance
         int filename = getImage().lastIndexOf('.');
         String strippedFilename = getImage().substring(0, filename);
         fixture.setUserData(strippedFilename);
@@ -102,7 +103,12 @@ public abstract class Entity implements Cloneable{
 	public void setAICheck(boolean aiInput) {
 		aiCheck = aiInput;
 	}
-	
+	public String getDefaultUserData() {
+		return defaultName;
+	}
+	public void setDefaultUserData(String defaultNameInput) {
+		defaultName = defaultNameInput;
+	}
 
 	// Map and Orthographic Camera
 	public void render() {

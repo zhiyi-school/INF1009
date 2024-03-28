@@ -5,16 +5,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Align;
 
 import GameEngine.Entity.EntityManager;
 import GameLayer.batchSingleton;
 import GameLayer.entityManagerSingleton;
 import GameLayer.fontSingleton;
-import GameLayer.screenManagerSingleton;
-import GameLayer.worldSingleton;
 
 
 public class PauseScreen extends Scene {
@@ -33,7 +29,6 @@ public class PauseScreen extends Scene {
 	
 	private float mouseX, mouseY;
 
-    private static World world = worldSingleton.getInstance();
     private static SpriteBatch batch = batchSingleton.getInstance();
     private static BitmapFont font = fontSingleton.getInstance();
     private static EntityManager entityManager = entityManagerSingleton.getInstance();
@@ -53,12 +48,12 @@ public class PauseScreen extends Scene {
 		screenManager = screenManagerInput;
 	}
     
-    	public String getScreen() {
+	public String getScreen() {
 		String screen = "Pause";
 		return screen;
 	}
 	
-    	public String getPauseText() {
+	public String getPauseText() {
 		return pauseText;
 	}
 	
@@ -67,135 +62,135 @@ public class PauseScreen extends Scene {
 	}
 	
 	public Button getRestartButton() {
-	        return restartButton;
+        return restartButton;
 	}
 
-    	public Button getResumeButton() {
-        	return resumeButton;
-    	}
-
-    	public Button getExitButton() {
-        	return exitButton;
-    	}
-	
-    	public float getStartX() {
-    		return startX;
-    	}
-	
-    	public void setStartX(float screenWidth) {
-    		startX = (screenWidth - totalButtonWidth) / 2;
-    	}
-    
-    	public void displayPause() {
-    		setPauseText("Game paused.");
-    	}
-    
-    	public void resumeGame() {
-        	screenManager.switchTo(gameScreen);
-    	}
-    
-    	public void restartGame() {
-    		entityManager.restartGame();
-    		screenManager.switchTo(gameScreen);
-    	}
-
-    	public void exitGame() {
-        	Gdx.app.exit();
-    	}
-    
-    	@Override
-    	public void show() {
-	    	displayPause();
-	    	
-	        buttonWidth = getButtonWidth();
-
-		// Create Resume Button
-	    	resumeButton = new Button(startX, 100, buttonWidth + 10, 60);
-	    	resumeButton.setText("Resume");
-	    	resumeButton.setColour(Color.RED);
-
-		// Create Restart Button
-	    	restartButton = new Button(startX + buttonWidth + buttonSpacing, 100, buttonWidth + 10, 60);
-	    	restartButton.setText("Restart");
-	    	restartButton.setColour(Color.RED);
-
-		// Create Exit Button
-	    	exitButton = new Button(startX + 2 * (buttonWidth + buttonSpacing), 100, buttonWidth, 60);
-	    	exitButton.setText("Exit");
-	    	exitButton.setColour(Color.RED);
-	    	
-	    }
-
-    	@Override
-    	public void render(float delta) {
-	        Gdx.gl.glClearColor(0, 1, 0, 1);
-	        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-	        
-	        resumeButton.render();
-	        restartButton.render();
-	        exitButton.render();
-	        
-	        batch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-	        batch.begin();
-			font.setColor(Color.BLACK);
-			font.getData().setScale(3);
-			float x = Gdx.graphics.getWidth() / 2f;
-			float y = Gdx.graphics.getHeight() * 0.8f; 
-			font.draw(batch, pauseText, x, y, 0, Align.center, false);
-			batch.end();
-			
-		// Check for click on button
-	        mouseX = Gdx.input.getX();
-	        mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
-
-	        if (resumeButton.hover(mouseX, mouseY)==true) {
-	        	resumeButton.setColour(Color.YELLOW);
-	        	if (Gdx.input.isTouched()){
-	        		resumeGame();
-	        		
-	        	}
-	        }
-		else if (restartButton.hover(mouseX, mouseY)==true) {
-	        	restartButton.setColour(Color.YELLOW);
-	        	if (Gdx.input.isTouched()){
-	        		restartGame();
-	        	}
-	        }
-		else if (exitButton.hover(mouseX, mouseY)==true) {
-	        	exitButton.setColour(Color.YELLOW);
-	        	if (Gdx.input.isTouched()){
-	        		exitGame();
-	        	}
-	        }
-	        else {
-	        	resumeButton.setColour(Color.RED);
-	        	restartButton.setColour(Color.RED);
-	        	exitButton.setColour(Color.RED);
-	        }
+	public Button getResumeButton() {
+    	return resumeButton;
 	}
 
-    	@Override
-    	public void resize(int width, int height) {
-        	// Called when the screen size is changed.
-    	}
+	public Button getExitButton() {
+    	return exitButton;
+	}
 
-    	@Override
-    	public void pause() {
-        	// Called when the game is paused.
-    	}
+	public float getStartX() {
+		return startX;
+	}
+	
+	public void setStartX(float screenWidth) {
+		startX = (screenWidth - totalButtonWidth) / 2;
+	}
 
-    	@Override
-    	public void resume() {
-        	// Called when the game resumes from a paused state.
-    	}
+	public void displayPause() {
+		setPauseText("Game paused.");
+	}
 
-    	@Override
-    	public void hide() {
-        	// Called when this screen is no longer the current screen.
-    	}
+	public void resumeGame() {
+    	screenManager.switchTo(gameScreen);
+	}
 
-    	@Override
-    	public void dispose() {
+	public void restartGame() {
+		entityManager.restartGame();
+		screenManager.switchTo(gameScreen);
+	}
+
+	public void exitGame() {
+    	Gdx.app.exit();
+	}
+    
+	@Override
+	public void show() {
+    	displayPause();
     	
-    	}
+        buttonWidth = getButtonWidth();
+
+        // Create Resume Button
+    	resumeButton = new Button(startX, 100, buttonWidth + 10, 60);
+    	resumeButton.setText("Resume");
+    	resumeButton.setColour(Color.RED);
+
+    	// Create Restart Button
+    	restartButton = new Button(startX + buttonWidth + buttonSpacing, 100, buttonWidth + 10, 60);
+    	restartButton.setText("Restart");
+    	restartButton.setColour(Color.RED);
+
+    	// Create Exit Button
+    	exitButton = new Button(startX + 2 * (buttonWidth + buttonSpacing), 100, buttonWidth, 60);
+    	exitButton.setText("Exit");
+    	exitButton.setColour(Color.RED);
+    	
+    }
+
+    	@Override
+	public void render(float delta) {
+        Gdx.gl.glClearColor(0, 1, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        
+        resumeButton.render();
+        restartButton.render();
+        exitButton.render();
+        
+        batch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.begin();
+		font.setColor(Color.BLACK);
+		font.getData().setScale(3);
+		float x = Gdx.graphics.getWidth() / 2f;
+		float y = Gdx.graphics.getHeight() * 0.8f; 
+		font.draw(batch, pauseText, x, y, 0, Align.center, false);
+		batch.end();
+		
+		// Check for click on button
+        mouseX = Gdx.input.getX();
+        mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
+
+        if (resumeButton.hover(mouseX, mouseY)==true) {
+        	resumeButton.setColour(Color.YELLOW);
+        	if (Gdx.input.isTouched()){
+        		resumeGame();
+        		
+        	}
+        }
+		else if (restartButton.hover(mouseX, mouseY)==true) {
+        	restartButton.setColour(Color.YELLOW);
+        	if (Gdx.input.isTouched()){
+        		restartGame();
+        	}
+        }
+		else if (exitButton.hover(mouseX, mouseY)==true) {
+        	exitButton.setColour(Color.YELLOW);
+        	if (Gdx.input.isTouched()){
+        		exitGame();
+        	}
+        }
+        else {
+        	resumeButton.setColour(Color.RED);
+        	restartButton.setColour(Color.RED);
+        	exitButton.setColour(Color.RED);
+        }
+	}
+
+	@Override
+	public void resize(int width, int height) {
+    	// Called when the screen size is changed.
+	}
+
+	@Override
+	public void pause() {
+    	// Called when the game is paused.
+	}
+
+	@Override
+	public void resume() {
+    	// Called when the game resumes from a paused state.
+	}
+
+	@Override
+	public void hide() {
+    	// Called when this screen is no longer the current screen.
+	}
+
+	@Override
+	public void dispose() {
+	
+	}
 }
