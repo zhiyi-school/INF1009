@@ -117,7 +117,7 @@ public abstract class Entity implements Cloneable{
 	
 	public void setPosition(float x, float y) {
 	    if (this.body != null) {
-	        this.body.setTransform(x, y, this.body.getAngle());
+	        this.body.setTransform(x / 100f, y / 100f, this.body.getAngle());
 	    }
 	}
 

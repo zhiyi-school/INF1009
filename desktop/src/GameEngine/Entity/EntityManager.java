@@ -22,10 +22,11 @@ public class EntityManager {
 	private ArrayList<String> spawnLetters;
 	
 	private PlayableCharacter Player1;
-	private NonPlayableCharacter Enemy;	
+	private NonPlayableCharacter enemyPrototype;	
 	private NonPlayableCharacter Item;
 	private NonPlayableCharacter Door;
-	private NonPlayableCharacter Spike;
+	private NonPlayableCharacter spikePrototype;
+
 	private NonPlayableCharacter letter;
 	private Map gameMap;
 
@@ -90,8 +91,7 @@ public class EntityManager {
 		Item = new NonPlayableCharacter("Weapon.png", 50, rand.nextFloat(Gdx.graphics.getHeight()), 200, 100, 10, false);
 		npcList.add(Item);
 		
-//		Door = new NonPlayableCharacter("DoorClosed.png", 10, 400, 200, 100, 10, false);
-		Door = new NonPlayableCharacter("DoorClosed.png", 100, 40, 200, 100, 10, false);
+		Door = new NonPlayableCharacter("DoorClosed.png", 10, 400, 200, 100, 10, false);
 		npcList.add(Door);
 		
 		test0 = new NonPlayableCharacter("letters_img/A.png", 60, 40, 200, 100, 10, false);
@@ -101,8 +101,12 @@ public class EntityManager {
 		test2 = new NonPlayableCharacter("letters_img/T.png", 80, 40, 200, 100, 10, false);
 		npcList.add(test2);
 		
+		spikePrototype = new NonPlayableCharacter("Spike.png", 0, 0, 0, 100, 10, false);
+	    enemyPrototype = new NonPlayableCharacter("Enemy.png", 0, 0, 200, 100, 10, true);
+		
 		spawnEnemies(2); // Set number of Enemy clones
-		spawnSpikes(3); // Set number of Spike clones
+		spawnSpikes(2); // Set number of Spike clones
+
 		
 		// Generate a random word
 		randWord = getPC("PlayableCharacter").getWord(rand.nextInt(getPC("PlayableCharacter").getWordSize()));
@@ -150,8 +154,10 @@ public class EntityManager {
 		    float spawnY = rand.nextFloat() * (gameMap.getMapHeight() - spikeHeight);
 		    
 		    spawnY = Math.max(spawnY, 0);
-		    
-		    Spike = new NonPlayableCharacter("Spike.png", spawnX, spawnY, 0, 100, 10, false);
+
+		    NonPlayableCharacter Spike = spikePrototype.clone();
+		    Spike.setPosition(spawnX, spawnY);
+		    System.out.println("Spike coords: " + spawnX + ", " + spawnY);
 
 		    npcList.add(Spike);
 		}
@@ -168,9 +174,11 @@ public class EntityManager {
 			// Calculate a random position within the defined zone
 	        float spawnX = rand.nextFloat() * (maxX - minX) + minX;
 	        float spawnY = rand.nextFloat() * (maxY - minY) + minY;
-			
-			Enemy = new NonPlayableCharacter("Enemy.png", spawnX, spawnY, 200, 100, 10, true);
-			
+
+			NonPlayableCharacter Enemy = enemyPrototype.clone();
+			Enemy.setPosition(spawnX, spawnY);
+			System.out.println("Enemy coords: " + spawnX + ", " + spawnY);
+
 			npcList.add(Enemy);
 		}
 	}

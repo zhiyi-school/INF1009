@@ -60,11 +60,15 @@ public class NonPlayableCharacter extends Character implements Cloneable{
   
 	// Enables NPC to clone using the prototype in Entity class
 	@Override
-    public NonPlayableCharacter clone() {
-        try {
-            return (NonPlayableCharacter) super.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new RuntimeException("This class does not implement Cloneable");
-        }
-    }
+	public NonPlayableCharacter clone() {
+	    NonPlayableCharacter cloned = null;
+	    try {
+	        cloned = (NonPlayableCharacter) super.clone(); // Use deep clone
+	        cloned.setTexture(this.getImage());
+	        cloned.createBody(this.getBody().getPosition().x, this.getBody().getPosition().y); // recreate Box2D body for new clone
+	    } catch (CloneNotSupportedException e) {
+	        throw new RuntimeException("This class does not implement Cloneable", e);
+	    }
+	    return cloned;
+	}
 }
