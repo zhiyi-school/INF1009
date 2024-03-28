@@ -89,7 +89,7 @@ public abstract class Entity implements Cloneable{
         fixtureDef.friction = 2f; 	// Set friction to affect sliding
 
         fixture = body.createFixture(fixtureDef);
-        // Set the user data for thdwe fixture to the character instance
+        // Set the user data for the fixture to the character instance
         int filename = getImage().lastIndexOf('.');
         String strippedFilename = getImage().substring(0, filename);
         fixture.setUserData(strippedFilename);
@@ -117,7 +117,7 @@ public abstract class Entity implements Cloneable{
 	
 	public void setPosition(float x, float y) {
 	    if (this.body != null) {
-	        this.body.setTransform(x, y, this.body.getAngle());
+	        this.body.setTransform(x / 100f, y / 100f, this.body.getAngle());
 	    }
 	}
 
