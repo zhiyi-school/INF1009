@@ -82,7 +82,7 @@ public class EntityManager {
 		Player1 = new PlayableCharacter("PlayableCharacter.png", 10, 50, 0.75f, 3, 5, false, true, Keys.A, Keys.D, Keys.W, "JumpSoundEffect.wav");
 		pcList.add(Player1);
 		
-		Item = new NonPlayableCharacter("Weapon.png", 50, 50, 200, 100, 10, false);
+		Item = new NonPlayableCharacter("Weapon.png", 100, 50, 200, 100, 10, false);
 		npcList.add(Item);
 		
 		Door = new NonPlayableCharacter("DoorClosed.png", 10, 400, 200, 100, 10, false);
@@ -166,9 +166,9 @@ public class EntityManager {
 					npc.dispose();
 				}
 			}
+			spikePrototype.dispose();
+			enemyPrototype.dispose();
 		}
-		spikePrototype.dispose();
-		enemyPrototype.dispose();
 		if(entityList.size() > 0) {
 			for(Entity entity: entityList) {
 				if (entity instanceof Map) {
@@ -240,7 +240,18 @@ public class EntityManager {
 					if(((String) npc.getFix().getUserData()).contains("add")) {
 						removeNPC = getCollision().addScore(pc, npc);
 						count--;
-						break;
+						int startLength;
+						if(pc.getScore().length() == 0) {
+							startLength = 0;
+						}else {
+							startLength = pc.getScore().length() - 1;
+						}
+						if(!(pc.getGuess()).substring(startLength, pc.getScore().length()).equals(((String) npc.getFix().getUserData()).substring(12))){
+							pc.setDefaultPos();
+							removeNPC = null;
+						}
+						System.out.println((pc.getGuess()).substring(startLength, pc.getScore().length()));
+						System.out.println(npc.getFix().getUserData());
 					}
 				}
 			}
