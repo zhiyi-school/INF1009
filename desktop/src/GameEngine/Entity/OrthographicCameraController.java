@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import GameLayer.batchSingleton;
+import GameEngine.batchSingleton;
 
 public class OrthographicCameraController {
     private OrthographicCamera camera;
@@ -89,9 +89,10 @@ public class OrthographicCameraController {
 				entityManager.getPC("PlayableCharacter").getBody().getPosition().y * MAP_SCALE);
 		applyViewport();
 		// Set the batch projection matrix to camera's combined matrix	
-		setProjection(batch);
+
+        setProjection();
 	}
-    public void setProjection(SpriteBatch batch) {
+    public void setProjection() {
 		batch.begin();
 		batch.setProjectionMatrix(getCamera().combined);
 		batch.end();

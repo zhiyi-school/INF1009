@@ -1,6 +1,6 @@
-package GameLayer;
+package GameEngine.Screen;
 
-import GameEngine.Entity.Screen.ScreenManager;
+import GameEngine.Screen.ScreenManager;
 
 public class screenManagerSingleton {
 	private static ScreenManager screenManager;

@@ -1,4 +1,4 @@
-package GameLayer;
+package GameEngine.Entity;
 
 import GameEngine.Entity.EntityManager;
 

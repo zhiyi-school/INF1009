@@ -1,4 +1,4 @@
-package GameEngine.Entity.Screen;
+package GameEngine.Screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -8,9 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Align;
 
 import GameEngine.Entity.EntityManager;
-import GameLayer.batchSingleton;
-import GameLayer.entityManagerSingleton;
-import GameLayer.fontSingleton;
+import GameEngine.batchSingleton;
+import GameEngine.Entity.entityManagerSingleton;
 
 
 public class PauseScreen extends Scene {

@@ -1,4 +1,4 @@
-package GameLayer;
+package GameEngine;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 

@@ -1,4 +1,4 @@
-package GameEngine.Entity.Screen;
+package GameEngine.Screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -13,10 +13,8 @@ import GameEngine.Entity.EntityManager;
 import com.badlogic.gdx.Input.Keys;
 
 import GameLayer.HUD;
-import GameLayer.batchSingleton;
-import GameLayer.entityManagerSingleton;
-import GameLayer.fontSingleton;
-import GameLayer.screenManagerSingleton;
+import GameEngine.batchSingleton;
+import GameEngine.Entity.entityManagerSingleton;
 
 public class GameScreen extends Scene {
 	private final Stage stage;
@@ -42,7 +40,6 @@ public class GameScreen extends Scene {
 		this.buttonWidth = buttonWidth;
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
-		setPauseButtonPositions();
 		this.hud = hud; // Assign the passed HUD instance
 
 		//Add HUD stage to GameScreen Stage
@@ -55,17 +52,7 @@ public class GameScreen extends Scene {
 		return "Game";
 	}
 
-	private void setPauseButtonPositions() {
-		float pauseButtonX = screenWidth - buttonWidth;
-		float pauseButtonY = screenHeight - buttonHeight;
-		pauseButton = new Button(pauseButtonX, pauseButtonY, buttonWidth, buttonHeight);
-		pauseButton.setText("II");
-		pauseButton.setColour(Color.RED);
-	}
 
-	public void pauseGame() {
-		screenManager.setCurrentScreen("Pause");
-	}
 
 	@Override
 	public void show() {
@@ -80,7 +67,7 @@ public class GameScreen extends Scene {
 
 		gameTime += delta;
 
-		pauseButton.render();
+
 
 		batch.begin();
 		font.setColor(Color.WHITE);
@@ -99,16 +86,6 @@ public class GameScreen extends Scene {
 		mouseX = Gdx.input.getX();
 		mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
 
-		if (pauseButton.hover(mouseX, mouseY)) {
-			pauseButton.setColour(Color.YELLOW);
-			if (Gdx.input.justTouched()) {
-				pauseGame();
-			}
-		} else if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
-			pauseGame();
-		} else {
-			pauseButton.setColour(Color.RED);
-		}
 
 		stage.act(delta);
 		stage.draw();

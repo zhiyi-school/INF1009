@@ -1,4 +1,4 @@
-package GameEngine.Entity.Screen;
+package GameEngine.Screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -8,10 +8,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Align;
 
 import GameEngine.Entity.EntityManager;
-import GameLayer.batchSingleton;
-import GameLayer.entityManagerSingleton;
-import GameLayer.fontSingleton;
-import GameLayer.screenManagerSingleton;
+import GameEngine.batchSingleton;
+import GameEngine.Entity.entityManagerSingleton;
 
 
 public class GameOverScreen extends Scene {

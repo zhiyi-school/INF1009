@@ -1,4 +1,4 @@
-package GameEngine.Entity.Screen;
+package GameEngine.Screen;
 
 import com.badlogic.gdx.Screen;
 

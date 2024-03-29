@@ -1,11 +1,13 @@
+package GameLayer;
+
+import GameEngine.Entity.orthographicCameraControllerSingleton;
+import GameEngine.Screen.screenManagerSingleton;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import GameEngine.Entity.EntityManager;
 import GameEngine.Entity.OrthographicCameraController;
-import GameEngine.Entity.Screen.ScreenManager;
-import GameLayer.entityManagerSingleton;
-import GameLayer.orthographicCameraControllerSingleton;
-import GameLayer.screenManagerSingleton;
+import GameEngine.Screen.ScreenManager;
+import GameEngine.Entity.entityManagerSingleton;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 

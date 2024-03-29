@@ -1,13 +1,11 @@
-package GameEngine.Entity.Screen;
+package GameEngine.Screen;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Align;
 
-import GameLayer.batchSingleton;
-import GameLayer.fontSingleton;
-import GameLayer.shapeSingleton;
+import GameEngine.batchSingleton;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

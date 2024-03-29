@@ -1,4 +1,4 @@
-package GameLayer;
+package GameEngine.Screen;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 

@@ -8,10 +8,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.physics.box2d.World;
 
-import GameEngine.Entity.Screen.ScreenManager;
+import GameEngine.Screen.ScreenManager;
 import GameLayer.languageFactory;
-import GameLayer.randomSingleton;
-import GameLayer.worldSingleton;
+import GameEngine.randomSingleton;
+import GameEngine.worldSingleton;
 
 public class EntityManager {
 
@@ -250,8 +250,7 @@ public class EntityManager {
 							pc.setDefaultPos();
 							removeNPC = null;
 						}
-						System.out.println((pc.getGuess()).substring(startLength, pc.getScore().length()));
-						System.out.println(npc.getFix().getUserData());
+
 					}
 				}
 			}

@@ -1,4 +1,4 @@
-package GameLayer;
+package GameEngine.Entity;
 
 import com.badlogic.gdx.Gdx;
 import GameEngine.Entity.OrthographicCameraController;

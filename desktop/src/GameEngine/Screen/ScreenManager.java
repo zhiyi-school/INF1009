@@ -1,13 +1,11 @@
-package GameEngine.Entity.Screen;
+package GameEngine.Screen;
 
 import java.util.ArrayList;
 import GameLayer.HUD;
-import GameLayer.batchSingleton;
-import GameLayer.entityManagerSingleton;
-import GameLayer.fontSingleton;
-import GameLayer.orthographicCameraControllerSingleton;
-import GameLayer.shapeSingleton;
-import GameLayer.worldSingleton;
+import GameEngine.batchSingleton;
+import GameEngine.Entity.entityManagerSingleton;
+import GameEngine.Entity.orthographicCameraControllerSingleton;
+import GameEngine.worldSingleton;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;

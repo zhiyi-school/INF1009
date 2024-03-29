@@ -1,10 +1,9 @@
 package GameEngine.Entity;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import GameLayer.batchSingleton;
+import GameEngine.batchSingleton;
 
 public abstract class Character extends Entity implements iMoveable{
 	
