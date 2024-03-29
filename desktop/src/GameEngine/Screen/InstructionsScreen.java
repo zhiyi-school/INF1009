@@ -72,7 +72,8 @@ public class InstructionsScreen extends Scene {
 	}
 
 	public void displayInstructions() {
-		setInstructionsText("These are the instructions for the game. \n To move left, press the A key. \n To move right, press the D key. \n To Jump, press the Space Bar");
+		setInstructionsText("These are the instructions for the game.\n Once the game starts, an audio will be played. \n You must collect the alphabets in order to complete the word. \n To move left, press the A key. \n To move right, press the D key. \n To Jump, press the W key.");
+
 	}
     
 	public void returnToMenu() {

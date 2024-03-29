@@ -82,6 +82,8 @@ public class HUD extends Actor {
         
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
+
+
     }
     public void setWorldTimer(int worldTimerInput) {
     	worldTimer = worldTimerInput;

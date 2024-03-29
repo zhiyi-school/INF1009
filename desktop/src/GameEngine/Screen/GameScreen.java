@@ -27,6 +27,7 @@ public class GameScreen extends Scene {
 	private float gameTime = 0;
 
 	private float mouseX, mouseY;
+	
 
 	// Calling Singleton Classes
     private static SpriteBatch batch = batchSingleton.getInstance();
@@ -52,7 +53,9 @@ public class GameScreen extends Scene {
 		return "Game";
 	}
 
-
+	public void pauseGame(){
+		screenManager.setCurrentScreen("Pause");
+	}
 
 	@Override
 	public void show() {
@@ -86,6 +89,9 @@ public class GameScreen extends Scene {
 		mouseX = Gdx.input.getX();
 		mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
 
+		if(Gdx.input.isKeyPressed(Keys.ESCAPE)){
+			pauseGame();
+		}
 
 		stage.act(delta);
 		stage.draw();
