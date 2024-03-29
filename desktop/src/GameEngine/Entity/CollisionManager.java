@@ -104,8 +104,10 @@ public class CollisionManager implements ContactListener{
 		if(((String) chars.getFix().getUserData()).contains("_add")) {
 			if(((String) chars.getFix().getUserData()).substring(0, 1).equals(pc.getGuess().substring(pc.getScore().length(), pc.getScore().length() + 1))) {
 				pc.setScore(((String) chars.getFix().getUserData()).substring(0, 1));
+				chars.getFix().setUserData(chars.getDefaultUserData());
 			}else if(pc.getLives() > 0) {
 				pc.setLives(pc.getLives() - 1);
+				chars.getFix().setUserData(chars.getDefaultUserData());
 			}
 			return chars;
 		}
@@ -121,9 +123,5 @@ public class CollisionManager implements ContactListener{
 			return true;
 		}
 		return false;
-	}
-	
-	public void win() {
-		
 	}
 }
