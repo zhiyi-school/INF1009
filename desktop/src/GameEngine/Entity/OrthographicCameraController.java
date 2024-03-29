@@ -89,9 +89,9 @@ public class OrthographicCameraController {
 				entityManager.getPC("PlayableCharacter").getBody().getPosition().y * MAP_SCALE);
 		applyViewport();
 		// Set the batch projection matrix to camera's combined matrix	
-		setProjection(batch);
+		setProjection();
 	}
-    public void setProjection(SpriteBatch batch) {
+    public void setProjection() {
 		batch.begin();
 		batch.setProjectionMatrix(getCamera().combined);
 		batch.end();

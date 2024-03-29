@@ -250,8 +250,6 @@ public class EntityManager {
 							pc.setDefaultPos();
 							removeNPC = null;
 						}
-						System.out.println((pc.getGuess()).substring(startLength, pc.getScore().length()));
-						System.out.println(npc.getFix().getUserData());
 					}
 				}
 			}
